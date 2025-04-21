@@ -9,9 +9,9 @@ html[data-theme="light"] {
   --background: #f3f3f3;
   --foreground: #121212;
   /* --accent: #006cac; */
-  --accent: #b64f0f;
+  --accent: #1474e2;
   /* --muted: #e6e6e6; */
-  --muted: #cf6d0b6b;
+  --muted: #1474e26b;
   /* --border: #ece9e9; */
   --border: #d6d0d0;
 }

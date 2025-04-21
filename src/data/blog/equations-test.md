@@ -3,7 +3,7 @@ author: Gustavo Salvini
 pubDatetime: 2025-04-09T16:45:39.660Z
 modDatetime: 2025-04-09T16:45:39.660Z
 title: Testing LaTeX equations
-featured: true
+featured: false
 hideEditPost: true
 draft: false
 tags:

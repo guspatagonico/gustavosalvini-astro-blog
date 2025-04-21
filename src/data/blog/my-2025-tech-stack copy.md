@@ -12,10 +12,20 @@ author: Gustavo Adrián Salvini
 tags:
   - tech stack
   - web development
-  - react
-  - next.js
+  - software development
+  - Astro
+  - React
+  - Next.js
   - AI
-  - LLMs
+  - LLM
+  - SSG
+  - SSR
+  - ISR
+  - Mantine
+  - Chakra UI
+  - Zustand
+  - Valtio
+  - Immer
 ---
 Technology evolves fast. Staying ahead means constantly learning, experimenting, and adjusting the tools you rely on.
 

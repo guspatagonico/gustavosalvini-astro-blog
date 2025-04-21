@@ -7,7 +7,7 @@ slug: how-to-integrate-giscus-comments
 featured: false
 draft: true
 tags:
-  - astro
+  - Astro
   - blog
   - docs
 description: Comment function on a static blog hosted on GitHub Pages with Giscus.

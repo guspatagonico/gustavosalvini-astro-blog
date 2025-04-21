@@ -2,7 +2,7 @@
 title: This blog - Architecture Analysis (based on Astro)
 description: A detailed analysis of the architecture of this blog, built with Astro, including diagrams and key architectural patterns.
 tags:
-  - astro
+  - Astro
   - architecture
   - web development
 author: Gustavo Adrián Salvini

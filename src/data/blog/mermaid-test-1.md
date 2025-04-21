@@ -3,9 +3,9 @@ author: Gustavo Salvini
 pubDatetime: 2025-04-09T16:45:39.660Z
 modDatetime: 2025-04-09T16:45:39.660Z
 title: Testing Mermaid diagrams
-featured: true
+featured: false
 hideEditPost: true
-draft: false
+draft: true
 tags:
   - Mermaid
 description: Testing Mermaid diagrams in Astro with remark/rehype plugins.
