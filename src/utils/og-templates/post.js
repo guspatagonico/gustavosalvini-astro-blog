@@ -94,12 +94,21 @@ import loadGoogleFonts from "../loadGoogleFont";
 //     </div>`;
 
 export default async post => {
+  // return await satori(markup, {
+  //   width: 1200,
+  //   height: 630,
+  //   embedFont: true,
+  //   fonts: await loadGoogleFonts(
+  //     post.data.title + post.data.author + SITE.title + "by"
+  //   ),
+  // });
+
   return satori(
     {
       type: "div",
       props: {
         style: {
-          background: "#fefbfb",
+          background: "hsl(24, 68%, 65%)",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -115,7 +124,7 @@ export default async post => {
                 top: "-1px",
                 right: "-1px",
                 border: "4px solid #000",
-                background: "#ecebeb",
+                background: "#efc5a9",
                 opacity: "0.9",
                 borderRadius: "4px",
                 display: "flex",
@@ -155,7 +164,7 @@ export default async post => {
                       type: "p",
                       props: {
                         style: {
-                          fontSize: 72,
+                          fontSize: 66,
                           fontWeight: "bold",
                           maxHeight: "84%",
                           overflow: "hidden",
@@ -199,13 +208,16 @@ export default async post => {
                               ],
                             },
                           },
-                          {
-                            type: "span",
-                            props: {
-                              style: { overflow: "hidden", fontWeight: "bold" },
-                              children: SITE.title,
-                            },
-                          },
+                          // {
+                          //   type: "span",
+                          //   props: {
+                          //     style: {
+                          //       overflow: "hidden",
+                          //       fontWeight: "normal",
+                          //     },
+                          //     children: SITE.altTitle,
+                          //   },
+                          // },
                         ],
                       },
                     },

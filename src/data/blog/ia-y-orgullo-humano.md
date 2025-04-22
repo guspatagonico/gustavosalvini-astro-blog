@@ -1,0 +1,203 @@
+---
+title: "Crear en la era de la IA: ¿Y el orgullo humano?"
+description: "Una reflexión sobre la IA, la esencia cada vez más tenue del oficio en el software y el rol de la conexión humana en la era digital."
+featured: true
+slug: ia-y-orgullo-humano
+pubDatetime: 2025-04-20T16:07:28.050Z
+draft: false
+timezone: America/Argentina/Buenos_Aires
+hideEditPost: true
+author: Gustavo Adrián Salvini
+tags:
+  - reflexiones
+  - inteligencia artificial
+  - conexión humana
+  - oficio
+  - ética
+  - futuro del trabajo
+  - spanish
+  - español
+---
+
+<figure>
+  <img
+    src="/assets/picapedrero-tandil-2.jpg"
+    alt="Monumento al picapedrero, Tandil, Argentina. Photo by: Gustavo Adrián Salvini"
+  />
+    <figcaption class="text-center">
+    Monumento al picapedrero, Tandil, Argentina. Photo by <a href="https://gustavosalvini.com.ar">Gustavo Adrián Salvini</a>
+  </figcaption>
+</figure>
+
+## Table of contents
+
+# La chispa de la creación humana
+
+La tecnología siempre amplificó nuestras capacidades —para bien y para mal— extendiendo el alcance de nuestras manos, nuestros pensamientos y nuestros sueños. 
+
+Durante mucho tiempo, esa idea fue profundamente inspiradora. Incluso trascendental. Tocaba el corazón mismo de lo que significa ser **humanos**.
+
+Pero últimamente, envuelto entre las rápidas corrientes del progreso, empecé a sentir una inquietud algo silenciosa. Nuestras herramientas se vuelven cada vez más capaces, más refinadas y aparentemente más inteligentes. Pero este ritmo tan acelerado tiene su precio.
+
+Algo delicado, algo profundamente humano, podría estar desvaneciéndose.
+
+# El precio del progreso
+
+Hace más de treinta años que soy desarrollador de software y un curioso empedernido de la tecnología (entre otras cosas). Para mí, este asunto no es una filosofía abstracta. Es algo personal.
+
+**Mi trabajo siempre tuvo más que ver con el recorrido que con el destino.** Pasé incontables horas colaborando con otras personas, compartiendo ideas y transformándolas en herramientas y soluciones concretas que realmente mejoran la vida.
+
+Lo que le daba sentido a todo eso no eran solo los resultados. Eran las personas. Las charlas. La chispa que solo se enciende cuando hay interacción humana de verdad.
+
+Y también, por supuesto, **las maratones de debugging**. Cómo olvidar esas noches eléctricas conectando cajas Linux medio rotas con un switch mal configurado, entrando en las máquinas del otro por SSH para correr scripts en los que apenas confiábamos, y sin embargo, funcionaban.
+
+No estábamos armando sistemas para poner en producción. **Nos estábamos construyendo a nosotros mismos.** Debian, Slackware o Ubuntu —no importaba, mientras pudiéramos bootear hasta llegar al shell de un sistema operativo y **entender qué pasaba**. Aprendíamos a los golpes, emparchábamos kernels a mano, compilábamos cosas que no entendíamos bien del todo, y compartíamos nuestros hallazgos como secretos entre mentes curiosas.
+
+Y debajo del código, lo que volvía todo inolvidable era la amistad, los silencios compartidos iluminados solo por la luz azulada de un monitor CRT, y la sensación de estar siendo parte de algo que importaba: **una tribu de makers entusiastas tratando de descifrar el mundo**.
+
+# El poder de construir juntos
+
+Las herramientas generativas no son el enemigo. Ni siquiera son algo negativo en sí mismas. Podemos usarlas. Podemos crecer con ellas.
+
+Pero quizás valga la pena frenar un momento y preguntarnos: ¿qué perdemos cuando dejamos de crear en conjunto? No me refiero solo a colaborar con una máquina, sino entre personas —con la interesante desprolijidad que eso implica.
+
+Paradójicamente, lo que hoy llamamos "las viejas formas de hacer las cosas", ocurrió hace apenas unos años. Prácticamente fue "ayer". Cuando "control de versiones" significaba avisar a tu compañero de equipo antes de modificarle un archivo.
+
+Sí, escalamos. Enormemente. Pero escalar no debería implicar sacar a las personas del medio. El verdadero progreso debería significar sumar más personas, no menos.
+
+Hay cosas que ninguna máquina puede captar como un humano. No por falta de potencia, sino por falta de presencia, tal vez por falta de conciencia.
+
+**El teorema de incompletitud de Gödel** nos recuerda que ningún sistema formal puede explicarse del todo desde adentro. Siempre habrá verdades que no pueda probar —ideas que escapan a sus propias reglas.
+
+Y eso no aplica solo a las matemáticas. Es un recordatorio profundo de que cualquier sistema cerrado —incluso uno tan complejo como un equipo, una empresa o un modelo de IA— tiene puntos ciegos. Hay límites a lo que puede ver, resolver o comprender desde adentro.
+
+Por eso necesitamos personas. Personas reales. Que traigan una mirada externa, que cuestionen supuestos, que hagan las preguntas incómodas, que sientan cosas que ningún prompt podría anticipar.
+
+Colaborar no es solo una estrategia de productividad. Es la forma en que trascendemos a lo que podríamos saber únicamente por nuestra cuenta. Es cómo surge algo realmente nuevo, no desde un plan perfecto, sino desde el caos vivo de la interacción.
+
+Está en la mirada de un colega que nota lo que vos pasaste por alto. En esa charla de café improvisada que destraba una idea clave. En el chispazo inesperado que ocurre cuando dos ideas que no parecían tener nada que ver colisionan… y encajan.
+
+Y no se trata de una rareza. Es una pista de lo que Gödel insinuaba en su famoso teorema: necesitamos del otro para ver más allá de nosotros mismos.
+
+Tal vez algo parecido a debuggear a las 2 a.m. cuando te quedás mirando fijamente tu lógica durante horas, atrapado en tu propio loop mental. Y de repente alguien se acerca, le da una mirada y dice:
+
+*\- "Che, ¿no te olvidaste de inicializar esa variable?"*
+
+Ese momento —esa claridad inesperada nacida de la colaboración— es lo que las máquinas no pueden replicar. Y lo que nos sigue haciendo, todavía, profundamente humanos.
+
+# Lazos más allá del código
+
+Igual de importantes fueron las incontables horas compartidas con colegas que al principio eran solo conocidos y terminaron siendo verdaderos compañeros de ruta. **El entusiasmo por aprender, enseñar y generar valor auténtico a través de la tecnología creó vínculos que perduran.**
+
+Con muchos de ellos —algunos hace más de treinta años— sigo colaborando hoy, unidos por la pasión de crear con un toque humano, dándole sentido a nuestro trabajo desde lo personal.
+
+Con el tiempo, esas colaboraciones se volvieron más que profesionales. Armamos redes de apoyo: nos recomendamos, compartimos oportunidades, y nos acompañamos en los momentos difíciles. Nos empujamos para crecer, no solo como profesionales, sino como personas. Y en ese acompañamiento mutuo, encontramos una fuerza serena y duradera.
+
+Somos más fuertes juntos, no del mismo modo en que un algoritmo se vuelve más eficiente, sino en el sentido humano del asunto: en la empatía, la creatividad, la resiliencia, la conexión. Las máquinas pueden potenciar resultados, pero solo las personas podemos construir sentido.
+
+# Cuando el oficio empieza a desvanecerse
+
+Para mí, el acto de crear siempre fue más importante que el resultado final.
+
+Esas noches peleando con el código, las maratones para arreglar bugs, y las pequeñas victorias llenas de alegría interior, todo eso definía nuestro **orgullo**. Ese sentimiento profundo que solo entiende quien realmente crea algo, que se resume en una frase simple: **Che, esto lo hicimos nosotros**.
+
+Pero ahora todo está cambiando, y no sé si hoy se puede sentir el mismo **orgullo** cuando lo que se crea ya no nace de uno, sino que se **genera**. El alma misma del oficio —el acto de crear— está mutando. ¿Y entendemos realmente lo que eso implica para nosotros como seres humanos?
+
+# La ilusión de crear sin esfuerzo
+
+Estamos viviendo una explosión de inteligencia artificial generativa. Imágenes, textos, código, música, voz —todo aparece con un prompt y un clic. Al principio me fascinó. Después fui escéptico. Ahora, estoy en un plano más reflexivo.
+
+Sí, la IA puede ayudar. Puede acelerar tareas, inspirarnos, sacarnos trabajos repetitivos.
+
+Pero me sigo preguntando: **¿a dónde vamos cuando la mayoría de lo que vemos, leemos o escuchamos ya no fue hecho por alguien, sino generado?**
+
+¿Qué pasa cuando crear ya no cuesta?
+
+¿Qué pasa con el **orgullo**?
+
+¿Qué pasa con el sentido que le damos a lo que construimos, si nunca fue el fruto de nuestro esfuerzo, nuestros errores, nuestro proceso?
+
+# Por qué la presencia sigue importando
+
+**Ahora soy papá. Y eso lo cambia todo.**
+
+También soy esposo, hijo y amigo. Y trato de estar presente para quienes quiero, incluso cuando la agenda no siempre ayuda.
+
+Cada día transito esa compleja coreografía entre resolver problemas abstractos y sostener manos reales; entre escribir lógica elegante y cambiar pañales; entre buscar clientes y calmar a mi hijo antes de dormir, a veces todo al mismo tiempo.
+
+Hay algo hermoso en esa danza: equilibrar código y cuidado, deadlines y cenas, propósito y juego. Y me recuerda, cada día, que lo que más importa es **estar presente**. No solo estar: estar **presente, atento y consciente**.
+
+¡Uff...! **La atención**. Otro gran tema para charlar. Lo dejo para otro momento, pero no lo quiero dejar de lado.
+
+Como muchos de ustedes, llevo muchas vidas dentro de la mía —una red de afectos, responsabilidades y vínculos que ningún algoritmo puede atender—. Nuestro valor real no se mide en gigahertz de cómputo, ni en límite de tokens, ni en el tamaño de la ventana de contexto. Se mide en momentos donde estamos presentes con **intención, empatía y amor**.
+
+**No somos mentes procesando datos: somos calor, conexión y presencia. Somos historias entrelazadas, no solo nodos en una red.**
+
+# Qué significa construir con propósito
+
+**Por eso construyo. Por eso asesoro.**
+
+No es para optimizar métricas o subirme a la última ola, sino para ayudar a personas. A personas reales.
+
+Para crear cosas que honren lo que de verdad importa: el tiempo, el equilibrio, la familia, la amistad, la silenciosa dignidad del esfuerzo.  
+
+Para diseñar con cuidado, no solo con velocidad.
+
+Algunos de los trabajos más significativos que hice no tuvieron nada que ver con grandes lanzamientos o código impecable. Tuvieron que ver con escuchar, acompañar, desenredar problemas enredados sin olvidar que construimos para humanos y no para plataformas.
+
+**Cada vez creo más que el verdadero rol de un desarrollador hoy no es solo escribir buen código, sino mantener viva la intención humana en todo lo que automatizamos.**
+
+Y escalar como humanos no es computar más rápido, sino profundizar los vínculos que nos hacen mejores personas.
+
+# No soy anti-tecnología — soy pro-humanidad
+
+**Aclaremos algo: no estoy en contra de la IA.**
+
+La uso, la exploro, la integro en mis proyectos. Incluso ayudo a clientes a **adoptarla con criterio**.
+
+Pero me acerco a ella como uno se acerca al fuego: con curiosidad, respeto y una dosis saludable de cautela.
+
+**Porque el peligro no está en la herramienta, está en el entusiasmo ciego que se olvida de preguntar cuál es el fin, para qué.**
+
+Si nunca nos detenemos a reflexionar, un día podríamos despertar en un mundo lleno de contenidos generados, un mundo súper automatizado y con una impecable eficiencia sin fricción, **pero un mundo misteriosamente vacío**.  
+
+Sin orgullo.  
+
+Sin esfuerzo.  
+
+Sin conexión.
+
+Un mundo donde todos los resultados son inmediatos, donde nadie recuerda por qué esa inmediatez importaba.
+
+# El oficio debe evolucionar, pero no desaparecer
+
+No se trata de ir lento. Se trata de *estar presente*.
+
+**Se trata de volcarte en lo que hacés y reconocerte en el resultado.** Ya sea este post, una línea de código, una carta o una canción: el orgullo está en *hacerlo*.
+
+Así que te dejo una pregunta, seas desarrollador, gerente, artista o madre/padre:
+
+> ¿Vas a estar orgulloso de lo que hiciste, si en el fondo no lo hiciste vos?
+
+# Un futuro que valga la pena cuidar
+
+No creo que tengamos que rechazar la IA, ni darle la espalda a las herramientas de nuestra época.  
+Pero sí creo que tenemos que aferrarnos con fuerza a **nuestra humanidad** para avanzar en un buen sentido.
+
+El futuro no lo va a definir solo la tecnología. Lo van a definir los valores que llevemos con nosotros, lo que decidamos cuidar, y el sentido que queramos preservar. Y quizás también, la velocidad con la que elijamos vivir y crear.
+
+**La vida no tiene que ser rápida para ser significativa.**
+
+La belleza de lo hecho por humanos muchas veces está en el tiempo que nos tomamos, en la intención que ponemos, en la presencia que aportamos.
+
+En un mundo que corre, hay una rebeldía silenciosa en quien decide ir a lo profundo en lugar de ir rápido.
+
+En construir cosas no solo funcionales sino memorables.  
+
+No solo útiles sino con alma.
+
+---
+
+*Esto es apenas el comienzo de una reflexión que continuará.* En próximos posts intentaré seguir explorando cómo atravesar esta era digital sin perder lo que nos define como humanos: nuestras conexiones, nuestra creatividad y nuestro orgullo por lo que hacemos con dedicación.
+
+Gracias por leer.

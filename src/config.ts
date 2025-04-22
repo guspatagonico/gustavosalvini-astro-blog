@@ -2,8 +2,9 @@ export const SITE = {
   website: "https://gustavosalvini.com.ar/", // replace this with your deployed domain
   author: "Gustavo Adrián Salvini",
   profile: "https://gustavosalvini.com.ar/",
-  desc: "A personal playground for full-stack development and digital exploration by Gustavo Adrián Salvini",
+  desc: "A personal playground for digital exploration by Gustavo Adrián Salvini.",
   title: "Gustavo Adrián Salvini",
+  altTitle: "The Perks of Sharing Knowledge",
   ogImage: "gustavosalvini-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 4,

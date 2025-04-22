@@ -17,6 +17,16 @@ tags:
   - future of work
 ---
 
+<figure>
+  <img
+    src="/assets/picapedrero-tandil-2.jpg"
+    alt="Stonecutter monument, Tandil, Argentina. Photo by: Gustavo Adrián Salvini"
+  />
+    <figcaption class="text-center">
+    Stonecutter monument, Tandil, Argentina. Photo by <a href="https://gustavosalvini.com.ar">Gustavo Adrián Salvini</a>
+  </figcaption>
+</figure>
+
 ## Table of contents
 
 # The Spark of Human Creation
@@ -54,7 +64,7 @@ Ironically, what we now call "the old ways" were often just a few years ago. Bac
 Yes, we could scale. Tremendously. But scaling shouldn't mean removing people.
 True progress should mean involving more people, not fewer.
 
-There are things no machine can grasp. Not because they lack power, but because they lack presence.
+There are things no machine can grasp the way a human can — not because of a lack of power, but because of a lack of presence, perhaps even a lack of consciousness.
 
 Gödel's incompleteness theorem reminds us that no formal system can fully explain itself from within. There will always be truths it cannot prove — insights that lie just beyond the reach of its own rules.
 
@@ -71,7 +81,8 @@ In the unexpected spark that happens when two seemingly unrelated ideas crash to
 These aren't anomalies. They're reminders of what Gödel hinted at in a different language: we need each other to see beyond ourselves.
 
 A bit like debugging at 2 a.m. — sometimes, you stare at your logic for hours, trapped in your own mental loop. Then someone walks in, barely looks, and says:
-"Wait... didn't you forget to initialize that variable?"
+
+*\- "Wait... didn't you forget to initialize that variable?"*
 
 That moment — that serendipitous clarity born of collaboration — is what machines can't replicate.
 And what makes us, still, beautifully human.
@@ -112,9 +123,13 @@ I'm also a husband, a son, and a friend. I do my best to be present for the peop
 
 Each day, I navigate the rich and often paradoxical complexity of life: solving abstract problems while holding real hands; writing elegant logic while changing nappies; chasing clients and comforting my son at bedtime, sometimes in the same breath.
 
-There's a quiet choreography in this dance — balancing code and care, deadlines and dinners, purpose and play. And it reminds me, day after day, that what truly matters is presence. Not just being there, but being with.
+There's something beautiful in that dance: balancing code and care, deadlines and dinners, purpose and play. And it reminds me, every single day, that what truly matters is being present. Not just being there — but **being present, attentive, and aware**.
 
-Like many of us, I carry lives within my life — a web of responsibilities and connections that no algorithm can model. Our value is not in compute cycles or token limits. It's in the moments we show up with intention, empathy, and love.
+Whew... **Attention**. That's a whole other topic worth exploring. I'll leave it for another time — but I won't let it slip away.
+
+Like many of you, I carry many lives within my own — a web of relationships, responsibilities, and bonds that no algorithm can truly tend to.
+
+Our real value isn't measured in gigahertz, token limits, or context window size. It's measured in the moments when we show up **with intention, empathy, and love**.
 
 **We are not just minds processing data: we are warmth, connection, and presence. We are stories woven into each other's lives, not just nodes in a network.**
 
@@ -140,6 +155,7 @@ I use it, I explore it, I integrate it into my projects. I even help clients ado
 But I approach it the way one might approach fire: with curiosity, respect, and a healthy dose of caution. **Because the danger isn't in the tool — it's in the blind enthusiasm that forgets to ask why.**
 
 If we never stop to reflect, we risk waking up one day in a world filled with content, automation, and frictionless efficiency… but strangely empty.
+
 No pride. No effort. No connection.
 
 A world where every result is instant, but no one remembers why it mattered.
