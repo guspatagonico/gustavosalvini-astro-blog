@@ -37,7 +37,7 @@ La tecnología siempre amplificó nuestras capacidades —para bien y para mal�
 
 Durante mucho tiempo, esa idea fue profundamente inspiradora. Incluso trascendental. Tocaba el corazón mismo de lo que significa ser **humanos**.
 
-Pero últimamente, envuelto entre las rápidas corrientes del progreso, empecé a sentir una inquietud algo silenciosa. Nuestras herramientas se vuelven cada vez más capaces, más refinadas y aparentemente más inteligentes. Pero este ritmo tan acelerado tiene su precio.
+Pero últimamente, envuelto entre las rápidas corrientes del progreso, empecé a sentir una incomodidad, una inquietud haciendo ruido en mi interior. Nuestras herramientas se vuelven cada vez más capaces, más refinadas y aparentemente más inteligentes. Pero este ritmo tan acelerado tiene su precio.
 
 Algo delicado, algo profundamente humano, podría estar desvaneciéndose.
 
@@ -67,7 +67,7 @@ Sí, escalamos. Enormemente. Pero escalar no debería implicar sacar a las perso
 
 Hay cosas que ninguna máquina puede captar como un humano. No por falta de potencia, sino por falta de presencia, tal vez por falta de conciencia.
 
-**El teorema de incompletitud de Gödel** nos recuerda que ningún sistema formal puede explicarse del todo desde adentro. Siempre habrá verdades que no pueda probar —ideas que escapan a sus propias reglas.
+**Los teoremas de incompletitud de Gödel** nos recuerdan que ningún sistema formal puede explicarse del todo desde adentro. Siempre habrá verdades que no pueda probar —ideas que escapan a sus propias reglas.
 
 Y eso no aplica solo a las matemáticas. Es un recordatorio profundo de que cualquier sistema cerrado —incluso uno tan complejo como un equipo, una empresa o un modelo de IA— tiene puntos ciegos. Hay límites a lo que puede ver, resolver o comprender desde adentro.
 

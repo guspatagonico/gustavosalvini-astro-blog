@@ -1,5 +1,5 @@
 ---
-title: This blog - Architecture Analysis (based on Astro)
+title: "This Blog: Architecture Analysis"
 description: A detailed analysis of the architecture of this blog, built with Astro, including diagrams and key architectural patterns.
 tags:
   - Astro

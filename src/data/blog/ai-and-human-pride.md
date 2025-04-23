@@ -66,7 +66,7 @@ True progress should mean involving more people, not fewer.
 
 There are things no machine can grasp the way a human can — not because of a lack of power, but because of a lack of presence, perhaps even a lack of consciousness.
 
-Gödel's incompleteness theorem reminds us that no formal system can fully explain itself from within. There will always be truths it cannot prove — insights that lie just beyond the reach of its own rules.
+**Gödel's incompleteness theorems** reminds us that no formal system can fully explain itself from within. There will always be truths it cannot prove — insights that lie just beyond the reach of its own rules.
 
 But this isn't just a statement about mathematics. It's a profound reminder that any closed system —even one as complex as a team, a company, or an AI model— has blind spots. There are limits to what can be seen, solved, or understood from the inside.
 

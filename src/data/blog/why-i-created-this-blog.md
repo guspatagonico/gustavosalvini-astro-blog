@@ -9,7 +9,7 @@ tags:
   - reflections
 author: Gustavo Adrián Salvini
 pubDatetime: 2025-04-13T02:45:23.022Z
-featured: true
+featured: false
 hideEditPost: true
 ---
 

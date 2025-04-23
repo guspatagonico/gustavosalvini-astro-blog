@@ -7,8 +7,8 @@ export const SITE = {
   altTitle: "The Perks of Sharing Knowledge",
   ogImage: "gustavosalvini-og.jpg",
   lightAndDarkMode: true,
-  postPerIndex: 4,
-  postPerPage: 4,
+  postPerIndex: 8,
+  postPerPage: 8,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   showArchives: true,
   showBackButton: true, // show back button in post detail
