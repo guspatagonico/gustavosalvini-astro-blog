@@ -131,6 +131,7 @@ const structuredData = {
     <!-- Google tag (gtag.js) -->
     <script
       is:inline
+      data-astro-rerun
       src="https://www.googletagmanager.com/gtag/js?id=G-09W87G423D"
     >
     </script>
@@ -145,8 +146,13 @@ const structuredData = {
 
       console.log("script executed");
 
-      document.addEventListener("astro:page-load", () => {
-        console.log("page loaded");
+      console.log("Page loaded (native HTML)");
+
+      var host = window.location.hostname;
+      console.log("host:", host);
+
+      if (host != "localhost") {
+        // your google analytic code here
 
         window.dataLayer = window.dataLayer || [];
 
@@ -163,6 +169,49 @@ const structuredData = {
           analytics_storage: "denied",
         });
         window.gtag("config", "G-09W87G423D");
+      }
+
+      document.addEventListener("astro:page-load", () => {
+        console.log("astro:page-load event");
+
+        var host = window.location.hostname;
+        console.log("host:", host);
+
+        if (host != "localhost") {
+          // your google analytic code here
+
+          window.dataLayer = window.dataLayer || [];
+
+          // window.gtag = function gtag(...args: any[]) {
+          window.gtag = function gtag(..._args: any[]) {
+            window.dataLayer.push(arguments);
+          };
+
+          window.gtag("js", new Date());
+          window.gtag("consent", "default", {
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+            analytics_storage: "denied",
+          });
+          window.gtag("config", "G-09W87G423D");
+        }
+
+        // window.dataLayer = window.dataLayer || [];
+
+        // // window.gtag = function gtag(...args: any[]) {
+        // window.gtag = function gtag(..._args: any[]) {
+        //   window.dataLayer.push(arguments);
+        // };
+
+        // window.gtag("js", new Date());
+        // window.gtag("consent", "default", {
+        //   ad_storage: "denied",
+        //   ad_user_data: "denied",
+        //   ad_personalization: "denied",
+        //   analytics_storage: "denied",
+        // });
+        // window.gtag("config", "G-09W87G423D");
       });
     </script>
 
