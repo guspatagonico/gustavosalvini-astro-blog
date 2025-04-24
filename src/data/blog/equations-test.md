@@ -76,3 +76,87 @@ LaTeX provides a wide range of mathematical symbols:
 - Operators: `$\sum$`, `$\prod$`, `$\int$`, `$\partial$`, `$\nabla$`
 - Relations: `$\leq$`, `$\geq$`, `$\approx$`, `$\sim$`, `$\propto$`
 - Logical symbols: `$\forall$`, `$\exists$`, `$\neg$`, `$\wedge$`, `$\vee$`
+
+
+---
+
+## Testing specific characters:
+
+```latex
+$H_a: \theta>\theta_0$
+```
+
+### Results:
+
+$H_a: \theta>\theta_0$
+
+```latex
+$\not\in$
+$\neq$
+$\neg$
+$\sim$
+$\nexists$
+$\lambda$
+$\lmoustache\0\2pi$
+```
+
+### Results
+
+$\not\in$
+$\neq$
+$\neg$
+$\sim$
+$\nexists$
+$\lambda$
+$\lmoustache\pi$
+
+
+```latex
+$$
+\begin{equation*}
+\begin{aligned}
+\iiint_{\mathcal{Q}} f(w,x,y,z) \,dw \,dx \,dy \,dz
+&\leq 
+\oint_{\partial Q} f'
+  \left(
+    \max \left\{ \frac{|w|}{|{w^2 + x^2}|} ; 
+    \frac{|z|}{|{y^2 + z^2}|} ;
+    \frac{|{w \oplus z}|}{|{x \oplus y}|} \right\}
+  \right)
+\\
+&\precapprox
+\biguplus_{\mathbb{Q} \Subset \bar{Q}}
+  \left[ f^* \left(
+    \frac{\lmoustache \mathbb{Q}(t)\rmoustache}{\sqrt{1 - t^2}}
+  \right) \right]^{t=9}_{t=\alpha}
+\end{aligned}
+\end{equation*}
+$$
+```
+
+$$
+\begin{equation*}
+\begin{aligned}
+\iiint_{\mathcal{Q}} f(w,x,y,z) \,dw \,dx \,dy \,dz
+&\leq 
+\oint_{\partial Q} f'
+  \left(
+    \max \left\{ \frac{|w|}{|{w^2 + x^2}|} ; 
+    \frac{|z|}{|{y^2 + z^2}|} ;
+    \frac{|{w \oplus z}|}{|{x \oplus y}|} \right\}
+  \right)
+\\
+&\precapprox
+\biguplus_{\mathbb{Q} \Subset \bar{Q}}
+  \left[ f^* \left(
+    \frac{\lmoustache \mathbb{Q}(t)\rmoustache}{\sqrt{1 - t^2}}
+  \right) \right]^{t=9}_{t=\alpha}
+\end{aligned}
+\end{equation*}
+$$
+
+
+$$
+\oint_V f(s) \,ds
+\iiint_V f(x,y,z) \,dx \,dy \,dz
+$$

@@ -1,6 +1,6 @@
 ---
-author: Alberto Perdomo
-pubDatetime: 2024-09-08T20:58:52.737Z
+author: Gustavo Adrián Salvini
+pubDatetime: 2025-04-24T10:44:25.496Z
 modDatetime: 2025-03-22T09:25:46.734Z
 title: How to add LaTeX Equations in Astro blog posts
 draft: true
