@@ -12,15 +12,15 @@ tags:
 description: Testing LaTeX equations in Astro with remark/rehype plugins.
 ---
 
-This document demonstrates how to use LaTeX equations in your Markdown files for AstroPaper. LaTeX is a powerful typesetting system often used for mathematical and scientific documents.
+This document demonstrates how to use $\LaTeX$ equations in your Markdown files for AstroPaper. $\LaTeX$ is a powerful typesetting system often used for mathematical and scientific documents.
 
 ## Inline Equations
 
 Inline equations are written between single dollar signs `$...$`. Here are some examples:
 
-1. The famous mass-energy equivalence formula: `$E = mc^2$` $E = mc^2$
-2. The quadratic formula: `$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$` $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
-3. Euler's identity: `$e^{i\pi} + 1 = 0$` $e^{i\pi} + 1 = 0$
+1. The famous mass-energy equivalence formula `$E = mc^2$` : $E = mc^2$
+2. The quadratic formula `$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$` : $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+3. Euler's identity `$e^{i\pi} + 1 = 0$` : $e^{i\pi} + 1 = 0$
 
 ---
 
@@ -160,3 +160,5 @@ $$
 \oint_V f(s) \,ds
 \iiint_V f(x,y,z) \,dx \,dy \,dz
 $$
+
+🤖
