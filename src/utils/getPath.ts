@@ -22,7 +22,8 @@ export function getPath(
     .slice(0, -1) // remove the last segment_ file name_ since it's unnecessary
     .map(segment => slugifyStr(segment)); // slugify each segment path
 
-  const basePath = (SITE.base ?? "") + (includeBase ? "/posts" : "");
+  // const basePath = (SITE.base ?? "") + (includeBase ? "/posts" : "");
+  const basePath = includeBase ? "/posts" : "";
 
   // Making sure `id` does not contain the directory
   const blogId = id.split("/");
