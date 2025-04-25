@@ -6,17 +6,15 @@ const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 
 const basePathList = SITE.base.split("/").slice(1);
 
-console.log("basePathList:", basePathList);
-
-console.log("currentUrlPath:", currentUrlPath);
-console.log("base:", SITE.base);
-// console.log("url:", Astro.url);
+// console.log("basePathList:", basePathList);
+// console.log("currentUrlPath:", currentUrlPath);
+// console.log("base:", SITE.base);
 
 // Get url array from path
 // eg: /tags/tailwindcss => ['tags', 'tailwindcss']
 const breadcrumbList = currentUrlPath.split("/").slice(1);
 
-console.log("breadcrumbList:", breadcrumbList);
+// console.log("breadcrumbList:", breadcrumbList);
 
 // i need to remove the base path from the breadcrumb list
 // if the base path is not empty
@@ -25,7 +23,7 @@ if (SITE.base) {
   breadcrumbList.splice(0, basePathList.length);
 }
 
-console.log("breadcrumbList:", breadcrumbList);
+// console.log("breadcrumbList:", breadcrumbList);
 
 // if breadcrumb is Home > Posts > 1 <etc>
 // replace Posts with Posts (page number)
