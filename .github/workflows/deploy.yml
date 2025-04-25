@@ -20,8 +20,8 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Update Playwright browsers to latest
-        run: pnpm exec playwright install
+      # - name: Update Playwright browsers to latest
+      #   run: pnpm exec playwright install
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         # with:
