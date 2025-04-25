@@ -42,9 +42,11 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
           `;
       }
 
+      // console.log("Astro:", Astro);
       // Init pagefind ui
       const search = new PagefindUI({
         element: "#pagefind-search",
+        bundlePath: (import.meta.env.BASE_URL ?? "") + "/pagefind/",
         showSubResults: true,
         showImages: false,
         processTerm: function (term: string) {

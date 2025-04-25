@@ -1,4 +1,5 @@
 ---
+import { getPagePath } from "@/utils/getPagePath.ts";
 // import IconHash from "@/assets/icons/IconHash.svg";
 
 export interface Props {
@@ -17,7 +18,7 @@ const { tag, tagName, size = "sm" } = Astro.props;
   ]}
 >
   <a
-    href={`/tags/${tag}/`}
+    href={getPagePath(`/tags/${tag}/`)}
     transition:name={tag}
     class:list={[
       "relative pr-2 text-lg underline decoration-muted group-hover:-top-0.5 group-hover:text-accent focus-visible:p-1",

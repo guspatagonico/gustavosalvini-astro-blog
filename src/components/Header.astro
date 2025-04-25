@@ -7,6 +7,7 @@ import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import LinkButton from "./LinkButton.astro";
+import { getPagePath } from "@/utils/getPagePath";
 import { SITE } from "@/config";
 
 const { pathname } = Astro.url;
@@ -19,7 +20,24 @@ const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
   const pathArray = path.split("/").filter(p => p.trim());
 
-  return currentPath === path || currentPathArray[0] === pathArray[0];
+  // console.log("---");
+  // console.log("path:", path, " - currentPath:", currentPath);
+  // console.log("currentPathArray:", currentPathArray);
+  // console.log("pathArray:", pathArray);
+  // console.log(
+  //   "currentPathArray[currentPathArray.length - 1]:",
+  //   currentPathArray[currentPathArray.length - 1]
+  // );
+  // console.log(
+  //   "pathArray[pathArray.length - 1]:",
+  //   pathArray[pathArray.length - 1]
+  // );
+
+  return (
+    currentPath === path ||
+    currentPathArray[currentPathArray.length - 1] ===
+      pathArray[pathArray.length - 1]
+  );
 };
 ---
 
@@ -40,7 +58,7 @@ const isActive = (path: string) => {
       class="relative flex w-full items-baseline justify-between bg-background p-4 sm:items-center sm:py-6"
     >
       <a
-        href="/"
+        href={getPagePath("/")}
         class="absolute py-1 text-2xl leading-7 font-light tracking-wide whitespace-nowrap sm:static"
       >
         {SITE.title}
@@ -69,22 +87,34 @@ const isActive = (path: string) => {
           ]}
         >
           <li class="col-span-2">
-            <a href="/posts" class:list={{ "active-nav": isActive("/posts") }}>
+            <a
+              href={getPagePath("/posts")}
+              class:list={{ "active-nav": isActive(getPagePath("/posts")) }}
+            >
               Posts
             </a>
           </li>
           <li class="col-span-2">
-            <a href="/tags" class:list={{ "active-nav": isActive("/tags") }}>
+            <a
+              href={getPagePath("/tags")}
+              class:list={{ "active-nav": isActive(getPagePath("/tags")) }}
+            >
               Tags
             </a>
           </li>
           <li class="col-span-2">
-            <a href="/about" class:list={{ "active-nav": isActive("/about") }}>
+            <a
+              href={getPagePath("/about")}
+              class:list={{ "active-nav": isActive(getPagePath("/about")) }}
+            >
               About
             </a>
           </li>
           <li class="col-span-2">
-            <a href="/now" class:list={{ "active-nav": isActive("/now") }}>
+            <a
+              href={getPagePath("/now")}
+              class:list={{ "active-nav": isActive(getPagePath("/now")) }}
+            >
               Now
             </a>
           </li>
@@ -92,11 +122,13 @@ const isActive = (path: string) => {
             SITE.showArchives && (
               <li class="col-span-2">
                 <LinkButton
-                  href="/archives"
+                  href={getPagePath("/archives")}
                   class:list={[
                     "focus-outline flex justify-center p-3 sm:p-1",
                     {
-                      "active-nav [&>svg]:stroke-accent": isActive("/archives"),
+                      "active-nav [&>svg]:stroke-accent": isActive(
+                        getPagePath("/archives")
+                      ),
                     },
                   ]}
                   ariaLabel="archives"
@@ -110,10 +142,10 @@ const isActive = (path: string) => {
           }
           <li class="col-span-1 flex items-center justify-center">
             <LinkButton
-              href="/search"
+              href={getPagePath("/search")}
               class:list={[
                 "focus-outline flex p-3 sm:p-1",
-                { "[&>svg]:stroke-accent": isActive("/search") },
+                { "[&>svg]:stroke-accent": isActive(getPagePath("/search")) },
               ]}
               ariaLabel="search"
               title="Search"

@@ -15,7 +15,7 @@ import { targetBlank } from "./src/utils/rehype/rehype-targetBlank";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
-  base: "/gustavosalvini-astro-blog",
+  base: SITE.base,
   integrations: [
     mdx(),
     sitemap({
