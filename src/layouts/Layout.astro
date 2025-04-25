@@ -137,8 +137,7 @@ const structuredData = {
       is:inline
       data-astro-rerun
       src="https://www.googletagmanager.com/gtag/js?id=G-09W87G423D"
-    >
-    </script>
+    ></script>
 
     <script>
       declare global {
@@ -176,10 +175,10 @@ const structuredData = {
       }
 
       document.addEventListener("astro:page-load", () => {
-        console.log("astro:page-load event");
+        // console.log("astro:page-load event");
 
         var host = window.location.hostname;
-        console.log("host:", host);
+        // console.log("host:", host);
 
         if (host != "localhost") {
           // your google analytic code here
