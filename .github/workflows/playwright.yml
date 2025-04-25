@@ -3,7 +3,11 @@ on:
   push:
     branches: [github-pages]
   pull_request:
-    branches: [github-pages]
+    branches:
+      [github-pages]
+      # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
 jobs:
   test:
     timeout-minutes: 60
@@ -14,11 +18,11 @@ jobs:
         with:
           node-version: lts/*
       - name: Install dependencies
-        run: pnpm ci
+        run: npm ci
       - name: Install Playwright Browsers
-        run: pnpm dlx playwright install --with-deps
+        run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: pnpm dlx playwright test
+        run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
