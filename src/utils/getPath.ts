@@ -24,7 +24,7 @@ export function getPath(
 
   // const basePath = (SITE.base ?? "") + (includeBase ? "/posts" : "");
   // const basePath = includeBase ? "/posts" : "";
-  const basePath = includeBase ? (SITE.base ?? "") + "/posts" : "";
+  const basePath = includeBase ? SITE.base + "/posts" : "";
 
   // Making sure `id` does not contain the directory
   const blogId = id.split("/");
