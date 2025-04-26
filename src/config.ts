@@ -1,6 +1,6 @@
 export const SITE = {
   website: "https://guspatagonico.github.io/gustavosalvini-astro-blog/", // replace this with your deployed domain
-  base: "gustavosalvini-astro-blog/",
+  base: "/gustavosalvini-astro-blog",
   author: "Gustavo Adrián Salvini",
   profile: "https://gustavosalvini.com.ar/",
   desc: "A personal playground for digital exploration by Gustavo Adrián Salvini.",
