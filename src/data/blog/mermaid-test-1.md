@@ -92,3 +92,24 @@ mindmap
       Mermaid
 
 ```
+
+### General blocks diagram
+
+```mermaid
+---
+config:
+  layout: fixed
+  theme: neo
+---
+flowchart TD
+    A["Sitio Web Kartonsec"] --> B("Plataforma Base:<br><b>Wordpress / WooCommerce</b><br>(Modo Catálogo)") & C("<b>Sección Home</b>") & D("<b>Sección Productos</b>") & E("<b>Sección Nosotros</b>") & F("<b>Sección Información Técnica</b>") & G("<b>Sección Dónde Comprar</b>") & H("Otras Secciones<br>(Contacto, Blog, Buscador General)")
+    D --> D1("Landings por Categoría") & D2("Fichas de Producto Individual")
+    G --> G1("Mapa Interactivo") & G2("Funcionalidad Geolocalización/Filtro") & G3("Listado de Distribuidores")
+    J["<b>Asesor Virtual Kartonsec</b>"] --> K("Tecnología Base:<br><b>Next.js / React / Zustand / Mantine UI</b>") & L("Flujos de Asesoramiento<br>(Impermeab. / Aislantes)")
+    L --> L1("Lógica de Recomendación") & L2("Cálculo de Cantidades<br>(Solo Flujo Impermeab.)")
+    A -- Enlace desde Menú Principal --> J
+    D1 -- Enlace Contextual --> J
+    D2 -- Enlace Contextual --> J
+    J -- Consume API (Wordpress) --> B
+    J -- Enlace a --> G
+```
