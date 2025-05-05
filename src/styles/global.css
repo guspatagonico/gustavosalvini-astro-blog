@@ -76,3 +76,7 @@ html[data-theme="dark"] {
 .active-nav {
   @apply underline decoration-muted decoration-2 underline-offset-4;
 }
+
+.katex-display {
+  overflow-x: scroll;
+}
