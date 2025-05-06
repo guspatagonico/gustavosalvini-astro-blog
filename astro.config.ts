@@ -30,7 +30,7 @@ export default defineConfig({
       [remarkCollapse, { test: "Table of contents" }],
     ],
     rehypePlugins: [
-      [targetBlank, { domain: "gustavosalvini.com.ar" }],
+      [targetBlank, { domain: "guspatagonico.github.io" }],
       rehypeKatex,
       [
         rehypeMermaid,
