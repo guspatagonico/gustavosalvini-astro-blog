@@ -6,7 +6,7 @@ Gustavo.
 
 ---
 
-![Gustavo Adrián Salvini Blog](public/gustavosalvini-og.jpg)
+![Gustavo Adrián Salvini Blog](https://gustavosalvini.com.ar/gustavosalvini-og.jpg)
 ![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
@@ -87,15 +87,14 @@ Documentation can be read in two formats\_ _markdown_ & _blog post_.
 
 ## 💻 Tech Stack
 
-**Main Framework** - [Astro](https://astro.build/)  
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)  
-**Styling** - [TailwindCSS](https://tailwindcss.com/)  
+**Main Framework** - [Astro](https://astro.build/)
+**Type Checking** - [TypeScript](https://www.typescriptlang.org/)
+**Styling** - [TailwindCSS](https://tailwindcss.com/)
 **UI/UX** - [Figma Design File](https://www.figma.com/community/file/1356898632249991861)  
-**Static Search** - [FuseJS](https://pagefind.app/)  
-**Icons** - [Tablers](https://tabler-icons.io/)  
-**Code Formatting** - [Prettier](https://prettier.io/)  
-**Deployment** - [Cloudflare Pages](https://pages.cloudflare.com/)  
-**Illustration in About Page** - [https://freesvgillustration.com](https://freesvgillustration.com/)  
+**Static Search** - [FuseJS](https://pagefind.app/)
+**Icons** - [Tablers](https://tabler-icons.io/)
+**Code Formatting** - [Prettier](https://prettier.io/)
+**Deployment** - [Github Pages](https://pages.github.com/)
 **Linting** - [ESLint](https://eslint.org)
 
 ## 👨🏻‍💻 Running Locally
@@ -121,16 +120,6 @@ pnpm install
 
 # start running the project
 pnpm run dev
-```
-
-As an alternative approach, if you have Docker installed, you can use Docker to run this project locally. Here's how:
-
-```bash
-# Build the Docker image
-docker build -t astropaper .
-
-# Run the Docker container
-docker run -p 4321:80 astropaper
 ```
 
 ## Google Site Verification (optional)
