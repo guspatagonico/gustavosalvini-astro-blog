@@ -1,6 +1,6 @@
 ---
-title: "gsupload-python: Safe, Deterministic SFTP / FTP Deploys"
-description: "Stop guessing with FTP: gsupload, the Python CLI that cures \"deploy anxiety\" with smart visual dry-runs and layered configuration."
+title: "Safe, Deterministic SFTP / FTP Deploys: 'gsupload-python'"
+description: "A DevOps-friendly CLI to sync files to FTP/SFTP targets using hierarchical config discovery, additive ignores, and a pre-flight tree diff."
 slug: gsupload-presentation
 pubDatetime: 2025-12-13T06:27:05.476Z
 draft: false
@@ -15,149 +15,466 @@ tags:
   - SFTP
   - Python
   - automation
+  - cli
 featured: true
 ---
 
-# Infrastructure as Code: Safe, Deterministic SFTP / FTP Deploys
 
-Let's be honest. As senior developers, we spend most of our time architecting complex cloud systems, tuning containers, and optimizing pipelines. But we also know the reality of the industry: sometimes, you just need to get files onto a simple server.
+If you've ever done "just upload these files to the server" often enough, you know what happens next: manual steps, inconsistent excludes, someone overwrites the wrong thing, or a deploy goes out with `node_modules/` by accident.
 
-Maybe it is a legacy monolith, a rapid client prototype, or a specialized environment where you only have SFTP access. The "junior" solution is dragging folders in FileZilla. The "senior" solution usually involves writing a brittle Bash script that eventually breaks or fails to handle edge cases.
+This post introduces **gsupload**, a small Python CLI I built to make FTP/SFTP uploads repeatable:
 
-I built **`gsupload`** to fill the gap between manual transfers and enterprise pipelines. It is a Python CLI designed with **S.O.L.I.D. principles**, offering the determinism, concurrency, and safety of a modern tool, without the infrastructure bloat.
+- Bind **host targets** by alias (SFTP or FTP)
+- Discover and **merge config files up the directory tree** (global → project → subfolder)
+- Apply **additive ignore patterns** from config + `.gsupload_ignore`
+- Show a **pre-flight tree comparison** (local vs remote) before uploading
+- Upload using **parallel workers** (with SSH compression for SFTP)
 
-## The Philosophy: "State Engine" Deployment
+Repository: https://github.com/guspatagonico/gsupload-python
 
-This is not just a file copier; it is a state engine. I designed `gsupload` to solve the specific pain points of legacy deployment: lack of visibility and lack of context.
+---
 
-The goal was simple: **Zero-Anxiety Deploys.**
+## Who this is for
 
-## The Architecture: Determinism over "Fire and Forget"
+- Sysadmins and DevOps engineers maintaining "a few servers" with repeatable uploads
+- Full-stack developers shipping static assets / hotfixes / small site updates
+- Anyone automating repetitive, error-prone FTP/SFTP workflows
 
-I wanted this tool to be robust. It builds a complete state of the world before performing any IO operations. Here is the **Deployment Pipeline** that runs every time you execute a command:
+If you need a full artifact pipeline with rollbacks, canaries and immutable releases: keep using your CD platform. If you need a fast, predictable "sync these files into that remote base path" tool: this fits.
 
-```mermaid
-flowchart TD
-    A[Start] --> B{Load Configs}
-    B --> C[Build Context]
-    C --> D[Scan Local Files]
-    C --> E[Fetch Remote State]
-    D --> F{Compute Diff}
-    E --> F
-    F --> G[Visual Dashboard]
-    G --> H{Validation?}
-    H -- No --> I[Abort]
-    H -- Yes --> J[Execute IO]
-```
+---
 
-## 1. The "Monorepo" Pattern: Cascading Configuration
+## Mental model (what gsupload actually does)
 
-The most powerful architectural feature is the **Configuration Inheritance System**. It allows you to maintain D.R.Y. (Don't Repeat Yourself) principles across complex directory structures.
+At a high level, `gsupload` does four things:
 
-It uses a **Merger Strategy** similar to CSS specificity:
-1.  **Global:** System-wide excludes (e.g., `.DS_Store`).
-2.  **Project:** Repository-level host definitions.
-3.  **Context:** Sub-directory overrides for specific environments.
+1. **Loads configuration** (global + layered `.gsupload.json` files)
+2. **Selects a binding** (explicit `-b` or auto-detected from your current directory)
+3. **Expands patterns** (recursive globbing by default) and applies excludes
+4. Optionally **compares remote vs local** and asks for confirmation
+5. Uploads matching files in parallel (threads)
+
+### Architecture overview
 
 ```mermaid
-classDiagram
-    direction LR
-    class RootConfig {
-        +Global Excludes
-    }
-    class ProjectConfig {
-        +Protocol SFTP
-        +Host Definition
-    }
-    class SubfolderConfig {
-        +Remote Path Override
-        +User Credentials
-    }
-    
-    RootConfig <|-- ProjectConfig : Inherits
-    ProjectConfig <|-- SubfolderConfig : Overrides
+flowchart TB
+  U[User or CI] -->|runs| CLI[gsupload CLI]
+
+  subgraph Config[Configuration Layer]
+    G[Global config<br/>~/.gsupload/gsupload.json<br/>or ~/.config/gsupload/gsupload.json]
+    P[Project configs<br/>walk up for .gsupload.json]
+    M[Merged config<br/>additive and overrides]
+    G --> M
+    P --> M
+  end
+
+  CLI --> Config
+  CLI --> BD[Binding selection<br/>-b or auto-detect]
+
+  subgraph Local[Local Selection]
+    PAT[Patterns<br/>*.css, src/**/*.js, dirs]
+    IGN[Ignore sources<br/>- global_excludes<br/>- binding excludes<br/>- .gsupload_ignore additive]
+    EXP[Expander<br/>recursive glob + dir walk]
+    LIST[Final file list<br/>deduped within local_basepath]
+    PAT --> EXP
+    IGN --> EXP
+    EXP --> LIST
+  end
+
+  CLI --> Local
+
+  subgraph Preflight[Pre-flight optional]
+    RL[Remote listing<br/>FTP and SFTP under remote_basepath]
+    DIFF[Tree diff<br/>NEW, OVERWRITE, REMOTE ONLY]
+    CONF{Confirm?}
+    RL --> DIFF --> CONF
+  end
+
+  CLI --> Preflight
+
+  CONF -->|yes| UP[Uploader<br/>ThreadPoolExecutor]
+  CONF -->|no| STOP[Exit]
+
+  subgraph Remote[Remote Target]
+    SFTP[SFTP server]
+    FTP[FTP server]
+  end
+
+  UP -->|SFTP| SFTP
+  UP -->|FTP| FTP
 ```
 
-## 2. Performance: Parallelism by Default
+---
 
-We are not just moving files one by one. The latest version of `gsupload` implements a **Threaded Worker Pool**.
+## Installation (uv tool recommended)
 
-*   **Concurrency:** By default, it spins up 5 workers to upload files in parallel. You can tune this with `--max-workers=10` if your bandwidth allows.
-*   **Compression:** SSH compression is enabled automatically for SFTP, significantly reducing transfer time for text-based assets (JS/CSS/HTML).
-
-## 3. The "Dry Run" Standard
-
-This is the critical feature for senior workflows. When you run the command, it performs a **Visual Dry Run** by default. It diffs the local filesystem against the remote tree before a single byte is written.
-
-```bash
-gsupload -b=production "css/*.css" "js/app.js"
-```
-
-The output provides immediate clarity:
-
-```text
-Visual Check:
-├── css/
-│   ├── main.css [OVERWRITE]  <-- Yellow indicates modification
-│   └── theme.css [NEW]       <-- Green indicates creation
-└── js/
-    └── app.js [OVERWRITE]
-
-Proceed with upload? [y/N]
-```
-
-**New View Modes:**
-*   **`-vcc` (Complete):** Shows the full tree, including files that exist on the remote server but not locally (great for spotting drift).
-*   **`-vc` (Changes Only):** Hides the noise. Only shows what will actually be uploaded.
-*   **`-ts` (Tree Summary):** Skips the visual tree and just reports the stats (e.g., "5 new, 2 overwrites").
-
-## 4. Observability & Debugging
-
-Implicit magic is the enemy of reliability. I added specific flags to inspect the tool's decision-making process:
-
-*   **`--show-config`**: Prints a **Source Map** of your configuration. It tells you exactly which JSON file contributes to every setting (host, user, excludes), helping you debug complex inheritance chains.
-*   **`--show-ignored`**: Audits your exclude patterns. It lists every file skipped by `.gitignore` or `.gsupload_ignore`, ensuring you aren't silently failing to upload critical assets.
-
-## Usage: Developer Experience First
-
-We use `uv` for modern, fast Python tool management.
-
-### Installation
+`gsupload` is packaged as a Python CLI. The cleanest way to use it globally is `uv tool`:
 
 ```bash
 uv tool install --editable /path/to/gsupload-python
+uv tool update-shell
+
+# new shell session
+
+gsupload --help
 ```
 
-### Configuration (.gsupload.json)
+For local development:
 
-Define your "bindings" (environments) as code.
+```bash
+uv pip install -e ".[dev]"
+python src/gsupload.py --help
+```
+
+---
+
+## Configuration: layered, mergeable, and portable
+
+`gsupload`'s killer feature is that configuration is **discovered and merged**.
+
+### Config discovery order
+
+- Optional global base layer:
+  - `~/.gsupload/gsupload.json` **or** `~/.config/gsupload/gsupload.json`
+- Project layers:
+  - it walks up from your current directory and collects every `.gsupload.json`
+  - then merges them from shallowest → deepest (root → cwd)
+
+### Merge rules (the "additive config" part)
+
+- `global_excludes`: **additive** (combined across all configs)
+- `bindings`: merged per binding name (deeper properties override; unspecified properties are inherited)
+- Any other top-level key: simple override (deepest wins)
+
+```mermaid
+flowchart TB
+  START([Start]) --> GL{Global config exists?}
+  GL -- yes --> LOADG[Load global as base]
+  GL -- no --> SKIPG[Skip global]
+
+  LOADG --> COLLECT
+  SKIPG --> COLLECT
+
+  COLLECT[Walk up directories<br/>collect .gsupload.json files] --> ORDER[Order shallow to deep]
+  ORDER --> MERGE[Merge layer-by-layer]
+
+  MERGE --> EX[global_excludes: concatenate]
+  MERGE --> B[binding by alias: deep merge]
+  MERGE --> O[other keys: override]
+
+  EX --> DONE([Merged config ready])
+  B --> DONE
+  O --> DONE
+```
+
+### Example config (one binding)
+
+Create a `.gsupload.json` at your repo root:
 
 ```json
 {
+  "global_excludes": [".DS_Store", "*.log", ".git", "node_modules"],
   "bindings": {
-    "production": {
+    "frontend": {
       "protocol": "sftp",
-      "hostname": "mysite.com",
-      "username": "admin",
+      "hostname": "example.com",
+      "port": 22,
+      "username": "deploy",
+      "key_filename": "~/.ssh/id_ed25519",
+      "max_workers": 10,
+      "local_basepath": ".",
       "remote_basepath": "/var/www/html"
     }
   }
 }
 ```
 
-## Design Patterns Applied
+Notes:
 
-For those interested in the implementation details:
+- `local_basepath` can be absolute, relative (resolved from config file location), or omitted (defaults to the config file directory).
+- For SFTP you can authenticate via SSH agent, password auth, key auth, or encrypted key + passphrase.
 
-1.  **Strategy Pattern:** Abstraction over transport layers (FTP vs. SFTP), keeping business logic decoupled from the protocol.
-2.  **Composite Pattern:** Unified handling of file and directory recursion, enabling robust globbing (e.g., `src/**/*.js`).
-3.  **Open/Closed Principle:** The config system is designed to be extended (new environments/bindings) without modifying core application logic.
+### Inspect the merged config
 
-## Conclusion
+This is your "what will happen if I run this here?" command:
 
-**`gsupload`** respects your time and your need for safety. It brings the determinism of a pipeline to the simplicity of a CLI.
+```bash
+gsupload --show-config
+```
 
-If you are tired of brittle scripts or manual errors in legacy environments, give it a try.
+It prints the merge order and which file contributed each key.
+
+---
+
+## Excludes: config + ignore files (additive)
+
+Excludes come from three places, combined together:
+
+1. `global_excludes` in config
+2. `excludes` inside a binding
+3. `.gsupload_ignore` files (collected walking up from cwd to `local_basepath`)
+
+This is intentionally close to `.gitignore` ergonomics.
+
+### User flow for ignores
+
+```mermaid
+flowchart TD
+  A([User runs gsupload]) --> B[Resolve binding + local_basepath]
+  B --> C[Build exclude list:<br/>- global_excludes<br/>- binding excludes]
+  C --> D[Walk up directories<br/>collect .gsupload_ignore files]
+  D --> E[Adjust ignore patterns<br/>anchor path patterns]
+  E --> F[Apply excludes during file expansion]
+  F --> G([Final file list])
+```
+
+To debug ignores:
+
+```bash
+# auto-detect binding
+gsupload --show-ignored
+
+# current dir only
+gsupload --show-ignored -nr
+
+# explicit binding
+gsupload --show-ignored -b=frontend
+```
+
+---
+
+## CLI usage you'll actually use
+
+The CLI shape is intentionally small:
+
+```bash
+gsupload [OPTIONS] PATTERNS...
+```
+
+Key defaults:
+
+- Recursive file matching is **enabled** by default (`-r`)
+- "Complete visual check" is **enabled** by default (`-vcc`)
+
+Useful inspection flags:
+
+- `--show-config`: print the merged config + source annotations
+- `--show-ignored`: show what will be excluded for the active binding
+- `--version`: print the CLI version
+
+### Always quote patterns
+
+You must quote globs so your shell doesn't expand them before `gsupload` sees them:
+
+```bash
+# correct
+gsupload "*.css"
+
+gsupload -b=frontend "src/**/*.js"
+
+# wrong (shell expands before gsupload runs)
+gsupload *.css
+```
+
+### Typical workflows
+
+Pre-flight review (default behavior):
+
+```bash
+# recursive + complete tree comparison + confirmation
+gsupload "*.css"
+```
+
+Changes-only visual check (faster scan output; doesnt list remote-only files):
+
+```bash
+gsupload -vc "*.css"
+```
+
+Fast mode for automation / CI (no remote scan, no prompt):
+
+```bash
+gsupload -f -b=frontend "dist/**/*"
+```
+
+Alternative "no pre-flight" mode (still expands patterns and applies excludes, but skips remote listing and confirmation):
+
+```bash
+gsupload -nvcc -b=frontend "dist/**/*"
+```
+
+Tune parallelism:
+
+```bash
+# override per run
+gsupload --max-workers=10 "*.css"
+
+# debug / conservative
+gsupload --max-workers=1 "*.css"
+```
+
+FTP active mode (only when you know you need it):
+
+```bash
+gsupload --ftp-active "*.html"
+```
+
+---
+
+## Data flow: from patterns to remote paths
+
+Understanding the data flow helps you reason about safety and predictability.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant U as User or CI
+  participant CLI as gsupload
+  participant CFG as Config loader
+  participant SEL as Binding selector
+  participant EXP as Pattern expander
+  participant IG as Ignore collector
+  participant REM as Remote lister
+  participant UP as Parallel uploader
+
+  U->>CLI: gsupload [opts] PATTERNS...
+  CLI->>CFG: load + merge configs
+  CFG-->>CLI: merged config
+
+  CLI->>SEL: -b provided? else auto-detect
+  SEL-->>CLI: binding + local_basepath
+
+  Note over CLI,IG: sources: global_excludes, binding excludes, .gsupload_ignore
+  CLI->>IG: collect exclude patterns
+  IG-->>CLI: merged exclude patterns
+
+  CLI->>EXP: expand patterns, recursive by default
+  EXP-->>CLI: local file list, deduped
+
+  alt visual check enabled (default)
+    CLI->>REM: list remote files under remote_basepath
+    REM-->>CLI: remote file set
+    CLI-->>U: show tree diff + summary
+    U->>CLI: confirm upload?
+  else force or no visual check
+    CLI-->>U: skip remote listing
+  end
+
+  CLI->>UP: upload with ThreadPoolExecutor
+  loop for each file
+    UP-->>UP: compute remote path relative to local_basepath
+    UP-->>UP: ensure remote directories exist
+    UP-->>UP: upload
+  end
+  UP-->>CLI: results
+  CLI-->>U: done + elapsed time
+```
+
+Remote paths are computed as:
+
+$$\text{remote\_path} = \text{remote\_basepath} + "/" + \text{relative(local\_file, local\_basepath)}$$
+
+That means you can safely move between machines as long as your `local_basepath` matches the local project root.
+
+---
+
+## The visual check: practical "diff before deploy"
+
+This is what makes `gsupload` feel safer than "just upload and hope":
+
+- `[NEW]` → file does not exist remotely (within `remote_basepath`)
+- `[OVERWRITE]` → file exists remotely and will be replaced
+- `[REMOTE ONLY]` → exists on server but not locally (shown in complete mode)
+
+Three modes:
+
+- Default / complete: `-vcc` (includes remote-only)
+- Changes only: `-vc` (doesn't list remote-only, still reports counts)
+- No check: `-f` or `-nvcc` (skip remote listing)
+
+---
+
+## Performance notes (why it's fast enough)
+
+`gsupload` is optimized for the common "many small web assets" case:
+
+- Parallel uploads (`ThreadPoolExecutor`) default to 5 workers
+- Per-file connections (each worker opens its own FTP/SFTP connection)
+- SFTP enables SSH compression (`compress=True`) to speed up text assets
+- Remote directory creation is cached to avoid repeated `mkdir/stat`
+
+Rule of thumb:
+
+- SFTP: you can often push to 5-10 workers
+- FTP: keep it conservative (1-3) depending on server limits
+
+---
+
+## Security posture: don't commit secrets
+
+SFTP is encrypted; FTP is not.
+
+Recommended practices:
+
+- Put **credentials in global config** (`~/.gsupload/...`) and keep project config in git.
+- Prefer **SSH agent authentication** (no passwords in JSON).
+- If you must use keys in config, point to a local path; avoid committing key files.
+
+A nice split for teams:
+
+- Repo: `.gsupload.json` contains only non-secret defaults (paths, excludes, binding names)
+- Personal machine: `~/.gsupload/gsupload.json` contains hostname/username/credentials overrides
+
+---
+
+## Using it in automation (CI / scripts)
+
+For non-interactive runs, use `-f`:
+
+```bash
+# Example: deploy compiled assets
+cd /repo
+npm run build
+
+# Upload build output without prompting
+gsupload -f -b=frontend "dist/**/*"
+```
+
+Pair this with a dedicated deploy user and least-privilege remote paths.
+
+---
+
+## Troubleshooting checklist
+
+- No files found?
+  - Quote your glob: `gsupload "*.css"`
+  - Check ignores: `gsupload --show-ignored`
+- Binding not detected?
+  - Run `gsupload --show-config` and confirm `local_basepath`
+  - Specify binding explicitly: `gsupload -b=frontend ...`
+- Remote listing slow?
+  - Use changes-only: `-vc`
+  - Or skip it: `-f`
+- FTP connectivity issues?
+  - Default is passive mode. Try `--ftp-active` only if you know your network requires it.
+
+---
+
+## Closing
+
+`gsupload` is intentionally small: one CLI, layered config, predictable ignore rules, a safety pre-flight diff, and parallel uploads. It's the kind of tool that pays for itself the third time you avoid uploading the wrong directory.
+
+If you try it and you want improvements, the best next steps are usually:
+
+- adding more binding metadata (environment names, tags)
+- integrating secrets via OS keychains or env vars (without breaking the "simple config" story)
+- adding a dry-run mode for CI pipelines that only reports diffs
+
+I'm also open to collaborations and networking around this kind of tooling. If you're using `gsupload` (or building something similar) and you want to discuss workflows, edge cases, or potential improvements:
+
+- open an issue or PR in the repository
+- share your constraints (hosting panels, chrooted SFTP, FTP quirks, CI needs)
+- suggest features that keep the tool pragmatic and easy to operate
 
 ---
 
