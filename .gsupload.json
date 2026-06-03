@@ -1,25 +1,19 @@
 {
     "global_excludes": [
-        ".DS_Store",
-        "node_modules",
-        "*.log",
-        ".git",
-        ".env",
-        ".env.local",
-        "package-lock.json",
-        "yarn.lock",
-        ".gsupload.json"
+        "pepe.txt",
+        "*.caca"
     ],
     "global_excludes_comments": "Exclude system and build artifacts from upload",
     "bindings": {
         "frontend": {
-            "comments": "Frontend deployment to ecim.tech server",
+            "comments": "'Blog Frontend' deployment to 'ecim.tech' server",
             "protocol": "sftp",
             "hostname": "ecim.tech",
             "port": 2222,
             "username": "gsalvini",
             "local_basepath": "dist",
-            "remote_basepath": "/home/gsalvini/public_html"
+            "remote_basepath": "/home/gsalvini/public_html",
+            "max_workers": 10
         }
     }
 }

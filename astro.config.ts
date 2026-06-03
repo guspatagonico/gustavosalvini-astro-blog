@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
@@ -24,20 +25,22 @@ export default defineConfig({
   ],
 
   markdown: {
-    remarkPlugins: [
-      remarkMath,
-      remarkToc,
-      [remarkCollapse, { test: "Table of contents" }],
-    ],
-    rehypePlugins: [
-      [targetBlank, { domain: "gustavosalvini.com.ar" }],
-      rehypeKatex,
-      [
-        rehypeMermaid,
-        { strategy: "img-svg", dark: true, colorScheme: "forest" },
+    processor: unified({
+      remarkPlugins: [
+        remarkMath,
+        remarkToc,
+        [remarkCollapse, { test: "Table of contents" }],
       ],
-      rehypeModifyMermaidGraphs,
-    ],
+      rehypePlugins: [
+        [targetBlank, { domain: "gustavosalvini.com.ar" }],
+        rehypeKatex,
+        [
+          rehypeMermaid,
+          { strategy: "img-svg", dark: true, colorScheme: "forest" },
+        ],
+        rehypeModifyMermaidGraphs,
+      ],
+    }),
 
     syntaxHighlight: {
       type: "shiki",
@@ -67,6 +70,5 @@ export default defineConfig({
   experimental: {
     // svg: true,
     // responsiveImages: true,
-    preserveScriptOrder: true,
   },
 });
