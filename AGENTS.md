@@ -74,3 +74,4 @@ timezone: America/Argentina/Buenos_Aires  # optional
 - `src/data/blog/examples/` — example/template posts
 - `src/data/blog/_releases/` — release notes (excluded from content loader via `[^_]` prefix)
 - `src/components/AboutMe.md` and `AboutMeIntro.md` — markdown components imported into layouts
+- For textual quotes with source attribution (blockquotes), add the source URL directly in the attribution line using an HTML anchor with `target="_blank"` and `rel="noopener noreferrer"`.
