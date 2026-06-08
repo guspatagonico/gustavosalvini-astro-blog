@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Boltzmann a ChatGPT — Explorador 3D Interactivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #f0883e;
+    --hot: #f85149;
+    --cold: #58a6ff;
+    --green: #3fb950;
+    --purple: #bc8cff;
+    --mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Iosevka', 'SF Mono', 'Menlo', 'Consolas', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  header {
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+  }
+  header h1 {
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p { color: var(--text-dim); margin-top: 0.5rem; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ===== TEMPERATURE EXPLORER ===== */
+  .temp-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+  @media (max-width: 768px) { .temp-layout { grid-template-columns: 1fr; } }
+
+  .temp-controls { display: flex; flex-direction: column; gap: 1rem; }
+  .temp-value { font-size: 2.5rem; font-weight: bold; text-align: center; transition: color 0.3s; }
+  .temp-value.cold { color: var(--cold); }
+  .temp-value.mid { color: var(--accent2); }
+  .temp-value.hot { color: var(--hot); }
+
+  .temp-slider {
+    width: 100%; height: 8px;
+    -webkit-appearance: none; appearance: none;
+    background: linear-gradient(to right, var(--cold), var(--accent2), var(--hot));
+    border-radius: 4px; outline: none; cursor: pointer;
+  }
+  .temp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 24px; height: 24px;
+    border-radius: 50%; background: white; border: 3px solid var(--border);
+    cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  .temp-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); }
+  .temp-labels span:first-child { color: var(--cold); }
+  .temp-labels span:nth-child(2) { color: var(--accent2); }
+  .temp-labels span:last-child { color: var(--hot); }
+  .phys-label { text-align: center; font-size: 0.88rem; color: var(--text-dim); font-weight: 700; min-height: 3.2em; display: flex; align-items: flex-start; justify-content: center; }
+
+  .bar-chart { display: flex; align-items: flex-end; gap: 2px; height: 180px; padding: 0 0.5rem; }
+  .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+  .bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s;
+    min-height: 2px;
+  }
+  .bar-label { font-size: 0.6rem; color: var(--text-dim); margin-top: 4px; text-align: center; }
+
+  .formula-box {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem; text-align: center;
+    font-family: var(--mono); font-size: 0.85rem; line-height: 1.8;
+  }
+
+  /* ===== 3D ENERGY LANDSCAPE ===== */
+  #three-container {
+    position: relative;
+    width: 100%; height: 550px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0a0e14;
+    cursor: grab;
+  }
+  #three-container:active { cursor: grabbing; }
+  #three-container canvas { display: block; }
+
+  .three-overlay {
+    position: absolute; top: 1rem; left: 1rem;
+    background: rgba(13,17,23,0.85);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.78rem;
+    pointer-events: none;
+    line-height: 1.6;
+  }
+  .three-overlay .val { color: var(--accent); font-family: var(--mono); }
+  .three-overlay .minima-label { color: var(--text-dim); font-size: 0.7rem; margin-top: 0.3rem; }
+  .three-overlay .tip { pointer-events: auto; }
+  .three-overlay .tip::after {
+    bottom: auto;
+    top: calc(100% + 4px);
+    left: 0;
+    transform: none;
+  }
+
+  .three-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(13,17,23,0.88);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.82rem;
+    color: var(--text);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 5;
+    animation: hintPulse 2.2s ease-in-out infinite;
+  }
+  .three-hint.hidden { display: none; }
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; border-color: var(--accent); }
+  }
+
+  .energy-controls {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-top: 1rem; align-items: center;
+  }
+  .view-bar {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    z-index: 10;
+  }
+  .view-btn {
+    width: 30px; height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13,17,23,0.8);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .view-btn:hover { border-color: var(--accent); color: var(--text); background: rgba(22,27,34,0.9); }
+  .view-btn.active { background: #1f6feb; border-color: #58a6ff; color: #fff; }
+  .view-btn svg { display: block; }
+  .view-sep { width: 22px; height: 1px; background: var(--border); margin: 0.1rem auto; }
+  .btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); padding: 0.5rem 1rem; border-radius: 6px;
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: #21262d; border-color: var(--accent); }
+  .btn.primary { background: #1f6feb; border-color: #1f6feb; }
+  .btn.primary:hover { background: #388bfd; }
+  .btn.active { background: #1f6feb; border-color: #58a6ff; }
+  .btn.danger { background: #da3633; border-color: #da3633; }
+
+  .slider-group {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.8rem; color: var(--text-dim);
+    margin-left: auto;
+  }
+  .slider-group input[type=range] { width: 100px; }
+  .slider-group .slider-val { font-family: var(--mono); color: var(--accent2); min-width: 2.5rem; text-align: right; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+  }
+  .stat-card {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.6rem 0.8rem; text-align: center;
+  }
+  .stat-card .stat-val { font-size: 1.1rem; font-weight: bold; font-family: var(--mono); color: var(--accent); }
+  .stat-card .stat-lbl { color: var(--text-dim); font-size: 0.7rem; }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    padding: 0 0 1.2rem;
+    margin: 0 0.5rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; top: 1.2rem; left: 0.5rem; right: 0.5rem;
+    height: 3px;
+    background: linear-gradient(to right, #58a6ff, #8b5cf6, #f0883e, #3fb950, #f85149);
+    border-radius: 2px;
+  }
+  .timeline-node {
+    text-align: center;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    padding: 2.0rem 0.25rem 0;
+    transition: transform 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .timeline-node:hover { transform: translateY(-2px); z-index: 50; }
+  .timeline-node .year {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.18);
+    border-radius: 10px;
+    padding: 0.1rem 0.5rem;
+    display: inline-block;
+    margin-top: 0.55rem;
+    margin-bottom: 0.55rem;
+    letter-spacing: 0.02em;
+  }
+  .timeline-node .dot {
+    position: absolute;
+    top: 1.2rem;                         /* alineado con la línea */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    margin: 0;
+    border: 3px solid rgba(255,255,255,0.18);
+    box-shadow: 0 0 12px rgba(255,255,255,0.08);
+    transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+  }
+  .timeline-node:hover .dot {
+    transform: translate(-50%, -50%) scale(1.35);
+    border-color: rgba(255,255,255,0.4);
+    box-shadow: 0 0 20px currentColor;
+  }
+  .timeline-node .name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .timeline-node .desc {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin-top: 0.2rem;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 600px) {
+    .timeline {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 0.5rem 0 0.5rem 2rem;
+      margin: 0;
+    }
+    .timeline::before {
+      top: 0; bottom: 0; left: 0.75rem; right: auto;
+      width: 3px; height: auto;
+      background: linear-gradient(to bottom, #58a6ff, #8b5cf6, #f0883e, #3fb950, #f85149);
+    }
+    .timeline-node {
+      text-align: left;
+      flex: none;
+      padding: 0 0 0 1.5rem;
+      align-items: flex-start;
+    }
+    .timeline-node .dot {
+      position: absolute;
+      left: -1.84rem;
+      top: 0.15rem;
+      transform: none;
+    }
+    .timeline-node:hover .dot {
+      transform: scale(1.35);
+    }
+    .timeline-node .year { margin-top: 0; margin-bottom: 0.4rem; }
+  }
+
+  footer { text-align: center; padding: 2rem 1rem; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    #three-container { height: 350px; }
+    .energy-controls { flex-direction: column; align-items: stretch; }
+  }
+
+  /* === TOOLTIPS === */
+  .tip {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: var(--text-dim);
+    text-underline-offset: 3px;
+    cursor: help;
+    position: relative;
+  }
+  .tip:hover { text-decoration-color: var(--accent); color: var(--accent); }
+  .tip::after {
+    content: attr(data-tip);
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1c2333;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    color: var(--text);
+    white-space: normal;
+    width: 220px;
+    z-index: 200;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    pointer-events: none;
+    text-align: left;
+    font-weight: normal;
+    border-bottom: 1px solid var(--accent);
+  }
+  .tip:hover::after,
+  .tip.show::after { display: block; }
+  .tip.tip-up::after { bottom: calc(100% + 6px); top: auto; }
+  .tip.tip-down::after { top: calc(100% + 6px); bottom: auto; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>De Boltzmann a ChatGPT</h1>
+  <p>Explorador interactivo: la física estadística detrás de los modelos de lenguaje</p>
+</header>
+
+<div class="container">
+
+  <!-- ====== 1. TEMPERATURE EXPLORER ====== -->
+  <section class="section">
+    <h2>1. El control de temperatura</h2>
+    <div class="temp-layout">
+      <div class="temp-controls">
+        <div class="temp-value mid" id="tempDisplay">τ = 0.7</div>
+        <input type="range" class="temp-slider" id="tempSlider" min="0" max="2" step="0.01" value="0.7">
+        <div class="temp-labels">
+          <span>τ = 0<br>Determinista<br>"Congelado"</span>
+          <span>τ = 0.7<br>Equilibrado<br>"Templado"</span>
+          <span>τ = 2.0<br>Aleatorio<br>"Caliente"</span>
+        </div>
+        <div class="phys-label" id="physLabel">🧊 Un gas frío: las partículas se concentran en el estado fundamental</div>
+      </div>
+      <div>
+        <div class="bar-chart" id="barChart"></div>
+        <div style="text-align:center;font-size:0.7rem;color:var(--text-dim);margin-top:0.5rem">
+          Probabilidad de cada token → distribución softmax / Boltzmann
+        </div>
+      </div>
+    </div>
+    <div class="formula-box" style="margin-top:1rem" id="formulaDisplay"></div>
+  </section>
+
+  <!-- ====== 2. 3D ENERGY LANDSCAPE ====== -->
+  <section class="section">
+    <h2>2. Paisaje de energía — Descenso de gradiente (3D)</h2>
+    <p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem">
+      El paisaje representa la
+      <strong class="tip" data-tip="También llamada loss function o función de costo. Mide el error del modelo. Acá está representada por la altura del paisaje: valles = bajo error, picos = alto error.">función de pérdida</strong>
+      de un modelo de machine learning.
+      Cada punto (x, y) es una configuración de parámetros; la altura es la pérdida. Los valles son
+      <span class="tip" data-tip="Valles del paisaje de pérdida. Soluciones donde el gradiente es cero. No todos son óptimos: algunos son 'trampas' de las que solo se escapa con ruido térmico (SGD).">mínimos locales</span>
+      — buenas soluciones. La esfera blanca desciende por
+      <span class="tip" data-tip="Algoritmo de optimización. Sigue la pendiente más empinada cuesta abajo. En física: una partícula que rueda hacia el equilibrio. En ML: así se entrenan las redes neuronales.">gradiente</span>,
+      como una partícula que rueda cuesta abajo en un sistema físico. Hacé <strong>doble clic</strong> en la superficie para lanzar la partícula. Arrastrá para rotar, scroll para zoom.
+    </p>
+    <div id="three-container">
+      <div class="three-overlay" id="threeOverlay">
+        <div><span class="tip" data-tip="Valor de la función de costo en la posición actual. En física: energía del sistema. Cuanto más baja, mejor es la solución.">Pérdida</span>: <span class="val" id="loss3d">—</span></div>
+        <div>Paso: <span class="val" id="step3d">0</span></div>
+        <div>Estado: <span class="val" id="status3d">—</span></div>
+        <div><span class="tip" data-tip="SGD: Stochastic Gradient Descent (Descenso de Gradiente Estocástico). Ruido térmico que permite escapar de mínimos locales. τ=0: descenso puro (determinista). τ>0: la partícula 'tiembla' como partículas en un gas caliente.">Temperatura SGD</span>: <span class="val" id="sgdTemp3d">0.00</span></div>
+        <div class="minima-label">🔵 Mínimo global · 🟠 Mínimos locales</div>
+      </div>
+      <div class="three-hint" id="threeHint">🎯 Hacé <strong>doble clic</strong> en la superficie para lanzar la partícula</div>
+      <div class="view-bar" id="viewBar">
+        <button class="view-btn active" data-view="default" title="Perspectiva">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 4.5 8 1l6 3.5M2 11.5 8 15l6-3.5M2 4.5v7M14 4.5v7M8 1v14M8 8l6 3.5M8 8 2 11.5"/>
+          </svg>
+        </button>
+        <button class="view-btn" data-view="top" title="Superior">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 14h12M8 2v10M4 6l4-4 4 4"/>
+          </svg>
+        </button>
+        <button class="view-btn" data-view="left" title="Lateral">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2v12M2 8h10M4 4l-2 4 2 4"/>
+          </svg>
+        </button>
+        <button class="view-btn" data-view="front" title="Frontal">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 2h12M8 14V4M4 10l4 4 4-4"/>
+          </svg>
+        </button>
+        <div class="view-sep"></div>
+        <button class="view-btn" id="btnFitView" title="Ajustar vista">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 10v4h4M10 14h4v-4M14 6V2h-4M6 2H2v4"/>
+            <circle cx="8" cy="8" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="energy-controls">
+      <button class="btn primary" id="btnReset">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8a6 6 0 0 1 10.47-4M14 8a6 6 0 0 1-10.47 4M2 2v4h4M14 14v-4h-4"/></svg>
+        Reiniciar
+      </button>
+      <button class="btn" id="btnStep">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2v12M12 8 4 2v12"/><line x1="13" y1="2" x2="13" y2="14"/></svg>
+        Un paso
+      </button>
+      <button class="btn" id="btnAuto">
+        <svg class="play-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="4 2 14 8 4 14"/></svg>
+        <span id="btnAutoLabel">Auto-descenso</span>
+      </button>
+      <div class="slider-group">
+        <span>🌡️ <span class="tip" data-tip="SGD: Stochastic Gradient Descent (Descenso de Gradiente Estocástico). Ruido térmico que permite escapar de mínimos locales. τ=0: descenso puro (determinista). τ>0: la partícula 'tiembla' como partículas en un gas caliente.">Temp SGD</span>:</span>
+        <input type="range" id="sgdSlider" min="0" max="2" step="0.01" value="0">
+        <span class="slider-val" id="sgdVal">0.00</span>
+      </div>
+      <div class="slider-group">
+        <span>📐 <span class="tip" data-tip="Tamaño del paso en cada iteración. Valores chicos: descenso lento pero preciso. Valores grandes: rápido pero puede pasar de largo el mínimo. Equivale a la viscosidad del medio.">Learning rate</span>:</span>
+        <input type="range" id="lrSlider" min="0.001" max="0.015" step="0.0005" value="0.003">
+        <span class="slider-val" id="lrVal">0.003</span>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="statLoss">—</div><div class="stat-lbl"><span class="tip" data-tip="Valor actual de la función de pérdida (loss). En física: energía del sistema. Menor es mejor.">Pérdida actual</span></div></div>
+      <div class="stat-card"><div class="stat-val" id="statStep">0</div><div class="stat-lbl">Pasos de descenso</div></div>
+      <div class="stat-card"><div class="stat-val" id="statGrad">—</div><div class="stat-lbl"><span class="tip" data-tip="Magnitud del vector gradiente. Indica la pendiente del paisaje en la posición actual. Cercana a cero = la partícula llegó a un valle (mínimo local).">Norma del gradiente</span></div></div>
+      <div class="stat-card"><div class="stat-val" id="statDist">—</div><div class="stat-lbl">Dist. al mínimo global</div></div>
+    </div>
+  </section>
+
+  <!-- ====== 3. TIMELINE ====== -->
+  <section class="section">
+    <h2>3. Linaje intelectual</h2>
+    <div class="timeline">
+      <div class="timeline-node"><div class="dot" style="background:var(--accent)"></div><div class="year">1877</div><div class="name tip" data-tip="Físico austríaco (1844-1906). Fundó la mecánica estadística. Su distribución de energías para gases es matemáticamente idéntica a la función softmax de los transformers.">Boltzmann</div><div class="desc"><span class="tip" data-tip="Fórmula que describe la probabilidad de cada estado de energía en un sistema en equilibrio térmico. Idéntica a softmax.">Distribución de Boltzmann</span><br>Mecánica estadística</div></div>
+      <div class="timeline-node"><div class="dot" style="background:var(--purple)"></div><div class="year">1902</div><div class="name tip" data-tip="Físico estadounidense (1839-1903). Unificó termodinámica y mecánica estadística. Su concepto de energía libre es la base matemática de las funciones de pérdida en ML.">Gibbs</div><div class="desc">Ensemble canónico<br>Energía libre</div></div>
+      <div class="timeline-node"><div class="dot" style="background:var(--accent2)"></div><div class="year">1948</div><div class="name tip" data-tip="Matemático estadounidense (1916-2001). Fundó la teoría de la información. Tomó la entropía de la termodinámica y la aplicó a la comunicación. La entropía cruzada es la función de pérdida estándar en ML.">Shannon</div><div class="desc">Teoría de la información<br>Entropía cruzada</div></div>
+      <div class="timeline-node"><div class="dot" style="background:var(--green)"></div><div class="year">1982</div><div class="name tip" data-tip="Físico estadounidense (1933-). Propuso redes neuronales basadas en el modelo de Ising del magnetismo. Premio Nobel de Física 2024 por sentar las bases del aprendizaje automático moderno.">Hopfield</div><div class="desc">Redes de Hopfield<br><span class="tip" data-tip="Modelo de la física del magnetismo (1920). Describe cómo espines atómicos en una red se alinean con sus vecinos. Hopfield lo usó como inspiración directa para sus redes neuronales de memoria asociativa.">Modelo de Ising</span> → <span class="tip" data-tip="Neural Networks (Redes Neuronales). Sistemas de procesamiento inspirados en el cerebro. Las redes de Hopfield fueron las primeras en conectar explícitamente la física estadística con el aprendizaje automático.">NN</span></div></div>
+      <div class="timeline-node"><div class="dot" style="background:var(--hot)"></div><div class="year">2017</div><div class="name tip" data-tip="Arquitectura de Google (2017) que usa softmax —idéntica a la distribución de Boltzmann— en cada capa de atención. Es la base de ChatGPT, Claude y todos los LLMs modernos.">Transformers</div><div class="desc">Attention is All You Need<br>Softmax en cada capa</div></div>
+    </div>
+    <p style="text-align:center;font-size:0.75rem;color:var(--text-dim);margin-top:1rem">
+      La misma fórmula matemática viajó de los átomos a los tokens durante 140 años.
+    </p>
+  </section>
+
+</div>
+
+<footer>
+  Basado en <a href="https://gustavosalvini.com.ar/posts/de-boltzmann-a-chatgpt/" target="_blank">"De Boltzmann a ChatGPT"</a> — Gustavo Adrián Salvini, 2026
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ============================================================
+// 1. TEMPERATURE EXPLORER (token probability bars)
+// ============================================================
+const TOKENS = ['átomos', 'energía', 'sistema', 'campo', 'partícula', 'gradiente', 'función', 'modelo', 'datos', 'física'];
+const LOGITS = [2.3, 1.8, 1.5, 1.2, 0.9, 0.6, 0.3, 0.0, -0.3, -0.6];
+
+function softmax(logits, tau) {
+  if (tau === 0) {
+    const maxIdx = logits.indexOf(Math.max(...logits));
+    return logits.map((_, i) => i === maxIdx ? 1 : 0);
+  }
+  const scaled = logits.map(z => Math.exp(z / tau));
+  const sum = scaled.reduce((a, b) => a + b, 0);
+  return scaled.map(s => s / sum);
+}
+
+function getTempColor(tau) {
+  if (tau < 0.2) return 'cold';
+  if (tau < 1.2) return 'mid';
+  return 'hot';
+}
+
+function getPhysDescription(tau) {
+  if (tau < 0.15) return '🧊 Un cristal perfecto: todas las partículas en el estado fundamental.';
+  if (tau < 0.4) return '❄️ Un gas muy frío: las partículas apenas se mueven, concentradas en pocos estados.';
+  if (tau < 0.8) return '🌤️ Temperatura ambiente: distribución balanceada, comportamiento predecible.';
+  if (tau < 1.3) return '🔥 Un gas caliente: las partículas exploran muchos estados, comportamiento creativo.';
+  return '💥 Plasma: distribución casi uniforme, las partículas se mueven al azar.';
+}
+
+function getBarColor(prob, tau) {
+  if (tau < 0.15) return prob > 0.5 ? '#58a6ff' : '#30363d';
+  const ratio = Math.min(prob * 3, 1);
+  const r = Math.round(88 + ratio * 167);
+  const g = Math.round(166 - ratio * 100);
+  const b = Math.round(255 - ratio * 200);
+  return `rgb(${r},${g},${b})`;
+}
+
+function updateTemperature() {
+  const tau = parseFloat(document.getElementById('tempSlider').value);
+  const probs = softmax(LOGITS, tau);
+  const display = document.getElementById('tempDisplay');
+  display.textContent = `τ = ${tau.toFixed(2)}`;
+  display.className = 'temp-value ' + getTempColor(tau);
+  document.getElementById('physLabel').textContent = getPhysDescription(tau);
+
+  const chart = document.getElementById('barChart');
+  chart.innerHTML = TOKENS.map((t, i) => {
+    const h = Math.max(probs[i] * 160, 2);
+    return `<div class="bar-wrapper">
+      <div class="bar" style="height:${h}px;background:${getBarColor(probs[i], tau)}"></div>
+      <div class="bar-label">${t}</div>
+    </div>`;
+  }).join('');
+
+  updateFormula(tau);
+}
+
+function updateFormula(tau) {
+  const boltzmann = tau < 0.01
+    ? 'P(Eᵢ) = 1 para el mínimo, 0 para el resto'
+    : `P(Eᵢ) = exp(-Eᵢ/kT) / Σⱼ exp(-Eⱼ/kT)  con T = ${tau.toFixed(2)}`;
+
+  const softmaxF = tau < 0.01
+    ? 'softmax(zᵢ) = 1 para el máximo, 0 para el resto'
+    : `softmax(zᵢ) = exp(zᵢ/τ) / Σⱼ exp(zⱼ/τ)  con τ = ${tau.toFixed(2)}`;
+
+  document.getElementById('formulaDisplay').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div>
+        <div style="color:var(--accent);margin-bottom:0.3rem">🧬 <span class="tip" data-tip="Fórmula de física estadística (1877). Describe cómo se reparten las energías entre partículas en equilibrio térmico. Es matemáticamente idéntica a la función softmax.">Distribución de <strong>Boltzmann</strong></span> (1877)</div>
+        <div>${boltzmann}</div>
+      </div>
+      <div>
+        <div style="color:var(--accent2);margin-bottom:0.3rem">🤖 <span class="tip" data-tip="Convierte puntajes (logits) en probabilidades que suman 1. Aparece en cada capa de atención de los transformers. Es la misma fórmula que Boltzmann derivó para los gases.">Función <strong>Softmax</strong></span> (Machine Learning)</div>
+        <div>${softmaxF}</div>
+      </div>
+    </div>
+    <div style="margin-top:0.75rem;font-size:0.75rem;color:var(--text-dim)">
+      ⚡ Son <em>la misma fórmula</em>. Temperatura <span style="color:var(--accent2)">T</span> en física ≡ <span style="color:var(--accent2)">τ</span> en ML.
+      Energías <span style="color:var(--accent)">Eᵢ</span> ≡ −logits <span style="color:var(--accent)">zᵢ</span>.
+    </div>
+  `;
+}
+
+document.getElementById('tempSlider').addEventListener('input', updateTemperature);
+updateTemperature();
+
+// ============================================================
+// 2. 3D ENERGY LANDSCAPE — Three.js
+// ============================================================
+
+// ---- Energy (loss) function (randomized on each page load) ----
+// x, y in [-1, 1]; returns loss (lower = better)
+
+// Generate random minima: 1 deep global + 2–3 shallower locals
+const MINIMA = (() => {
+  const mins = [];
+  // Global minimum — deepest, centered-ish
+  mins.push({
+    x: (Math.random() - 0.5) * 1.0,
+    y: (Math.random() - 0.5) * 1.0,
+    depth: -2.0 - Math.random() * 1.0,     // −2.0 to −3.0
+    width: 0.08 + Math.random() * 0.1       // 0.08 to 0.18
+  });
+  // 2 or 3 local minima — shallower, spread across the plane
+  const nLocal = 2 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < nLocal; i++) {
+    let x, y, tooClose, attempts = 0;
+    do {
+      x = (Math.random() - 0.5) * 1.6;
+      y = (Math.random() - 0.5) * 1.6;
+      tooClose = mins.some(m => Math.hypot(x - m.x, y - m.y) < 0.4);
+      attempts++;
+    } while (tooClose && attempts < 50);
+    mins.push({
+      x, y,
+      depth: -0.7 - Math.random() * 1.1,   // −0.7 to −1.8
+      width: 0.10 + Math.random() * 0.15    // 0.10 to 0.25
+    });
+  }
+  return mins;
+})();
+
+const RIPPLE_AMP = 0.12 + Math.random() * 0.18;
+const RIPPLE_FX  = 3.0 + Math.random() * 3.5;
+const RIPPLE_FY  = 3.0 + Math.random() * 3.5;
+const BOWL       = 0.10 + Math.random() * 0.12;
+
+function energyFn(x, y) {
+  let e = 0;
+  for (const m of MINIMA) {
+    e += m.depth * Math.exp(-((x - m.x) ** 2 + (y - m.y) ** 2) / m.width);
+  }
+  e += RIPPLE_AMP * Math.sin(RIPPLE_FX * x) * Math.cos(RIPPLE_FY * y);
+  e += BOWL * (x ** 2 + y ** 2);
+  return e;
+}
+
+// Numerical gradient
+function gradientFn(x, y, h = 0.0005) {
+  const dx = (energyFn(x + h, y) - energyFn(x - h, y)) / (2 * h);
+  const dy = (energyFn(x, y + h) - energyFn(x, y - h)) / (2 * h);
+  return [dx, dy];
+}
+
+// ---- Three.js Setup ----
+const container = document.getElementById('three-container');
+const overlay = document.getElementById('threeOverlay');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0a0e14');
+scene.fog = new THREE.Fog('#0a0e14', 12, 35);
+
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.5, 50);
+camera.position.set(7, 6.5, 8);
+camera.lookAt(0, -0.3, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
+
+// Orbit controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, -0.3, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 3;
+controls.maxDistance = 18;
+controls.maxPolarAngle = Math.PI * 0.75;
+controls.update();
+
+// ---- Lighting ----
+const ambientLight = new THREE.AmbientLight('#4466aa', 0.6);
+scene.add(ambientLight);
+
+const sunLight = new THREE.DirectionalLight('#ffffff', 1.8);
+sunLight.position.set(8, 12, 4);
+sunLight.castShadow = true;
+sunLight.shadow.mapSize.width = 2048;
+sunLight.shadow.mapSize.height = 2048;
+sunLight.shadow.camera.near = 0.5;
+sunLight.shadow.camera.far = 50;
+sunLight.shadow.camera.left = -12;
+sunLight.shadow.camera.right = 12;
+sunLight.shadow.camera.top = 12;
+sunLight.shadow.camera.bottom = -12;
+sunLight.shadow.bias = -0.0001;
+scene.add(sunLight);
+
+const fillLight = new THREE.DirectionalLight('#8899cc', 0.4);
+fillLight.position.set(-3, 2, -4);
+scene.add(fillLight);
+
+// ---- Surface mesh ----
+const SURFACE_SIZE = 10;
+const SEGMENTS = 120;
+const HEIGHT_SCALE = 2.2;
+const HEIGHT_OFFSET = -0.2;
+
+const surfGeom = new THREE.PlaneGeometry(SURFACE_SIZE, SURFACE_SIZE, SEGMENTS, SEGMENTS);
+surfGeom.rotateX(-Math.PI / 2);
+
+const posArr = surfGeom.attributes.position;
+const colorsArr = new Float32Array(posArr.count * 3);
+
+let minEnergy = Infinity, maxEnergy = -Infinity;
+const heights = new Float32Array(posArr.count);
+for (let i = 0; i < posArr.count; i++) {
+  const sx = posArr.getX(i) / (SURFACE_SIZE / 2);  // map to [-1, 1]
+  const sy = posArr.getZ(i) / (SURFACE_SIZE / 2);
+  const e = energyFn(sx, sy);
+  heights[i] = e;
+  if (e < minEnergy) minEnergy = e;
+  if (e > maxEnergy) maxEnergy = e;
+}
+
+// Terrain-like colormap
+function heightColor(t) {
+  // Rainbow / spectral colormap: violet→blue→cyan→green→yellow→red
+  // t: 0 (low loss / valleys) → 1 (high loss / peaks)
+  const hue = 260 - t * 260;          // 260° (violet) → 0° (red)
+  const sat = 0.85;
+  const lit = 0.32 + t * 0.28;        // darker in valleys, brighter on peaks
+
+  // HSL → RGB
+  const c = (1 - Math.abs(2 * lit - 1)) * sat;
+  const x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
+  const m = lit - c / 2;
+  let rp, gp, bp;
+  if (hue < 60)       { rp = c; gp = x; bp = 0; }
+  else if (hue < 120) { rp = x; gp = c; bp = 0; }
+  else if (hue < 180) { rp = 0; gp = c; bp = x; }
+  else if (hue < 240) { rp = 0; gp = x; bp = c; }
+  else if (hue < 300) { rp = x; gp = 0; bp = c; }
+  else                 { rp = c; gp = 0; bp = x; }
+  return [rp + m, gp + m, bp + m];
+}
+
+const energyRange = maxEnergy - minEnergy || 1;
+for (let i = 0; i < posArr.count; i++) {
+  const sy = posArr.getZ(i) / (SURFACE_SIZE / 2);
+  const sx = posArr.getX(i) / (SURFACE_SIZE / 2);
+  posArr.setY(i, heights[i] * HEIGHT_SCALE + HEIGHT_OFFSET);
+  const t = (heights[i] - minEnergy) / energyRange;
+  const [cr, cg, cb] = heightColor(t);
+  colorsArr[i * 3] = cr;
+  colorsArr[i * 3 + 1] = cg;
+  colorsArr[i * 3 + 2] = cb;
+}
+surfGeom.setAttribute('color', new THREE.BufferAttribute(colorsArr, 3));
+surfGeom.computeVertexNormals();
+
+const surfMat = new THREE.MeshStandardMaterial({
+  vertexColors: true,
+  roughness: 0.55,
+  metalness: 0.05,
+  flatShading: false,
+});
+const surface = new THREE.Mesh(surfGeom, surfMat);
+surface.castShadow = true;
+surface.receiveShadow = true;
+scene.add(surface);
+
+// ---- Local minima markers ----
+function addMinimaMarker(x, y, color, size) {
+  const e = energyFn(x, y);
+  const ringGeom = new THREE.TorusGeometry(size, 0.04, 16, 24);
+  const ring = new THREE.Mesh(ringGeom, new THREE.MeshBasicMaterial({ color, depthTest: false, depthWrite: false }));
+  ring.position.set(x * 5, e * HEIGHT_SCALE + HEIGHT_OFFSET + 0.06, y * 5);
+  ring.rotation.x = -Math.PI / 2;
+  scene.add(ring);
+}
+// Global minimum — prominent blue beacon
+(function () {
+  const gx = MINIMA[0].x, gy = MINIMA[0].y;
+  const e = energyFn(gx, gy);
+  const baseY = e * HEIGHT_SCALE + HEIGHT_OFFSET;
+  // Large outer ring
+  addMinimaMarker(gx, gy, '#58a6ff', 0.48);
+  // Inner ring (brighter)
+  addMinimaMarker(gx, gy, '#88ccff', 0.30);
+  // Vertical beacon pillar
+  const pillarGeom = new THREE.CylinderGeometry(0.06, 0.06, 1.4, 16);
+  const pillarMat = new THREE.MeshBasicMaterial({ color: '#58a6ff', transparent: true, opacity: 0.55, depthTest: false, depthWrite: false });
+  const pillar = new THREE.Mesh(pillarGeom, pillarMat);
+  pillar.position.set(gx * 5, baseY + 0.05, gy * 5);
+  scene.add(pillar);
+  // Glowing sphere at top of beacon
+  const topGeom = new THREE.SphereGeometry(0.1, 16, 16);
+  const topMat = new THREE.MeshBasicMaterial({ color: '#aaddff', depthTest: false, depthWrite: false });
+  const topSphere = new THREE.Mesh(topGeom, topMat);
+  topSphere.position.set(gx * 5, baseY + 0.75, gy * 5);
+  scene.add(topSphere);
+})();
+// Local minima — orange rings
+for (let i = 1; i < MINIMA.length; i++) {
+  addMinimaMarker(MINIMA[i].x, MINIMA[i].y, '#f0883e', 0.22);
+}
+
+// ---- Ball (gradient descent particle) ----
+const ballGeom = new THREE.SphereGeometry(0.2, 32, 32);
+const ballMat = new THREE.MeshStandardMaterial({
+  color: '#ffffff',
+  emissive: '#666666',
+  roughness: 0.15,
+  metalness: 0.1
+});
+const ball = new THREE.Mesh(ballGeom, ballMat);
+ball.castShadow = true;
+scene.add(ball);
+
+// Glow ring around ball
+const glowGeom = new THREE.TorusGeometry(0.28, 0.03, 16, 32);
+const glowMat = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.6 });
+const glowRing = new THREE.Mesh(glowGeom, glowMat);
+ball.add(glowRing);
+
+// Point light following the ball for visibility
+const ballLight = new THREE.PointLight('#ffaa44', 0.3, 3);
+ball.add(ballLight);
+
+// ---- Trail (glitter / sparkle effect) ----
+// Generate sparkle texture on a canvas
+const sparkleCanvas = document.createElement('canvas');
+sparkleCanvas.width = 64; sparkleCanvas.height = 64;
+const sctx = sparkleCanvas.getContext('2d');
+const gradient = sctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+gradient.addColorStop(0, 'rgba(255,255,255,1)');
+gradient.addColorStop(0.06, 'rgba(255,255,255,1)');
+gradient.addColorStop(0.15, 'rgba(255,240,180,0.9)');
+gradient.addColorStop(0.35, 'rgba(255,180,60,0.5)');
+gradient.addColorStop(0.6, 'rgba(255,100,20,0.1)');
+gradient.addColorStop(1, 'rgba(0,0,0,0)');
+sctx.fillStyle = gradient;
+sctx.fillRect(0, 0, 64, 64);
+const sparkleTexture = new THREE.CanvasTexture(sparkleCanvas);
+sparkleTexture.needsUpdate = true;
+
+const MAX_TRAIL = 600;
+const trailPositionsArr = new Float32Array(MAX_TRAIL * 3);
+const trailColorsArr = new Float32Array(MAX_TRAIL * 3);
+const trailGeom = new THREE.BufferGeometry();
+trailGeom.setAttribute('position', new THREE.BufferAttribute(trailPositionsArr, 3));
+trailGeom.setAttribute('color', new THREE.BufferAttribute(trailColorsArr, 3));
+trailGeom.setDrawRange(0, 0);
+const trailMat = new THREE.PointsMaterial({
+  size: 0.16,
+  map: sparkleTexture,
+  vertexColors: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  transparent: true,
+  opacity: 0.9,
+  sizeAttenuation: true,
+});
+const trail = new THREE.Points(trailGeom, trailMat);
+scene.add(trail);
+
+// ---- State ----
+let ballEX = 0.15;   // energy-space x
+let ballEY = 0.85;   // energy-space y
+let isDescending = false;
+let stepCount = 0;
+let frameCounter = 0;
+let stepsPerTick = 2;        // how many gradient steps per animation frame
+let sgdTemperature = 0.0;    // noise level
+let learningRate = 0.003;
+const trailPoints = [];      // [{ex, ey, e}]
+
+function ballWorldPos(ex, ey) {
+  const e = energyFn(ex, ey);
+  return new THREE.Vector3(ex * 5, e * HEIGHT_SCALE + HEIGHT_OFFSET, ey * 5);
+}
+
+function placeBall(ex, ey) {
+  ballEX = Math.max(-0.98, Math.min(0.98, ex));
+  ballEY = Math.max(-0.98, Math.min(0.98, ey));
+  const pos = ballWorldPos(ballEX, ballEY);
+  ball.position.copy(pos);
+  glowRing.rotation.x += 0.05;
+}
+
+function resetTrail() {
+  trailPoints.length = 0;
+  const pos = ballWorldPos(ballEX, ballEY);
+  trailPoints.push({ ex: ballEX, ey: ballEY, e: energyFn(ballEX, ballEY) });
+}
+
+function updateTrailGeometry() {
+  const n = Math.min(trailPoints.length, MAX_TRAIL);
+  for (let i = 0; i < n; i++) {
+    const tp = trailPoints[i];
+    const wp = ballWorldPos(tp.ex, tp.ey);
+    trailPositionsArr[i * 3] = wp.x;
+    trailPositionsArr[i * 3 + 1] = wp.y + 0.06;
+    trailPositionsArr[i * 3 + 2] = wp.z;
+    // Warm gradient: newest = gold, oldest = deep orange
+    const t = i / n;
+    trailColorsArr[i * 3]     = 1.0 - t * 0.2;
+    trailColorsArr[i * 3 + 1] = 0.85 - t * 0.6;
+    trailColorsArr[i * 3 + 2] = 0.35 - t * 0.3;
+  }
+  trailGeom.attributes.position.needsUpdate = true;
+  trailGeom.attributes.color.needsUpdate = true;
+  trailGeom.setDrawRange(0, n);
+}
+
+function gradientStep() {
+  const [gx, gy] = gradientFn(ballEX, ballEY);
+  let dx = -gx * learningRate;
+  let dy = -gy * learningRate;
+
+  // Thermal noise (SGD)
+  if (sgdTemperature > 0.001) {
+    const noiseScale = Math.sqrt(sgdTemperature) * 0.05;
+    dx += (Math.random() - 0.5) * noiseScale * 2;
+    dy += (Math.random() - 0.5) * noiseScale * 2;
+  }
+
+  ballEX = Math.max(-0.98, Math.min(0.98, ballEX + dx));
+  ballEY = Math.max(-0.98, Math.min(0.98, ballEY + dy));
+  stepCount++;
+
+  const pos = ballWorldPos(ballEX, ballEY);
+  ball.position.copy(pos);
+
+  // Animate glow ring
+  glowRing.rotation.z += 0.08;
+  glowRing.rotation.x += 0.04;
+
+  // Trail
+  trailPoints.push({ ex: ballEX, ey: ballEY, e: energyFn(ballEX, ballEY) });
+  if (trailPoints.length > MAX_TRAIL) trailPoints.shift();
+
+  // Convergence check (only when no thermal noise)
+  const gradNorm = Math.sqrt(gx * gx + gy * gy);
+  if (gradNorm < 0.003 && sgdTemperature < 0.001) {
+    isDescending = false;
+    document.getElementById('btnAutoLabel').textContent = 'Auto-descenso';
+    document.getElementById('btnAuto').classList.remove('active');
+
+    // Determine global vs local
+    let closestDist = Math.sqrt((ballEX - MINIMA[0].x) ** 2 + (ballEY - MINIMA[0].y) ** 2);
+    let isGlobal = true;
+    for (let i = 1; i < MINIMA.length; i++) {
+      const d = Math.sqrt((ballEX - MINIMA[i].x) ** 2 + (ballEY - MINIMA[i].y) ** 2);
+      if (d < closestDist) { closestDist = d; isGlobal = false; }
+    }
+    const convergeColor = isGlobal ? '#58a6ff' : '#f0883e';
+
+    // Convergence animation: expanding ring + flash
+    const wp = ball.position.clone();
+    // Inner ring
+    const ringGeom = new THREE.TorusGeometry(0.2, 0.04, 16, 32);
+    const ringMat = new THREE.MeshBasicMaterial({ color: convergeColor, transparent: true, opacity: 1, depthTest: false, depthWrite: false });
+    const ring = new THREE.Mesh(ringGeom, ringMat);
+    ring.position.copy(wp);
+    ring.position.y += 0.1;
+    ring.rotation.x = -Math.PI / 2;
+    scene.add(ring);
+    // Outer ring (larger, same color)
+    const ring2Geom = new THREE.TorusGeometry(0.35, 0.03, 16, 32);
+    const ring2Mat = new THREE.MeshBasicMaterial({ color: convergeColor, transparent: true, opacity: 0.7, depthTest: false, depthWrite: false });
+    const ring2 = new THREE.Mesh(ring2Geom, ring2Mat);
+    ring2.position.copy(wp);
+    ring2.position.y += 0.08;
+    ring2.rotation.x = -Math.PI / 2;
+    scene.add(ring2);
+
+    // Flash ball
+    ball.material.emissive.set(convergeColor);
+    ballLight.color.set(convergeColor);
+    ballLight.intensity = 6;
+    const origScale = ball.scale.clone();
+
+    // Animate ring expansion + fade
+    const startTime = performance.now();
+    const DURATION = 1.5;
+    function animateConvergeRing() {
+      const elapsed = performance.now() - startTime;
+      const t = Math.min(1, elapsed / (DURATION * 1000));
+      if (t >= 1) {
+        scene.remove(ring); scene.remove(ring2);
+        ringGeom.dispose(); ringMat.dispose();
+        ring2Geom.dispose(); ring2Mat.dispose();
+        ball.material.emissive.set('#666666');
+        ballLight.color.set('#ffaa44');
+        ballLight.intensity = 0.3;
+        ball.scale.copy(origScale);
+        return;
+      }
+      // Ease out
+      const ease = 1 - Math.pow(1 - t, 3);
+      const scale = 1 + ease * 6;
+      ring.scale.set(scale, scale, scale);
+      ring.material.opacity = 1 - ease;
+      ring.position.y = wp.y + 0.1 + ease * 2.5;
+      // Outer ring expands faster
+      const scale2 = 1 + ease * 4;
+      ring2.scale.set(scale2, scale2, scale2);
+      ring2.material.opacity = (1 - ease) * 0.7;
+      ring2.position.y = wp.y + 0.08 + ease * 2.0;
+      // Ball pulse
+      ball.scale.setScalar(origScale.x + ease * 0.3);
+      ballLight.intensity = 6 * (1 - ease) + 0.3;
+      requestAnimationFrame(animateConvergeRing);
+    }
+    animateConvergeRing();
+  }
+
+  return gradNorm;
+}
+
+function updateStats(gradNorm) {
+  const e = energyFn(ballEX, ballEY);
+  const distToGlobal = Math.sqrt((ballEX - MINIMA[0].x) ** 2 + (ballEY - MINIMA[0].y) ** 2);
+  document.getElementById('loss3d').textContent = e.toFixed(4);
+  document.getElementById('step3d').textContent = stepCount;
+
+  // Determine convergence type
+  let statusText;
+  if (isDescending) {
+    statusText = 'Descendiendo';
+  } else if (gradNorm && gradNorm < 0.003) {
+    const distGlobal = distToGlobal;
+    let closestIsGlobal = true;
+    for (let i = 1; i < MINIMA.length; i++) {
+      const d = Math.sqrt((ballEX - MINIMA[i].x) ** 2 + (ballEY - MINIMA[i].y) ** 2);
+      if (d < distGlobal) { closestIsGlobal = false; break; }
+    }
+    statusText = closestIsGlobal ? 'Convergió (global ✓)' : 'Convergió (local ⚠)';
+  } else {
+    statusText = 'Pausado';
+  }
+  document.getElementById('status3d').textContent = statusText;
+  document.getElementById('sgdTemp3d').textContent = sgdTemperature.toFixed(2);
+  document.getElementById('statLoss').textContent = e.toFixed(4);
+  document.getElementById('statStep').textContent = stepCount;
+  document.getElementById('statGrad').textContent = gradNorm ? gradNorm.toFixed(5) : '—';
+  document.getElementById('statDist').textContent = distToGlobal.toFixed(4);
+}
+
+function resetParticle() {
+  // Place at a random high position, don't auto-start
+  ballEX = (Math.random() - 0.5) * 1.8;
+  ballEY = (Math.random() - 0.5) * 1.8;
+  stepCount = 0;
+  isDescending = false;
+  document.getElementById('btnAutoLabel').textContent = 'Auto-descenso';
+  document.getElementById('btnAuto').classList.remove('active');
+  placeBall(ballEX, ballEY);
+  resetTrail();
+  updateTrailGeometry();
+  updateStats(null);
+  // Show hint again so user knows they can double-click
+  document.getElementById('threeHint').classList.remove('hidden');
+}
+
+// ---- Event handlers ----
+document.getElementById('btnReset').addEventListener('click', resetParticle);
+
+document.getElementById('btnStep').addEventListener('click', () => {
+  const gn = gradientStep();
+  updateTrailGeometry();
+  updateStats(gn);
+});
+
+document.getElementById('btnAuto').addEventListener('click', function () {
+  if (isDescending) {
+    isDescending = false;
+    document.getElementById('btnAutoLabel').textContent = 'Auto-descenso';
+    this.classList.remove('active');
+  } else {
+    isDescending = true;
+    document.getElementById('btnAutoLabel').textContent = 'Pausar';
+    this.classList.add('active');
+    document.getElementById('threeHint').classList.add('hidden');
+    // Check if converged
+    const [gx, gy] = gradientFn(ballEX, ballEY);
+    if (Math.sqrt(gx * gx + gy * gy) < 0.003 && sgdTemperature < 0.001) {
+      resetParticle();
+    }
+  }
+});
+
+document.getElementById('sgdSlider').addEventListener('input', function () {
+  sgdTemperature = parseFloat(this.value);
+  document.getElementById('sgdVal').textContent = sgdTemperature.toFixed(2);
+  document.getElementById('sgdTemp3d').textContent = sgdTemperature.toFixed(2);
+  if (sgdTemperature > 0.001 && !isDescending) {
+    isDescending = true;
+    document.getElementById('btnAutoLabel').textContent = 'Pausar';
+    document.getElementById('btnAuto').classList.add('active');
+  }
+});
+
+document.getElementById('lrSlider').addEventListener('input', function () {
+  learningRate = parseFloat(this.value);
+  document.getElementById('lrVal').textContent = learningRate.toFixed(3);
+});
+
+// Click on surface to place ball
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+container.addEventListener('dblclick', (event) => {
+  // Ignore if interacting with controls (dragging)
+  if (event.target !== renderer.domElement) return;
+
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(surface);
+  if (intersects.length > 0) {
+    // Hide the double-click hint after first use
+    document.getElementById('threeHint').classList.add('hidden');
+    const point = intersects[0].point;
+    ballEX = point.x / 5;
+    ballEY = point.z / 5;
+    stepCount = 0;
+    isDescending = true;
+    document.getElementById('btnAutoLabel').textContent = 'Pausar';
+    document.getElementById('btnAuto').classList.add('active');
+    placeBall(ballEX, ballEY);
+    resetTrail();
+    updateTrailGeometry();
+    updateStats(null);
+
+    // Launch visual effect: brief flash + expanding ring
+    ball.material.emissive.set('#ffaa44');
+    ball.scale.set(1.6, 1.6, 1.6);
+    ballLight.intensity = 2.5;
+    setTimeout(() => {
+      ball.material.emissive.set('#666666');
+      ball.scale.set(1, 1, 1);
+      ballLight.intensity = 0.3;
+    }, 250);
+  }
+});
+
+// ---- Animation loop ----
+function animate3D() {
+  requestAnimationFrame(animate3D);
+
+  controls.update();
+
+  if (isDescending) {
+    frameCounter++;
+    if (frameCounter >= Math.max(1, 4 - stepsPerTick)) {
+      frameCounter = 0;
+      let converged = false;
+      for (let s = 0; s < stepsPerTick; s++) {
+        const gn = gradientStep();
+        if (!isDescending) {
+          converged = true;
+          updateTrailGeometry();
+          updateStats(gn);
+          break;
+        }
+        if (s === stepsPerTick - 1) {
+          updateTrailGeometry();
+          updateStats(gn);
+        }
+      }
+    }
+  }
+
+  // Subtle pulsing of glow ring
+  const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.15;
+  glowRing.scale.setScalar(pulse);
+
+  // Trail shimmer: gently oscillate opacity for a glitter/sparkle feel
+  if (trailGeom.attributes.position.count > 0) {
+    const shimmer = 0.82 + Math.sin(Date.now() * 0.004) * 0.08 + Math.sin(Date.now() * 0.0073) * 0.05;
+    trailMat.opacity = Math.min(1, Math.max(0.7, shimmer));
+  }
+
+  renderer.render(scene, camera);
+}
+
+// ---- Resize handler ----
+window.addEventListener('resize', () => {
+  camera.aspect = container.clientWidth / container.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth, container.clientHeight);
+});
+
+// ---- Initialize ----
+placeBall(ballEX, ballEY);
+resetTrail();
+updateTrailGeometry();
+updateStats(null);
+
+// Initial camera fit: frame the entire surface in viewport
+(function initialFit() {
+  const sphereCenter = new THREE.Vector3(0, HEIGHT_OFFSET, 0);
+  const sphereRadius = 5.8;
+  const camDir = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+  const fovRad = camera.fov * Math.PI / 180;
+  const fitDist = sphereRadius / Math.tan(fovRad / 2) * 1.15;
+  const fitPos = sphereCenter.clone().add(camDir.clone().multiplyScalar(fitDist));
+  camera.position.copy(fitPos);
+  controls.target.copy(sphereCenter);
+})();
+
+animate3D();
+
+// ---- Camera view presets ----
+const VIEWS = {
+  default:  { pos: [7, 6.5, 8],    target: [0, -0.3, 0] },
+  top:      { pos: [0, 12, 0.1],   target: [0, -0.3, 0] },
+  left:     { pos: [-10, 2, 0],    target: [0, -0.3, 0] },
+  right:    { pos: [10, 2, 0],     target: [0, -0.3, 0] },
+  front:    { pos: [0, 2, 10],     target: [0, -0.3, 0] },
+};
+let targetView = null;
+let viewAnimStart = 0;
+const VIEW_ANIM_DURATION = 800;
+
+function animateView() {
+  if (!targetView) return;
+  const elapsed = performance.now() - viewAnimStart;
+  const t = Math.min(1, elapsed / VIEW_ANIM_DURATION);
+  // Ease in-out
+  const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+  const v = VIEWS[targetView];
+  camera.position.lerp(new THREE.Vector3(...v.pos), 0.08);
+  controls.target.lerp(new THREE.Vector3(...v.target), 0.08);
+
+  if (t >= 1) {
+    camera.position.set(...v.pos);
+    controls.target.set(...v.target);
+    targetView = null;
+  }
+}
+
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const view = this.dataset.view;
+    if (!VIEWS[view]) return;
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    targetView = view;
+    viewAnimStart = performance.now();
+    // Kick off animation — it runs inside the main animate3D loop
+  });
+});
+
+// Fit-to-view button: fit entire surface in viewport, preserving angle
+document.getElementById('btnFitView').addEventListener('click', () => {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+
+  // Surface bounding sphere (covers the 10×10 plane plus height variation)
+  const sphereCenter = new THREE.Vector3(0, HEIGHT_OFFSET, 0);
+  // Diagonal of 10×10 = ~7.07, plus height range ~3 → radius ≈ 5.5
+  const sphereRadius = 5.8;
+
+  // Get current camera direction (normalized)
+  const camDir = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+
+  // Required distance to fit sphere: radius / tan(fov/2)
+  const fov = camera.fov * Math.PI / 180;
+  const fitDist = sphereRadius / Math.tan(fov / 2) * 1.15; // 15% margin
+
+  // New camera position: sphere center + direction * distance
+  const fitPos = sphereCenter.clone().add(camDir.clone().multiplyScalar(fitDist));
+
+  // Add temporary fit entry
+  VIEWS._fit = { pos: fitPos.toArray(), target: sphereCenter.toArray() };
+  targetView = '_fit';
+  viewAnimStart = performance.now();
+});
+
+// Integrate view animation into main loop
+const origAnimate3D = animate3D;
+animate3D = function () {
+  origAnimate3D();
+  if (targetView) animateView();
+};
+
+// ---- Tooltip click-to-toggle for mobile/touch ----
+document.addEventListener('click', (e) => {
+  const tip = e.target.closest('.tip');
+  if (!tip) {
+    document.querySelectorAll('.tip.show').forEach(t => t.classList.remove('show'));
+    return;
+  }
+  // If clicking the already-open tip, close it; otherwise open this one
+  const wasOpen = tip.classList.contains('show');
+  document.querySelectorAll('.tip.show').forEach(t => t.classList.remove('show'));
+  if (!wasOpen) {
+    tip.classList.add('show');
+    e.stopPropagation();
+  }
+});
+
+// Close tooltips on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.tip.show').forEach(t => t.classList.remove('show'));
+  }
+});
+</script>
+
+</body>
+</html>

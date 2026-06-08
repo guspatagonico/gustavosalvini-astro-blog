@@ -21,8 +21,28 @@ slug: de-boltzmann-a-chatgpt
 hideEditPost: true
 timezone: America/Argentina/Buenos_Aires
 ---
+import { SITE } from "@/config";
+
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/post-de-boltzmann-a-chatgpt.jpg`}
+    alt="De la física estadística a la IA"
+  />
+
+  <figcaption class="text-center">
+    De la física estadística a la IA
+  </figcaption>
+</figure>
+
+
 
 Hay algo profundamente elegante en descubrir que las ecuaciones que gobiernan el comportamiento de miles de millones de partículas en un gas son, esencialmente, las mismas que permiten que un modelo de lenguaje prediga la próxima palabra en una oración. No es una analogía vaga ni una metáfora inspiradora: es una identidad matemática precisa. Este artículo recorre el puente que une la física estadística del siglo XIX con la inteligencia artificial del siglo XXI, pasando por el álgebra lineal, la teoría de la probabilidad y la arquitectura de las redes neuronales modernas.
+
+---
+
+## Table of contents
+
+---
 
 ---
 
@@ -127,19 +147,38 @@ La próxima vez que uses ChatGPT, Claude o cualquier LLM, recordá que detrás d
 
 ---
 
-*Si te gustó este artículo, compartilo con alguien que disfrute tanto de la ciencia como de entender cómo funcionan realmente las cosas.*
+## 8. Explorador interactivo
+
+<div style="margin-top: 1rem; max-width: 1024px; margin-inline: auto; padding-inline: clamp(0.25rem, 2vw, 1rem);">
+  <div style="border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; background: #1a1a2e;">
+    <iframe
+      src="/embeds/boltzmann-chatgpt.html"
+      title="Boltzmann y ChatGPT: explorador interactivo"
+      loading="lazy"
+      onload="const frame=this; const syncHeight=()=>{ try { frame.style.height = Math.ceil(frame.contentWindow.document.documentElement.scrollHeight) + 'px'; } catch {} }; syncHeight(); frame.contentWindow.addEventListener('resize', syncHeight);"
+      style="display: block; width: 100%; min-height: 420px; border: 0;"
+    ></iframe>
+  </div>
+  <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+    Si no carga en esta vista, abrilo en
+    <a href="/embeds/boltzmann-chatgpt.html" target="_blank" rel="noopener noreferrer">una pestaña nueva</a>.
+  </p>
+</div>
 
 ---
 
+*Si te gustó este artículo, compartilo con alguien que disfrute tanto de la ciencia como de entender cómo funcionan realmente las cosas.*
+
+---
 **Referencias (con links verificados):**
 
-1. Boltzmann, L. (1877). *Über die Beziehung zwischen dem zweiten Hauptsatze der mechanischen Wärmetheorie und der Wahrscheinlichkeitsrechnung*. Sitzungsberichte der mathematisch-naturwissenschaftlichen Classe der Kaiserlichen Akademie der Wissenschaften, 76, 373–435.
+1. Boltzmann, L. (1877). *Über die Beziehung zwischen dem zweiten Hauptsatze der mechanischen Wärmetheorie und der Wahrscheinlichkeitsrechnung*. Sitzungsberichte der mathematisch-naturwissenschaftlichen Classe der Kaiserlichen Akademie der Wissenschaften, 76, 373-435.
    - Paper fundacional de la mecánica estadística. Referencia académica completa; el original está disponible en colecciones históricas.
 
-2. Shannon, C. E. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal, 27(3), 379–423.
+2. Shannon, C. E. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal, 27(3), 379-423.
    - [https://doi.org/10.1002/j.1538-7305.1948.tb01338.x](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x)
 
-3. Hopfield, J. J. (1982). *Neural networks and physical systems with emergent collective computational abilities*. Proceedings of the National Academy of Sciences, 79(8), 2554–2558.
+3. Hopfield, J. J. (1982). *Neural networks and physical systems with emergent collective computational abilities*. Proceedings of the National Academy of Sciences, 79(8), 2554-2558.
    - [https://doi.org/10.1073/pnas.79.8.2554](https://doi.org/10.1073/pnas.79.8.2554)
 
 4. Hinton, G. E., & Salakhutdinov, R. R. (2006). *Reducing the dimensionality of data with neural networks*. Science, 313(5786), 504–507.
@@ -148,7 +187,7 @@ La próxima vez que uses ChatGPT, Claude o cualquier LLM, recordá que detrás d
 5. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). *Attention Is All You Need*. Advances in Neural Information Processing Systems (NeurIPS), 30.
    - [https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)
 
-6. Mehta, P., Bukov, M., Wang, C. H., Day, A. G. R., Richardson, C., Fisher, C. K., & Schwab, D. J. (2019). *A high-bias, low-variance introduction to Machine Learning for physicists*. Physics Reports, 810, 1–124.
+6. Mehta, P., Bukov, M., Wang, C. H., Day, A. G. R., Richardson, C., Fisher, C. K., & Schwab, D. J. (2019). *A high-bias, low-variance introduction to Machine Learning for physicists*. Physics Reports, 810, 1-124.
    - [https://arxiv.org/abs/1803.08823](https://arxiv.org/abs/1803.08823)
 
 7. The Nobel Prize in Physics 2024. NobelPrize.org. Nobel Prize Outreach AB.
@@ -159,8 +198,8 @@ La próxima vez que uses ChatGPT, Claude o cualquier LLM, recordá que detrás d
 **Recursos complementarios:**
 
 - *How deep is the connection between the softmax function in ML and the Boltzmann distribution?* - Cross Validated (StackExchange).
-  [https://stats.stackexchange.com/questions/347666/](https://stats.stackexchange.com/questions/347666/)
+   [https://stats.stackexchange.com/questions/347666/](https://stats.stackexchange.com/questions/347666/)
 - *Cross-entropy* - Wikipedia.
-  [https://en.wikipedia.org/wiki/Cross-entropy](https://en.wikipedia.org/wiki/Cross-entropy)
+   [https://en.wikipedia.org/wiki/Cross-entropy](https://en.wikipedia.org/wiki/Cross-entropy)
 - *Efficient attention explained: the math behind linear-time transformers* - LambdaClass Blog.
-  [https://blog.lambdaclass.com/efficient-attention-explained/](https://blog.lambdaclass.com/efficient-attention-explained/)
+   [https://blog.lambdaclass.com/efficient-attention-explained/](https://blog.lambdaclass.com/efficient-attention-explained/)
