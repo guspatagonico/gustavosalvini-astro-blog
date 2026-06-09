@@ -18,6 +18,19 @@ hideEditPost: true
 timezone: America/Argentina/Buenos_Aires
 ---
 
+import { SITE } from "@/config";
+
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/loro-estocastico.jpg`}
+    alt="Un simpático loro estocástico"
+  />
+
+  <figcaption class="text-center">
+    Un simpático loro estocástico
+  </figcaption>
+</figure>
+
 ## Un loro en el servidor
 
 Imaginá esta escena: un loro colorido posado sobre un rack de servidores, con el pico abierto, soltando un discurso impecable. Habla de probabilidades, de teoremas, de blockchains y de amor. Usa las palabras correctas, la sintaxis perfecta, la estructura de un ensayo bien armado. Suena convincente. Suena inteligente.
@@ -223,7 +236,3 @@ No se trata de no usar la IA. Se trata de usarla con los ojos abiertos.
 
 14. **<a id="ref14"></a>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A., Kaiser, Ł., & Polosukhin, I. (2017).** _Attention Is All You Need._ Advances in Neural Information Processing Systems (NeurIPS 2017). El paper que introdujo la arquitectura Transformer.
     → https://arxiv.org/abs/1706.03762
-
----
-
-_Ilustración de portada: "Loros estocásticos" - inspirada en el estilo de Quino, firmada por Gus. Representa la metáfora central: un loro sobre un servidor, parloteando texto impecable pero vacío, mientras un humano observa con perplejidad irónica._
