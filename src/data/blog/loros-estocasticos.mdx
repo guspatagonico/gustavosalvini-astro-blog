@@ -1,0 +1,225 @@
+---
+title: "Loros estocásticos: la metáfora que revela qué es realmente la IA (y por qué no deberías olvidarlo)"
+description: El término "loro estocástico" no es un insulto ni un desmerecimiento. Es una  analogías bastante lúcida que ayuda a entender qué hacen y qué no hacen los modelos de lenguaje (como los LLMs). Además, detrás de esa metáfora hay una historia que vale la pena conocer.
+tags:
+   - Artificial Intelligence
+   - IA
+   - Machine Learning
+   - neural networks
+   - Redes Neuronales
+   - science
+   - reflexión
+author: Gustavo Adrián Salvini
+pubDatetime: 2026-06-09T14:37:22.882Z
+draft: false
+featured: true
+slug: loros-estocasticos
+hideEditPost: true
+timezone: America/Argentina/Buenos_Aires
+---
+
+## El loro en el servidor
+
+Imaginá esta escena: un loro colorido posado sobre un rack de servidores, con el pico abierto, soltando un discurso impecable. Habla de probabilidades, de teoremas, de blockchains y de amor. Usa las palabras correctas, la sintaxis perfecta, la estructura de un ensayo bien armado. Suena convincente. Suena inteligente.
+
+Pero el loro no entiende ni una palabra de lo que dice.
+
+No sabe qué es el amor. No sabe qué es un teorema. No sabe qué es una blockchain. Simplemente aprendió, después de escuchar miles de millones de conversaciones humanas, qué palabras suelen ir después de qué otras palabras. Y las repite con una fluidez que engaña.
+
+Bienvenidos al mundo de los **loros estocásticos**.
+
+---
+
+## ¿De dónde sale este término?
+
+La historia comienza en 2021, cuando cuatro investigadoras -Emily M. Bender, Timnit Gebru, Angelina McMillan-Major y Shmargaret Shmitchell (seudónimo de Margaret Mitchell)- publicaron un paper que sacudió los cimientos de la inteligencia artificial. Se titulaba, sin vueltas:
+
+> _"On the Dangers of Stochastic Parrots: Can Language Models Be Too Big? 🦜"_ > _(Sobre los peligros de los loros estocásticos: ¿pueden los modelos de lenguaje ser demasiado grandes?)_
+
+El paper se presentó en la conferencia ACM FAccT 2021 (Fairness, Accountability, and Transparency) y proponía algo que hoy parece obvio pero que en ese momento era casi una herejía en la industria: los grandes modelos de lenguaje no entienden nada. Son, en el mejor de los casos, loros estadísticos extremadamente sofisticados. [¹](#ref1)
+
+La reacción de Google, donde trabajaban Gebru y Mitchell, fue tan violenta como reveladora: las despidieron. Gebru fue despedida en diciembre de 2020 por negarse a retirar su nombre del paper; Mitchell fue despedida dos meses después. El paper amenazaba el relato corporativo de que la IA era el futuro inevitable y sagrado. Mejor callar a las mensajeras. Irónicamente, eso solo le dio más notoriedad al término. [²](#ref2) [³](#ref3)
+
+Hoy, "loro estocástico" es parte del vocabulario estándar de cualquier persona que trabaje seriamente con inteligencia artificial.
+
+---
+
+## ¿Qué significa exactamente "loro estocástico"?
+
+Vamos por partes.
+
+**"Loro"** porque un loro repite lo que escucha. No entiende, no reflexiona, no siente. Repite. Un modelo de lenguaje hace exactamente eso: ha sido entrenado con textos escritos por humanos -libros, artículos, conversaciones, foros de internet- y lo que hace es reproducir patrones estadísticos aprendidos de esos textos.
+
+**"Estocástico"** porque no repite exactamente lo mismo cada vez. Introduce variación probabilística. En cada paso, el modelo calcula: "dado el texto que ya generé hasta ahora, ¿cuál es la palabra más probable que viene después?" Pero no elige siempre la más probable; a veces elige la segunda, o la décima, lo que le da esa apariencia de creatividad y variedad.
+
+La definición exacta que dieron las autoras en el paper es esta:
+
+> _"Un modelo de lenguaje es un sistema que cose al azar secuencias de formas lingüísticas que ha observado en sus vastos datos de entrenamiento, según información probabilística sobre cómo se combinan, pero sin referencia alguna al significado: un loro estocástico."_ [¹](#ref1)
+
+En el original en inglés:
+
+> _"Contrary to how it may seem when we observe its output, an LM is a system for haphazardly stitching together sequences of linguistic forms it has observed in its vast training data, according to probabilistic information about how they combine, but without any reference to meaning: a stochastic parrot."_ [¹](#ref1) [⁴](#ref4)
+
+Eso es todo. No hay magia. No hay conciencia. No hay comprensión.
+
+Y sin embargo, cuando un modelo de este tipo encadena las palabras con la fluidez de un ensayista experimentado, es muy fácil olvidar que del otro lado no hay una mente. Es muy fácil antropomorfizar, proyectar inteligencia donde solo hay predicción estadística.
+
+---
+
+## ¿Por qué es tan fácil olvidarlo?
+
+Porque el lenguaje humano es secuencial. Cuando alguien nos habla, asumimos que hay una intención, una comprensión, una mente del otro lado. Es un atajo cognitivo que nos ha servido durante cientos de miles de años de evolución.
+
+Pero con la IA, ese atajo nos traiciona.
+
+ChatGPT no "piensa" lo que te responde. No "opina". No "reflexiona". Hace algo mucho más parecido a esto: mira las palabras que escribiste, calcula la probabilidad de cada posible palabra siguiente en su enorme base de datos estadística, elige una, y repite el proceso hasta completar la respuesta.
+
+El resultado puede ser brillante. Puede ser útil. Puede ser conmovedor. Pero no hay nadie ahí adentro.
+
+Eso no lo hace inútil. Lo hace **diferente**. Y confundir esa diferencia es donde empiezan los problemas.
+
+---
+
+## La torre de Babel de las disciplinas
+
+Una de las cosas más fascinantes -y menos contadas- de la inteligencia artificial moderna es que no nació de una sola disciplina. Se construyó sobre los hombros de ideas que vienen de campos muy distintos: la física, la termodinámica estadística, la teoría de la información, la biología y la lingüística. Cada una aportó una pieza clave sin la cual los modelos de lenguaje actuales simplemente no existirían.
+
+### 🔗 De la física estadística al softmax
+
+Si alguna vez usaste ChatGPT o cualquier modelo moderno de IA, cada vez que el modelo elige una palabra está usando, sin que lo sepas, una ecuación de la física del siglo XIX: la **distribución de Boltzmann**.
+
+El físico austríaco Ludwig Boltzmann dedujo en la década de 1870 cómo se distribuye la energía entre las partículas de un gas en equilibrio térmico. Su fórmula -conocida hoy como distribución de Boltzmann- describe la probabilidad de que un sistema esté en un estado con una cierta energía. Ciento cincuenta años después, esa misma ecuación es la que usan las redes neuronales para convertir números internos (logits) en probabilidades, bajo el nombre de **función softmax**. Es literalmente la misma fórmula, con otros nombres:
+
+$$p_i = \frac{e^{-E_i / kT}}{\sum_j e^{-E_j / kT}} \quad \text{(Boltzmann, física)}$$
+
+$$\text{softmax}(z)_i = \frac{e^{z_i}}{\sum_j e^{z_j}} \quad \text{(softmax, machine learning)}$$
+
+La máquina de Boltzmann, inventada por Geoffrey Hinton y Terry Sejnowski en 1985, lleva esto un paso más allá: toma conceptos enteros de la termodinámica estadística -energía libre, temperatura, equilibrio térmico- y los aplica directamente como modelo de aprendizaje automático. Fue uno de los primeros algoritmos capaces de aprender representaciones internas. [⁷](#ref7)
+
+### 🔗 De la teoría de la información al entrenamiento de redes
+
+Claude Shannon publicó en 1948 _"A Mathematical Theory of Communication"_, fundando la teoría de la información. En ese paper definió el concepto de **entropía** como una medida de la incertidumbre o la cantidad de información contenida en un mensaje. [⁸](#ref8)
+
+Hoy, los modelos de lenguaje se entrenan minimizando la **cross-entropy** (entropía cruzada), una función de pérdida que mide qué tan lejos están las predicciones del modelo de la distribución real de palabras en los textos de entrenamiento. Cada vez que un LLM aprende a predecir mejor la siguiente palabra, lo que está haciendo es minimizar la entropía cruzada -un concepto que Shannon puso sobre la mesa en 1948 pensando en telecomunicaciones, no en inteligencia artificial. [⁹](#ref9)
+
+La conexión es directa y medible: la función de pérdida que permite que existan modelos como GPT-4 es, en esencia, una métrica de la teoría de la información.
+
+### 🔗 De la biología a las neuronas artificiales
+
+Antes de que existieran las redes neuronales artificiales, existían las neuronas biológicas. En 1943, el neurocientífico Warren McCulloch y el matemático Walter Pitts publicaron _"A Logical Calculus of the Ideas Immanent in Nervous Activity"_, donde propusieron un modelo matemático simplificado de una neurona: recibe señales de entrada, las suma, y si superan un cierto umbral, "dispara" una señal de salida. [¹⁰](#ref10)
+
+Ese modelo -la neurona de McCulloch-Pitts- es el abuelo de todo lo que vino después. La arquitectura de los transformers modernos es inmensamente más compleja, pero el principio básico sigue siendo el mismo: unidades simples que procesan información en paralelo, conectadas entre sí, aprendiendo de los datos.
+
+### 🔗 De la lingüística a la crítica de los LLMs
+
+La cuarta pata de esta torre es la lingüística. Emily Bender, la primera autora del paper de los loros estocásticos, es profesora de lingüística computacional en la Universidad de Washington. Su perspectiva es clave: ella no ve a los modelos de lenguaje como inteligencia, sino como **sistemas de procesamiento estadístico de formas lingüísticas**.
+
+Pero la relación entre lingüística e IA viene de mucho antes. En la década de 1950, Zellig Harris desarrolló la **lingüística distribucional**, una teoría que sostiene que el significado de una palabra puede deducirse por las palabras que la rodean -"you shall know a word by the company it keeps", como lo resumió John Rupert Firth en 1957. [¹¹](#ref11) Esa idea es la base de los word embeddings (word2vec, GloVe) que alimentan a los modelos de lenguaje modernos.
+
+Por otro lado, Noam Chomsky argumentó durante décadas que el lenguaje humano requiere una gramática universal innata, y que el aprendizaje meramente estadístico jamás podría producir lenguaje genuino. [¹²](#ref12) El éxito de los LLMs -modelos puramente estadísticos que generan texto fluido- puso esa discusión sobre el tapete con una intensidad renovada.
+
+### El hilo invisible
+
+Lo que une todas estas disciplinas es algo sutil pero profundo: **todas estudian sistemas complejos donde el comportamiento global emerge de interacciones locales**. En un gas, las moléculas individuales chocan al azar y sin embargo la temperatura y la presión emergen como propiedades macroscópicas predecibles. En una red neuronal, miles de millones de parámetros se ajustan estadísticamente y sin embargo emerge la capacidad de generar lenguaje coherente.
+
+Que una ecuación pensada para describir gases del siglo XIX termine siendo la misma que elige palabras en un chatbot del siglo XXI no es una coincidencia. Es la prueba de que la física, la información, la biología y el lenguaje están conectados por hilos matemáticos que aún estamos descubriendo.
+
+Y cada uno de esos hilos fue descubierto por humanos. La máquina solo los teje.
+
+---
+
+## El factor humano: lo que nunca deberías delegar
+
+Y acá llegamos al corazón de todo esto.
+
+Cuando uso un asistente de IA para escribir un artículo, para depurar código, para explorar una idea, estoy usando una herramienta estadística increíblemente poderosa. Pero la dirección, el propósito, la chispa, la decisión de qué merece la pena preguntar, el criterio para saber si la respuesta tiene sentido -todo eso soy yo.
+
+O mejor dicho: todo eso **somos nosotros**.
+
+La metáfora del loro estocástico no es una crítica para despreciar la tecnología. Es un recordatorio de humildad -pero no de la máquina: **nuestra**.
+
+Es fácil marearse con la fluidez del texto. Es fácil pensar "esto es tan bueno como lo que haría un humano". Y a veces lo es, superficialmente. Pero lo que hace que un texto valga la pena no es solo que las palabras estén bien ordenadas. Es que haya alguien atrás que sepa lo que quiere decir, que haya vivido, que haya sentido, que tenga una opinión formada después de años de experiencia, que pueda poner en contexto, que pueda decir "esto no me suena bien" aunque estadísticamente sea correcto.
+
+Esa capacidad de **discernir** no la tiene un loro, por más estocástico que sea.
+
+---
+
+## El genio no está en la máquina
+
+Hay una frase del físico Richard Feynman que encontramos en una foto de los archivos de Caltech. Estaba escrita en su pizarrón el día de su muerte, el 15 de febrero de 1988. En el mismo pizarrón había una segunda frase: "Know how to solve every problem that has been solved." Pero la primera, la que más resuena en esta conversación, dice:
+
+> _"What I cannot create, I do not understand."_ > _(Lo que no puedo crear, no lo entiendo.)_ [¹³](#ref13)
+
+Apliquémosla al revés: **lo que podemos crear, lo entendemos**. Y los modelos de lenguaje fueron creados por humanos. Cada arquitectura, cada algoritmo de entrenamiento, cada ajuste, cada decisión de diseño fue tomada por personas. La arquitectura Transformer, la revolución que está detrás de ChatGPT, fue inventada por ocho investigadores de Google en 2017 en el paper _"Attention Is All You Need"_ (NeurIPS 2017). [¹⁴](#ref14) Personas de carne y hueso, con nombres y apellidos -Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin- que entendían de matemática, de lingüística, de computación, y se pararon sobre los hombros de Boltzmann, Shannon, McCulloch, Pitts y Firth.
+
+El verdadero genio no está en el loro. Está en quienes construyeron la jaula. En quienes diseñaron el mecanismo que le permite hablar. En quienes entendieron lo suficiente de todas esas disciplinas para crear algo que _parece_ entender aunque no lo haga.
+
+Y esa genialidad -la de conectar conceptos de la física, de la termodinámica estadística, de la teoría de la información, de la biología, de la lingüística- es **exclusivamente humana**. La máquina no podría haber llegado a ese conocimiento por sí misma. Todo lo que sabe se lo dimos nosotros.
+
+---
+
+## Usar la IA sin olvidar lo que es
+
+Cada vez que uses una herramienta de IA, preguntate: _¿Estoy usando esto como lo que es -un asistente estadístico que procesa lenguaje- o le estoy pidiendo que haga algo que requiere el criterio, la experiencia y el juicio que solo un humano puede tener?_
+
+No se trata de no usar IA. Se trata de usarla con los ojos abiertos.
+
+Que el loro hable bonito no significa que sepa de qué está hablando. Y que nosotros sepamos cuándo escucharlo y cuándo ignorarlo -ese discernimiento- es lo que nos hace, todavía, irremplazables.
+
+---
+
+## Referencias
+
+### Sobre el paper de los loros estocásticos
+
+1. **<a id="ref1"></a>Bender, E. M., Gebru, T., McMillan-Major, A., & Shmitchell, S. (2021).** _On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?_ Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT '21), pp. 610–623.
+   → https://dl.acm.org/doi/10.1145/3442188.3445922
+
+2. **<a id="ref2"></a>Hao, K. (2020).** _We read the paper that forced Timnit Gebru out of Google. Here's what it says._ MIT Technology Review.
+   → https://www.technologyreview.com/2020/12/04/1013294/google-ai-ethics-research-paper-forced-out-timnit-gebru/
+
+3. **<a id="ref3"></a>WIRED.** _Behind the Paper That Led to a Google Researcher's Firing._
+   → https://www.wired.com/story/behind-paper-led-google-researchers-firing/
+
+4. **<a id="ref4"></a>Quote Investigator (2022).** _Quote Origin: Stitching Together Sequences of Linguistic Forms... Without Any Reference To Meaning: A Stochastic Parrot._
+   → https://quoteinvestigator.com/2022/10/07/word-parrot/
+
+### Sobre las conexiones interdisciplinarias
+
+5. **<a id="ref5"></a>Boltzmann, L. (1868).** _Studien über das Gleichgewicht der lebendigen Kraft zwischen bewegten materiellen Punkten._ [Estudios sobre el equilibrio de la fuerza viva entre puntos materiales en movimiento.] Sobre la distribución estadística de energía en sistemas físicos. La ecuación base de la mecánica estadística.
+   → https://en.wikipedia.org/wiki/Boltzmann_distribution
+
+6. **<a id="ref6"></a>Goodfellow, I., Bengio, Y., & Courville, A. (2016).** _Deep Learning._ MIT Press. Capítulo 6: la función softmax como generalización de la distribución de Boltzmann para redes neuronales.
+   → https://www.deeplearningbook.org/
+
+7. **<a id="ref7"></a>Ackley, D. H., Hinton, G. E., & Sejnowski, T. J. (1985).** _A Learning Algorithm for Boltzmann Machines._ Cognitive Science, 9(1), 147–169. Las máquinas de Boltzmann aplican directamente conceptos de termodinámica estadística (energía libre, temperatura) al aprendizaje automático.
+   → https://onlinelibrary.wiley.com/doi/abs/10.1207/s15516709cog0901_7
+
+8. **<a id="ref8"></a>Shannon, C. E. (1948).** _A Mathematical Theory of Communication._ Bell System Technical Journal, 27(3), 379–423. Fundación de la teoría de la información: definición de entropía como medida de incertidumbre.
+   → https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf
+
+9. **<a id="ref9"></a>Machine Learning Mastery.** _From Shannon to Modern AI: A Complete Information Theory Guide for Machine Learning._ La progresión de entropía → información mutua → cross-entropy y divergencia KL en el aprendizaje automático.
+   → https://machinelearningmastery.com/from-shannon-to-modern-ai-a-complete-information-theory-guide-for-machine-learning/
+
+10. **<a id="ref10"></a>McCulloch, W. S. & Pitts, W. (1943).** _A Logical Calculus of the Ideas Immanent in Nervous Activity._ Bulletin of Mathematical Biophysics, 5, 115–133. Primer modelo matemático de una neurona biológica.
+    → https://link.springer.com/article/10.1007/BF02478259
+
+11. **<a id="ref11"></a>Firth, J. R. (1957).** _A synopsis of linguistic theory 1930–1955._ Studies in Linguistic Analysis, pp. 1–32. "You shall know a word by the company it keeps" - base de la semántica distribucional.
+    → https://en.wikipedia.org/wiki/Distributional_semantics
+
+12. **<a id="ref12"></a>Chomsky, N. (1957).** _Syntactic Structures._ Mouton & Co. La gramática universal y el debate sobre si el lenguaje puede aprenderse solo con estadística.
+    → https://en.wikipedia.org/wiki/Syntactic_Structures
+
+### Sobre Feynman y el Transformer
+
+13. **<a id="ref13"></a>Richard Feynman.** _"What I cannot create, I do not understand."_ Escrito en su pizarrón en Caltech, encontrado el día de su muerte, 15 de febrero de 1988. Hay una segunda frase: "Know how to solve every problem that has been solved." Foto en los archivos de Caltech.
+    → http://feynman.com/fun/quotes/
+    → https://x.com/phalpern/status/964174001194061825 (foto desde @CaltechArchives)
+    → https://en.wikiquote.org/wiki/Richard_Feynman
+
+14. **<a id="ref14"></a>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A., Kaiser, Ł., & Polosukhin, I. (2017).** _Attention Is All You Need._ Advances in Neural Information Processing Systems (NeurIPS 2017). El paper que introdujo la arquitectura Transformer.
+    → https://arxiv.org/abs/1706.03762
+
+---
+
+_Ilustración de portada: "Loros estocásticos" - inspirada en el estilo de Quino, firmada por Gus. Representa la metáfora central: un loro sobre un servidor, parloteando texto impecable pero vacío, mientras un humano observa con perplejidad irónica._

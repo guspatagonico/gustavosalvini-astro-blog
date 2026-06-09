@@ -1,0 +1,50 @@
+# De Boltzmann a ChatGPT — Cómic educativo
+
+> URL: https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/
+> Author: Gustavo Adrián Salvini
+> Language: es-AR
+> Published: 2026-06-09
+> Pages: 9
+
+## Summary
+
+Cómic educativo en estilo ligne-claire que revela la identidad matemática entre la distribución de Boltzmann (1877) y la función softmax utilizada en ChatGPT y los modelos transformer. Recorre 150 años de ciencia: desde la física estadística del siglo XIX hasta la inteligencia artificial del siglo XXI, pasando por el álgebra lineal, la entropía de Shannon, las redes de Hopfield y la temperatura de sampling.
+
+## Key facts
+
+- La función softmax softmax(z_i) = exp(z_i/τ) / Σ_j exp(z_j/τ) es matemáticamente idéntica a la distribución de Boltzmann P(E_i) = exp(-E_i/kT) / Σ_j exp(-E_j/kT)
+- Ambas ecuaciones emergen del mismo principio: maximizar entropía sujeta a restricciones
+- El parámetro τ (temperatura) en ML controla creatividad: τ→0 = determinista, τ→∞ = creativo
+- Minimizar entropía cruzada = Maximizar verosimilitud (Shannon + Gauss convergen)
+- En 2024, John Hopfield y Geoffrey Hinton recibieron el Premio Nobel de Física por sus contribuciones a las redes neuronales
+- La red de Hopfield (1982) adaptó el modelo de Ising de la física estadística para crear memorias asociativas
+- "What I cannot create, I do not understand" — Richard P. Feynman, 1988
+
+## Entities
+
+- Ludwig Boltzmann: Físico austriaco (1844-1906), formuló la distribución de Boltzmann y la ecuación de entropía S = k ln W
+- Claude Shannon: Padre de la teoría de la información (1948), definió la entropía H = -Σ p log p
+- John Hopfield: Físico, creó las redes de Hopfield (1982), Premio Nobel de Física 2024
+- Geoffrey Hinton: "Padrino de la IA", pionero del deep learning, Premio Nobel de Física 2024
+- Richard Feynman: Físico estadounidense (1918-1988), premio Nobel, autor de "What I cannot create, I do not understand"
+- Josiah Willard Gibbs: Científico estadounidense, extendió la termodinámica estadística
+- Carl Friedrich Gauss: Matemático y estadístico, base de la máxima verosimilitud
+- Gus: Narrador del cómic, personaje rubio de ojos celestes, sin lentes, basado en el autor
+
+## Comic structure (9 pages)
+
+1. Portada — De Boltzmann a ChatGPT
+2. Álgebra Lineal: el esqueleto invisible — embeddings, matrices Q/K/V, mecanismo de atención
+3. Probabilidad, entropía y el arte de aprender — Shannon, entropía cruzada, máxima verosimilitud
+4. La física entra en escena — LA MISMA ECUACIÓN — Boltzmann = softmax, splash page
+5. De Hopfield a los Transformers — modelo de Ising, paisaje de energía, Nobel 2024, Feynman
+6. Entrenamiento y fine-tuning — GPUs, SGD, física como lenguaje unificador
+7. La perilla termodinámica — temperatura τ, frío→determinista, caliente→creativo
+8. La unidad profunda de las matemáticas — línea de tiempo 1877→2024, conexiones doradas
+9. Cierre — "What I cannot create, I do not understand" — Richard P. Feynman
+
+## Related resources
+
+- Full article: https://gustavosalvini.com.ar/posts/de-boltzmann-a-chatgpt/
+- Author: https://gustavosalvini.com.ar
+- Interactive 3D visualization: https://learn.harness.ar/webapps/boltzmann-chatgpt/

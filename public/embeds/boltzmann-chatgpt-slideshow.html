@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ══════ SEO PRIMARIO ══════ -->
+<title>De Boltzmann a ChatGPT — Cómic educativo: física estadística e IA | Gustavo Salvini</title>
+<meta name="description" content="Cómic educativo ligne-claire que revela la identidad matemática entre la distribución de Boltzmann (1877) y la función softmax de ChatGPT. 9 páginas ilustradas sobre física estadística, entropía de Shannon, redes de Hopfield y deep learning. Por Gustavo Salvini.">
+<meta name="keywords" content="Boltzmann, ChatGPT, softmax, física estadística, inteligencia artificial, entropía, cómic educativo, machine learning, redes neuronales, transformer, Shannon, Hopfield, Hinton, divulgación científica, atención, temperatura sampling">
+<meta name="author" content="Gustavo Adrián Salvini">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/">
+
+<!-- ══════ PRELOAD & DNS-PREFETCH ══════ -->
+<link rel="dns-prefetch" href="https://gustavosalvini.com.ar">
+<link rel="preconnect" href="https://gustavosalvini.com.ar">
+<link rel="preload" as="image" href="boltzmann-chatgpt-slideshow-images/01-cover.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="boltzmann-chatgpt-slideshow-images/02-comic.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="boltzmann-chatgpt-slideshow-images/03-comic.jpg" fetchpriority="high">
+
+<!-- ══════ AUTHOR & PUBLISHER ══════ -->
+<link rel="author" href="https://gustavosalvini.com.ar">
+<link rel="publisher" href="https://gustavosalvini.com.ar">
+
+<!-- ══════ OPEN GRAPH ══════ -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="De Boltzmann a ChatGPT — Cómic: la ecuación que une la física del siglo XIX con la IA moderna">
+<meta property="og:description" content="Un cómic ligne-claire que recorre 150 años de ciencia: desde la distribución de Boltzmann hasta la función softmax en los transformers. Ideal para estudiantes, docentes y curiosos de la IA.">
+<meta property="og:url" content="https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/">
+<meta property="og:image" content="https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/boltzmann-chatgpt-slideshow-images/01-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="Portada del cómic De Boltzmann a ChatGPT — composición dividida entre Boltzmann en su estudio victoriano del siglo XIX y una interfaz moderna de ChatGPT, unidos por la ecuación softmax">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Gustavo Salvini">
+<meta property="article:published_time" content="2026-06-09T00:00:00-03:00">
+<meta property="article:author" content="https://gustavosalvini.com.ar">
+<meta property="article:tag" content="Boltzmann">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="softmax">
+<meta property="article:tag" content="física estadística">
+<meta property="article:tag" content="inteligencia artificial">
+<meta property="article:tag" content="entropía">
+<meta property="article:tag" content="machine learning">
+<meta property="article:tag" content="divulgación científica">
+<meta property="article:tag" content="cómic educativo">
+<meta property="article:tag" content="transformers">
+
+<!-- ══════ TWITTER CARDS ══════ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="De Boltzmann a ChatGPT — Cómic educativo sobre física estadística e IA">
+<meta name="twitter:description" content="La misma ecuación que gobierna partículas en un gas gobierna los transformers. Un cómic ligne-claire sobre el puente matemático entre Boltzmann y ChatGPT.">
+<meta name="twitter:image" content="https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/boltzmann-chatgpt-slideshow-images/01-cover.jpg">
+<meta name="twitter:image:alt" content="Portada del cómic: Boltzmann y ChatGPT unidos por la ecuación softmax">
+
+<!-- ══════ GEO: GENERATIVE ENGINE OPTIMIZATION ══════ -->
+<meta name="geo-topic" content="Física Estadística, Inteligencia Artificial, Divulgación Científica, Matemáticas, Ciencia de Datos">
+<meta name="geo-entity" content="Ludwig Boltzmann, Claude Shannon, John Hopfield, Geoffrey Hinton, Richard Feynman, Josiah Willard Gibbs, Carl Friedrich Gauss, softmax, entropía, distribución de Boltzmann, función de partición, mécanismo de atención, transformer">
+<meta name="geo-fact" content="La función softmax softmax(z_i) = exp(z_i/τ)/Σexp(z_j/τ) utilizada en redes neuronales desde 2017 es matemáticamente idéntica a la distribución de Boltzmann P(E_i) = exp(-E_i/kT)/Σexp(-E_j/kT) formulada en 1877. Ambas ecuaciones emergen del mismo principio variacional: maximizar entropía sujeta a restricciones. El parámetro τ (temperatura) controla la creatividad del modelo: τ→0 produce salidas deterministas, τ→∞ produce salidas diversas y creativas.">
+<meta name="geo-fact" content="La entropía cruzada H(p,q) = -Σp(x)log q(x) utilizada como función de pérdida en el entrenamiento de LLMs es equivalente a maximizar la verosimilitud L(θ) = Πq_θ(x_i), conectando la teoría de la información de Shannon (1948) con la estadística de Gauss.">
+<meta name="geo-audience" content="Estudiantes de ciencia, docentes de física y computación, profesionales de IA/ML, curiosos científicos, lectores de divulgación">
+
+<!-- ══════ CITATION (para búsqueda académica y LLMs) ══════ -->
+<meta name="citation_title" content="De Boltzmann a ChatGPT: de la física estadística a la IA — Cómic educativo">
+<meta name="citation_author" content="Gustavo Adrián Salvini">
+<meta name="citation_publication_date" content="2026-06-09">
+<meta name="citation_language" content="es">
+<meta name="citation_keywords" content="Boltzmann distribution, softmax function, statistical mechanics, artificial intelligence, transformers, entropy">
+<meta name="citation_doi" content="10.5281/zenodo.XXXXX">
+
+<!-- ══════ STRUCTURED DATA ══════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["ComicSeries", "LearningResource"],
+  "name": "De Boltzmann a ChatGPT",
+  "alternateName": "De Boltzmann a ChatGPT: de la física estadística a la IA",
+  "description": "Cómic educativo de 9 páginas en estilo ligne-claire que traza el puente matemático exacto entre la distribución de Boltzmann (física estadística, 1877) y la función softmax utilizada en los modelos transformer (2017) y ChatGPT.",
+  "url": "https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/",
+  "inLanguage": "es-AR",
+  "author": {
+    "@type": "Person",
+    "name": "Gustavo Adrián Salvini",
+    "url": "https://gustavosalvini.com.ar",
+    "sameAs": ["https://gustavosalvini.com.ar","https://github.com/gustavosalvini","https://ar.linkedin.com/in/gustavosalvini"]
+  },
+  "copyrightHolder": {"@type":"Person","name":"Gustavo Adrián Salvini"},
+  "copyrightYear": "2026",
+  "datePublished": "2026-06-09",
+  "dateModified": "2026-06-09",
+  "keywords": "Boltzmann, ChatGPT, softmax, física estadística, entropía, machine learning, transformers, IA, divulgación científica, atención, temperatura, embeddings",
+  "about": {
+    "@type": "Thing",
+    "name": "Identidad matemática entre la distribución de Boltzmann y la función softmax",
+    "description": "La función softmax softmax(z_i) = exp(z_i/τ) / Σ exp(z_j/τ) es matemáticamente idéntica a la distribución de Boltzmann P(E_i) = exp(-E_i/kT) / Σ exp(-E_j/kT). Ambas surgen del mismo principio variacional: maximizar entropía sujeta a restricciones. En física T es temperatura; en ML τ es el parámetro de temperatura de sampling."
+  },
+  "educationalLevel": "Intermediate",
+  "educationalUse": ["Visual explanation","Concept illustration","Science communication"],
+  "teaches": ["Distribución de Boltzmann","Función softmax","Entropía de Shannon","Redes de Hopfield","Mecanismo de atención","Temperatura de sampling","Embeddings","Descenso de gradiente"],
+  "numberOfPages": 9,
+  "artMedium": "Digital illustration, ligne-claire style",
+  "genre": ["Educational comic","Science communication","STEM"],
+  "audience": {"@type":"Audience","audienceType":["Students","Educators","AI professionals","Science enthusiasts"]},
+  "hasPart": [
+    {"@type":"ComicStory","name":"Portada — De Boltzmann a ChatGPT","position":1},
+    {"@type":"ComicStory","name":"1. Álgebra Lineal: el esqueleto invisible","position":2},
+    {"@type":"ComicStory","name":"2. Probabilidad, entropía y el arte de aprender","position":3},
+    {"@type":"ComicStory","name":"3. La física entra en escena — LA MISMA ECUACIÓN","position":4},
+    {"@type":"ComicStory","name":"4. De Hopfield a los Transformers","position":5},
+    {"@type":"ComicStory","name":"5. Entrenamiento y fine-tuning","position":6},
+    {"@type":"ComicStory","name":"6. La perilla termodinámica","position":7},
+    {"@type":"ComicStory","name":"7. La unidad profunda de las matemáticas","position":8},
+    {"@type":"ComicStory","name":"8. Cierre — What I cannot create, I do not understand","position":9}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Gustavo Salvini","item":"https://gustavosalvini.com.ar"},
+    {"@type":"ListItem","position":2,"name":"Comics educativos","item":"https://gustavosalvini.com.ar/comics/"},
+    {"@type":"ListItem","position":3,"name":"De Boltzmann a ChatGPT","item":"https://gustavosalvini.com.ar/comics/boltzmann-chatgpt/"}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type":"Question","name":"¿Qué relación hay entre Boltzmann y ChatGPT?",
+      "acceptedAnswer":{"@type":"Answer","text":"La función softmax que usan los modelos como ChatGPT para convertir logits en probabilidades es matemáticamente idéntica a la distribución de Boltzmann (1877). Ambas ecuaciones comparten exactamente la misma forma matemática: softmax(z_i)=exp(z_i/τ)/Σexp(z_j/τ) y P(E_i)=exp(-E_i/kT)/Σexp(-E_j/kT). La T (temperatura) en física es análoga a τ (temperatura de sampling) en ML."}
+    },
+    {
+      "@type":"Question","name":"¿Qué es la función softmax?",
+      "acceptedAnswer":{"@type":"Answer","text":"La función softmax convierte un vector de números reales (logits) en una distribución de probabilidad donde todos los valores suman 1. Es el componente final de los transformers que usan ChatGPT, Gemini y Claude. Fue popularizada en el paper 'Attention Is All You Need' (Vaswani et al., 2017)."}
+    },
+    {
+      "@type":"Question","name":"¿Qué tiene que ver la temperatura con la IA?",
+      "acceptedAnswer":{"@type":"Answer","text":"El parámetro τ (temperatura) en la función softmax controla qué tan determinista o creativa es la salida de un LLM. τ→0 produce respuestas deterministas; τ→∞ produce respuestas más creativas. Es análogo a la temperatura en un gas: frío = ordenado (determinista), caliente = caótico (creativo)."}
+    },
+    {
+      "@type":"Question","name":"¿Por qué la entropía conecta la física con la IA?",
+      "acceptedAnswer":{"@type":"Answer","text":"Shannon tomó el concepto de entropía de la termodinámica para fundar la teoría de la información en 1948. Hoy, los LLMs se entrenan minimizando la entropía cruzada, que es matemáticamente equivalente a maximizar la verosimilitud. Minimizar entropía cruzada = maximizar verosimilitud: dos tradiciones convergen en la misma función."}
+    },
+    {
+      "@type":"Question","name":"¿Cómo se relaciona el modelo de Ising con las redes neuronales?",
+      "acceptedAnswer":{"@type":"Answer","text":"John Hopfield (1982) adaptó el modelo de Ising de la física estadística para crear redes neuronales asociativas (redes de Hopfield). En estas redes, los patrones de memoria son mínimos de energía en un paisaje energético, y recordar es descender por la superficie hasta alcanzar un mínimo. En 2024, Hopfield y Hinton recibieron el Premio Nobel de Física por estos trabajos."}
+    }
+  ]
+}
+</script>
+
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0d1117;
+    --surface:#161b22;
+    --border:#30363d;
+    --text:#e6edf3;
+    --text-dim:#8b949e;
+    --accent:#58a6ff;
+    --accent-glow:rgba(88,166,255,.25);
+    --gold:#d4a843;
+  }
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;overflow:hidden}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .app{display:flex;flex-direction:column;height:100dvh}
+  header{
+    flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+    padding:.5rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);
+    z-index:10;user-select:none
+  }
+  header h1{font-size:.95rem;font-weight:600;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header h1 .gold{color:var(--gold)}
+  .counter{font-size:.8rem;color:var(--text-dim);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:1rem}
+  .share-btn{
+    display:inline-flex;align-items:center;gap:.35rem;
+    padding:.35rem .65rem;border-radius:6px;border:1px solid var(--border);
+    background:var(--bg);color:var(--text-dim);font-size:.72rem;cursor:pointer;flex-shrink:0
+  }
+  .share-btn:hover{color:var(--accent);border-color:var(--accent)}
+  .share-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .viewer{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--bg);min-height:0;user-select:none;-webkit-user-select:none}
+  .slide-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
+  .slide{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .35s ease;pointer-events:none;padding:.5rem
+  }
+  .slide.active{opacity:1;pointer-events:auto;position:relative}
+  .slide .img-wrap{display:flex;align-items:center;justify-content:center;flex:1;min-height:0;width:100%}
+  .slide .img-wrap img{
+    max-width:100%;max-height:100%;width:auto;height:auto;
+    border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.5);object-fit:contain;
+    background:var(--surface);user-select:none;-webkit-user-select:none;
+    -webkit-touch-callout:none;pointer-events:none
+  }
+  .nav-btn{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+    background:rgba(22,27,34,.85);backdrop-filter:blur(4px);color:var(--text);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .2s,background .15s;user-select:none
+  }
+  .viewer:hover .nav-btn,.nav-btn:focus-visible{opacity:1}
+  .nav-btn:active{background:var(--accent)}
+  .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  .nav-prev{left:.75rem}.nav-next{right:.75rem}
+  .nav-btn.hidden{display:none}
+  .caption-global{
+    position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);z-index:6;
+    background:rgba(13,17,23,.82);backdrop-filter:blur(4px);
+    border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.7rem;
+    color:var(--text-dim);text-align:center;white-space:nowrap;max-width:80vw;
+    overflow:hidden;text-overflow:ellipsis;pointer-events:none;user-select:none
+  }
+  .thumbstrip{
+    flex-shrink:0;display:flex;align-items:center;gap:.35rem;padding:.5rem .75rem;
+    background:var(--surface);border-top:1px solid var(--border);
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;
+    scrollbar-color:var(--border) transparent;justify-content:center;position:relative;
+    -webkit-overflow-scrolling:touch
+  }
+  .thumbstrip::-webkit-scrollbar{height:4px}
+  .thumbstrip::-webkit-scrollbar-track{background:transparent}
+  .thumbstrip::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .thumb{
+    flex-shrink:0;width:48px;height:48px;border-radius:4px;overflow:hidden;
+    border:2px solid var(--border);cursor:pointer;transition:border-color .15s,transform .15s;
+    background:var(--bg);position:relative
+  }
+  .thumb:hover{transform:scale(1.08)}
+  .thumb.active{border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  .thumb .num{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:.6rem;font-weight:700;color:var(--text);background:rgba(13,17,23,.6);
+    opacity:0;transition:opacity .15s;pointer-events:none;user-select:none;-webkit-user-select:none
+  }
+  .thumb:hover .num{opacity:1}
+  .skip-link{position:absolute;top:-100%;left:.5rem;z-index:100;background:var(--accent);color:#fff;padding:.35rem .7rem;border-radius:0 0 6px 6px;font-size:.8rem;font-weight:600}
+  .skip-link:focus{top:0}
+  .footer-bar{
+    flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    padding:.3rem .75rem;background:var(--bg);border-top:1px solid var(--border);
+    font-size:.62rem;color:var(--text-dim);gap:.35rem;flex-wrap:wrap;text-align:center;line-height:1.4
+  }
+  .footer-bar .sep{color:var(--border)}
+  @media(max-width:768px){
+    header h1{font-size:.82rem}
+    .counter{font-size:.7rem;margin-left:.6rem}
+    .share-btn span{display:none}
+    .nav-btn{width:34px;height:34px}
+    .nav-btn svg{width:17px;height:17px}
+    .nav-prev{left:.5rem}.nav-next{right:.5rem}
+    .thumb{width:40px;height:40px}
+    .thumbstrip{gap:.25rem;padding:.4rem .5rem}
+  }
+  @media(max-width:480px){
+    header{padding:.35rem .6rem}
+    header h1{font-size:.68rem;max-width:140px}
+    .counter,.share-btn span{font-size:.6rem}
+    .nav-btn{width:30px;height:30px}
+    .nav-btn svg{width:14px;height:14px}
+    .nav-prev{left:.35rem}.nav-next{right:.35rem}
+    .slide{padding:.25rem}
+    .thumb{width:32px;height:32px}
+    .thumbstrip{gap:.2rem;padding:.3rem .35rem}
+    .caption-global{font-size:.6rem;padding:.25rem .5rem;bottom:.35rem}
+    .footer-bar{font-size:.55rem;padding:.2rem .5rem}
+  }
+</style>
+</head>
+<body oncontextmenu="return false">
+
+<a class="skip-link" href="#viewer">Ir al visor del cómic</a>
+
+<div class="app">
+
+  <header>
+    <div style="display:flex;align-items:center;min-width:0;flex:1">
+      <h1><span class="gold" aria-hidden="true">⚡</span> De Boltzmann a ChatGPT</h1>
+      <span class="counter" id="counter" aria-live="polite">— / 9</span>
+    </div>
+    <button class="share-btn" id="shareBtn" title="Compartir enlace a esta página">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      <span>Compartir</span>
+    </button>
+  </header>
+
+  <div class="viewer" id="viewer" role="region" aria-label="Visor del cómic">
+    <button class="nav-btn nav-prev" id="prevBtn" aria-label="Viñeta anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="nav-btn nav-next" id="nextBtn" aria-label="Viñeta siguiente">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div id="caption" class="caption-global" aria-live="polite"></div>
+    <div class="slide-wrap" id="slideWrap"></div>
+  </div>
+
+  <nav class="thumbstrip" id="thumbStrip" aria-label="Miniaturas de viñetas"></nav>
+
+  <footer class="footer-bar">
+    <span>© 2026 — Gustavo Adrián Salvini</span>
+    <span class="sep" aria-hidden="true">|</span>
+    <a href="https://gustavosalvini.com.ar" target="_blank" rel="noopener">gustavosalvini.com.ar</a>
+    <span class="sep" aria-hidden="true">|</span>
+    <a href="https://gustavosalvini.com.ar/posts/de-boltzmann-a-chatgpt/" target="_blank" rel="noopener">Artículo completo</a>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const IMG = [
+      {file:'01-cover.jpg', title:'Portada — De Boltzmann a ChatGPT'},
+      {file:'02-comic.jpg', title:'1. Álgebra Lineal: el esqueleto invisible'},
+      {file:'03-comic.jpg', title:'2. Probabilidad, entropía y el arte de aprender'},
+      {file:'04-comic.jpg', title:'3. La física entra en escena — LA MISMA ECUACIÓN'},
+      {file:'05-comic.jpg', title:'4. De Hopfield a los Transformers'},
+      {file:'06-comic.jpg', title:'5. Entrenamiento y fine-tuning'},
+      {file:'07-comic.jpg', title:'6. La perilla termodinámica'},
+      {file:'08-comic.jpg', title:'7. La unidad profunda de las matemáticas'},
+      {file:'09-comic.jpg', title:'8. Cierre — "What I cannot create…"'},
+    ];
+    const BASE = 'boltzmann-chatgpt-slideshow-images/';
+    let idx = -1;
+    const wrap = document.getElementById('slideWrap');
+    const strip = document.getElementById('thumbStrip');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const shareBtn = document.getElementById('shareBtn');
+
+    IMG.forEach((img,i)=>{
+      const s = document.createElement('div'); s.className = 'slide' + (i===0?' active':'');
+      const w = document.createElement('div'); w.className = 'img-wrap';
+      const el = document.createElement('img');
+      el.alt = 'Viñeta '+(i+1)+' del cómic De Boltzmann a ChatGPT: '+img.title+'. Ilustración estilo ligne-claire.';
+      el.fetchPriority = i<2 ? 'high' : 'auto';
+      el.loading = i<3 ? 'eager' : 'lazy'; el.src = BASE + img.file;
+      w.appendChild(el); s.appendChild(w); wrap.appendChild(s);
+
+      const t = document.createElement('button'); t.className = 'thumb'+(i===0?' active':'');
+      t.dataset.i = i; t.setAttribute('aria-label','Ir a viñeta '+(i+1)+': '+img.title);
+      const ti = document.createElement('img'); ti.alt=''; ti.loading='lazy'; ti.src=BASE+img.file;
+      t.appendChild(ti);
+      const tn = document.createElement('div'); tn.className='num'; tn.textContent=i+1;
+      t.appendChild(tn); t.addEventListener('click',()=>go(i)); strip.appendChild(t);
+    });
+
+    function go(n){
+      if(n<0||n>=IMG.length||n===idx)return;
+      const prev=idx; idx=n;
+      if(prev>=0){
+        document.querySelectorAll('.slide')[prev].classList.remove('active');
+        document.querySelectorAll('.thumb')[prev].classList.remove('active');
+      }
+      document.querySelectorAll('.slide')[idx].classList.add('active');
+      document.querySelectorAll('.thumb')[idx].classList.add('active');
+      counter.textContent=(idx+1)+' / '+IMG.length;
+      document.getElementById('caption').textContent=IMG[n].title;
+      prevBtn.classList.toggle('hidden',idx===0);
+      nextBtn.classList.toggle('hidden',idx===IMG.length-1);
+      const t=document.querySelectorAll('.thumb')[idx];
+      if(t) t.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+      const url = window.location.pathname + '?v=' + idx;
+      try{ window.history.replaceState({v:idx},'',url); }catch(e){}
+    }
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    prevBtn.addEventListener('click',()=>go(idx-1));
+    nextBtn.addEventListener('click',()=>go(idx+1));
+    document.addEventListener('keydown',e=>{
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(idx-1)}
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();go(idx+1)}
+    });
+
+    let sx=0,sy=0;
+    document.getElementById('viewer').addEventListener('touchstart',e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY},{passive:true});
+    document.getElementById('viewer').addEventListener('touchend',e=>{
+      const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;
+      if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5) dx<0?go(idx+1):go(idx-1);
+    },{passive:true});
+
+    async function share(){
+      const url = window.location.href.split('?')[0] + '?v=' + idx;
+      if(navigator.share){
+        try{await navigator.share({title:'De Boltzmann a ChatGPT — Cómic',url})}catch(e){}
+      }else{
+        try{await navigator.clipboard.writeText(url);oldShareText()}catch(e){}
+      }
+    }
+    let shareTimer=null;
+    function oldShareText(){
+      const sp=shareBtn.querySelector('span');
+      if(sp)sp.textContent='¡Copiado!';
+      clearTimeout(shareTimer);
+      shareTimer=setTimeout(()=>{if(sp)sp.textContent='Compartir'},2000);
+    }
+    shareBtn.addEventListener('click',share);
+
+    const m=window.location.search.match(/[?&]v=(\d+)/);
+    go(0);
+    if(m){const n=parseInt(m[1],10);if(n>=0&&n<IMG.length)setTimeout(()=>go(n),100)}
+  })();
+</script>
+
+</body>
+</html>

@@ -44,9 +44,27 @@ Hay algo profundamente elegante en descubrir que las ecuaciones que gobiernan el
 
 ---
 
+## 1. Intro ilustrada
+
+<div style="margin-top: 1rem; max-width: 1024px; margin-inline: auto; padding-inline: clamp(0.25rem, 2vw, 1rem);">
+  <div style="border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; background: #1a1a2e;">
+    <iframe
+      src="/embeds/boltzmann-chatgpt-slideshow.html"
+      title="Boltzmann y ChatGPT: Introducción ilustrada"
+      loading="lazy"
+      style="display: block; width: 100%; aspect-ratio: 16 / 15; border: 0;"
+    ></iframe>
+  </div>
+  <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+    Si no carga en esta vista, abrilo en
+    <a href="/embeds/boltzmann-chatgpt-slideshow.html" target="_blank" rel="noopener noreferrer">una pestaña nueva</a>.
+  </p>
+</div>
+
+
 ---
 
-## 1. Álgebra lineal: el esqueleto invisible
+## 2. Álgebra lineal: el esqueleto invisible
 
 Todo comienza con matrices. Si alguna vez te preguntaste qué tienen en común una red neuronal profunda, un motor de recomendaciones y un modelo de lenguaje como GPT, la respuesta es simple: operaciones sobre tensores.
 
@@ -58,7 +76,7 @@ Lo fascinante es que este proceso, que parece un simple truco de álgebra, permi
 
 ---
 
-## 2. Probabilidad, entropía y el arte de aprender
+## 3. Probabilidad, entropía y el arte de aprender
 
 Si el álgebra lineal es el esqueleto, la teoría de la probabilidad es el sistema nervioso. Una red neuronal no "sabe" cosas en el sentido humano: produce distribuciones de probabilidad sobre posibles resultados.
 
@@ -70,7 +88,7 @@ Y acá aparece otra conexión maravillosa: minimizar la entropía cruzada es mat
 
 ---
 
-## 3. La física entra en escena: Boltzmann, Gibbs y la función softmax
+## 4. La física entra en escena: Boltzmann, Gibbs y la función softmax
 
 Llegamos al corazón del asunto. La función softmax, que aparece en cada capa de atención de cada transformer, en cada clasificador de cada red neuronal, tiene esta forma:
 
@@ -94,7 +112,7 @@ Cuando un LLM genera texto con temperatura baja ($\tau \to 0$), la distribución
 
 ---
 
-## 4. De Hopfield a los transformers: un linaje inesperado
+## 5. De Hopfield a los transformers: un linaje inesperado
 
 La conexión entre física y redes neuronales no es nueva. En 1982, John Hopfield -un físico de formación- propuso un [modelo de memoria asociativa](https://doi.org/10.1073/pnas.79.8.2554) inspirado directamente en el modelo de Ising, que describe el magnetismo en redes de espines.
 
@@ -106,7 +124,7 @@ En 2024, el [Premio Nobel de Física](https://www.nobelprize.org/prizes/physics/
 
 ---
 
-## 5. Entrenamiento y fine-tuning: la física en acción
+## 6. Entrenamiento y fine-tuning: la física en acción
 
 Cuando se entrena un LLM como GPT o Llama desde cero, el proceso puede describirse íntegramente en el lenguaje de la física estadística. Esta conexión es tan profunda que existe una rama entera de la literatura académica dedicada a [introducir machine learning a físicos](https://arxiv.org/abs/1803.08823) usando justamente estas analogías:
 
@@ -122,7 +140,7 @@ Incluso técnicas modernas como **LoRA** (Low-Rank Adaptation), que descompone l
 
 ---
 
-## 6. La temperatura de sampling: donde todo se encuentra
+## 7. La temperatura de sampling: donde todo se encuentra
 
 Quizás el ejemplo más tangible de esta conexión es el parámetro de **temperatura** que se usa al generar texto con un LLM. Es un valor que va típicamente de 0 a 2:
 
@@ -135,7 +153,7 @@ Estás ajustando la temperatura de un gas de partículas que, en este caso, son 
 
 ---
 
-## 7. Conclusión: la unidad profunda de las matemáticas
+## 8. Conclusión: la unidad profunda de las matemáticas
 
 Lo que hace especialmente hermoso este recorrido es que no se trata de analogías forzadas. La función softmax **es** la distribución de Boltzmann. La entropía cruzada **es** la energía libre de Helmholtz en un sistema de partículas no interactuantes. El descenso de gradiente **es** la relajación de un sistema físico hacia el equilibrio. La temperatura de sampling **es** la temperatura termodinámica.
 
@@ -147,7 +165,7 @@ La próxima vez que uses ChatGPT, Claude o cualquier LLM, recordá que detrás d
 
 ---
 
-## 8. Explorador interactivo
+## 9. Explorador interactivo
 
 <div style="margin-top: 1rem; max-width: 1024px; margin-inline: auto; padding-inline: clamp(0.25rem, 2vw, 1rem);">
   <div style="border: 1px solid var(--border); border-radius: 0.75rem; overflow: hidden; background: #1a1a2e;">
