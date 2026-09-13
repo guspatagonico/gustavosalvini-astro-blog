@@ -1,41 +1,139 @@
-name: Deploy to GitHub Pages
+name: Deploy
 
+# main   -> producción  (https://gustavosalvini.com.ar)
+# staging -> staging    (preview)
+# Los deploys son por SFTP al server de ecim.tech, con rsync.
+#
+# Sin inputs de usuario en los `run`: los triggers son push y workflow_dispatch
+# con un choice cerrado, así que no hay superficie de inyección.
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch's name
   push:
-    branches: [github-pages]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+    branches: [main, staging]
   workflow_dispatch:
+    inputs:
+      target:
+        description: Ambiente a desplegar
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
-  pages: write
-  id-token: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout
         uses: actions/checkout@v4
-      # - name: Update Playwright browsers to latest
-      #   run: pnpm exec playwright install
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
-        # with:
-        # path: . # The root location of your Astro project inside the repository. (optional)
-        # node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-        # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
 
-  deploy:
+      - name: pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Caché de Chromium (lo usa mermaid en los diagramas)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Build
+        run: pnpm build
+
+      - name: Guardar el build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  deploy-staging:
+    name: Deploy staging
     needs: build
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/staging') ||
+      (github.event_name == 'workflow_dispatch' && inputs.target == 'staging')
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      name: staging
+      url: https://staging.gustavosalvini.com.ar/
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: true
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bajar el build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Deploy por SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PATH: ${{ secrets.SFTP_PATH }}
+          SFTP_SSH_KEY: ${{ secrets.SFTP_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          LABEL: staging
+          NOINDEX: "1"
+        run: bash .github/scripts/deploy-sftp.sh
+
+  deploy-production:
+    name: Deploy producción
+    needs: build
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && inputs.target == 'production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://gustavosalvini.com.ar/
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bajar el build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Deploy por SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PATH: ${{ secrets.SFTP_PATH }}
+          SFTP_SSH_KEY: ${{ secrets.SFTP_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          LABEL: producción
+          BACKUP_DIR: /home/gsalvini/backups/gustavosalvini.com.ar
+          BACKUP_KEEP: "5"
+          SITE_URL: https://gustavosalvini.com.ar/
+        run: bash .github/scripts/deploy-sftp.sh

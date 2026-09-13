@@ -1,0 +1,7 @@
+# Rutas que rsync NO debe sincronizar ni borrar en el servidor.
+# Todo lo que no sale del build tiene que estar listado acá.
+.DS_Store
+**/.DS_Store
+
+# Subido a mano al server, no existe en el repo ni en el build.
+embeds/images/iso-logotipo.png

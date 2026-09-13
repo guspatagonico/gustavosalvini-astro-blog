@@ -1,0 +1,64 @@
+name: CI
+
+# Se corre en cada PR y en cada push a las ramas que despliegan.
+# No despliega nada: solo verifica y construye.
+on:
+  pull_request:
+  push:
+    branches: [main, staging]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Calidad y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Caché de Chromium (lo usa mermaid en los diagramas)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Tipos y contenido (bloqueante)
+        run: pnpm exec astro check
+
+      - name: Build (bloqueante)
+        run: pnpm build
+
+      - name: Lint (informativo)
+        continue-on-error: true
+        run: pnpm lint
+
+      - name: Formato (informativo)
+        continue-on-error: true
+        run: pnpm format:check
+
+      - name: Guardar el build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-preview
+          path: dist
+          retention-days: 5
