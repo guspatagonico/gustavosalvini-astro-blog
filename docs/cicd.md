@@ -89,4 +89,13 @@ El deploy de staging ya escribe un `robots.txt` con `Disallow: /` y el vhost agr
 - `pnpm lint` tiene 19 errores viejos (3 archivos): `src/components/CookieConsentConfig.ts`, `src/layouts/Layout.astro`, `tests-examples/demo-todo-app.spec.ts`. Por eso no bloquea el pipeline.
 - `pnpm format:check` falla en 24 archivos de contenido viejos. Tampoco bloquea.
 - La rama `github-pages` y su workflow quedaron obsoletos: el dominio hace años que no apunta a GitHub Pages. Cuando el deploy por SFTP esté probado, conviene archivarla.
-- `posts/el-perceptron/` quedó en el server de una versión vieja del sitio (el slug actual es `posts/perceptron-es/`). El próximo deploy con `--delete` lo limpia.
+- `posts/el-perceptron/` quedó en el server de una versión vieja del sitio (el slug actual es `posts/perceptron-es/`). El próximo deploy con `--delete` lo limpia. **Ya limpiado** en el primer deploy real (13/09/2026).
+
+## Pitfalls ya pagados
+
+- **No usar `-p` en rsync ni preservar tiempos de directorio.** El docroot de producción es de `www-data` y `gsalvini` solo escribe por grupo: `chmod` y `utimes` sobre archivos ajenos fallan con `Operation not permitted`, y rsync termina en exit 23 **con el contenido ya sincronizado**, que es la peor combinación porque el sitio queda actualizado y el job en rojo. Por eso el script usa `-rltzO` y los archivos nuevos heredan el umask 022 del runner.
+- **Nunca comparar con `printf | grep -q`.** `grep -q` cierra el pipe antes de que el escritor termine, el escritor muere por SIGPIPE y con `pipefail` el pipeline queda en 141 aunque el contenido esté perfecto. Descargar a archivo y grepear el archivo.
+- **No verificar contando archivos.** El server puede tener archivos legítimos que el build no conoce (los de `.deployignore`), así que el conteo da falso positivo. La verificación correcta es un dry-run posterior: si no queda nada pendiente, el server es idéntico al build.
+- **La guarda del `--delete` salva de verdad.** Corre un dry-run antes del sync y aborta si el borrado tocaría rutas fuera de los prefijos que gestiona el build (`_astro/`, `pagefind/`, `posts/`, `tags/`, `assets/`, `embeds/`). Ya evitó borrar `embeds/images/iso-logotipo.png`, que está subido a mano y no existe en el repo.
+- **El bucket de la guarda tiene un agujero conocido**: cualquier archivo ajeno dentro de esos prefijos se borra sin avisar. Si aparece algo importante, listarlo en `.deployignore`.
+
