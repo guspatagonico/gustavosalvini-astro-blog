@@ -106,9 +106,15 @@ fi
 
 RSYNC_SSH="ssh -i $KEY_FILE -p $SFTP_PORT -o IdentitiesOnly=yes -o UserKnownHostsFile=$KNOWN_HOSTS_FILE -o StrictHostKeyChecking=yes"
 
+# Ojo con los flags: el docroot de producción es de www-data y gsalvini solo
+# tiene escritura por grupo. Por eso NO se usa -p (chmod sobre archivos ajenos
+# falla con "Operation not permitted") ni se preservan tiempos de directorio
+# (-O): los archivos nuevos heredan el umask 022 del runner, que es lo que
+# Apache necesita para leerlos.
+#
 # Dry-run primero: si el --delete se llevaría algo que el build no gestiona,
 # se corta acá y no se toca el servidor.
-rsync -rlptz --delete --itemize-changes --dry-run "${EXCLUDE_OPTS[@]}" \
+rsync -rltzO --delete --itemize-changes --dry-run "${EXCLUDE_OPTS[@]}" \
   -e "$RSYNC_SSH" "$DIST_DIR"/ "$TARGET:$SFTP_PATH"/ > /tmp/rsync-dry.log 2>&1 || {
     echo "ERROR: falló el dry-run de rsync" >&2
     cat /tmp/rsync-dry.log >&2
@@ -128,7 +134,7 @@ if [ -n "$sospechosos" ]; then
   exit 1
 fi
 
-rsync -rlptz --delete --delay-updates --human-readable --stats "${EXCLUDE_OPTS[@]}" \
+rsync -rltzO --delete --delay-updates --human-readable --stats "${EXCLUDE_OPTS[@]}" \
   -e "$RSYNC_SSH" "$DIST_DIR"/ "$TARGET:$SFTP_PATH"/
 echo "::endgroup::"
 
@@ -148,13 +154,25 @@ if [ "$local_hash" != "$remote_hash" ]; then
 fi
 echo "hash de index.html coincide: $local_hash"
 
+# Chequeo exacto: si después de sincronizar un dry-run no tiene nada pendiente,
+# el servidor es idéntico al build. Contar archivos a mano no sirve porque el
+# server puede tener archivos protegidos por .deployignore.
+post_dry="$(mktemp)"
+rsync -rltzO --delete --itemize-changes --dry-run "${EXCLUDE_OPTS[@]}" \
+  -e "$RSYNC_SSH" "$DIST_DIR"/ "$TARGET:$SFTP_PATH"/ > "$post_dry" 2>&1
+pendientes="$(grep -cE '^([<>*]|cd)' "$post_dry" || true)"
 remote_files="$(remote_run <<REMS
 set -euo pipefail
 find "$SFTP_PATH" -type f | wc -l
 REMS
 )"
-local_files="$(find "$DIST_DIR" -type f | wc -l)"
-echo "archivos: locales=$local_files remotos=$remote_files"
+echo "archivos: locales=$(find "$DIST_DIR" -type f | wc -l) remotos=$remote_files"
+if [ "$pendientes" -ne 0 ]; then
+  echo "ERROR: quedaron $pendientes diferencias entre el build y el servidor" >&2
+  grep -E '^([<>*]|cd)' "$post_dry" | head -20 >&2
+  exit 1
+fi
+echo "servidor idéntico al build (dry-run posterior sin diferencias)"
 
 if [ -n "$SITE_URL" ]; then
   marker="$(grep -oE '/_astro/[A-Za-z0-9._-]+\.(css|js)' "$DIST_DIR/index.html" | head -1 || true)"
@@ -162,8 +180,15 @@ if [ -n "$SITE_URL" ]; then
     echo "ERROR: no se encontró un asset /_astro/ en el build para verificar" >&2
     exit 1
   fi
-  live="$(curl -fsS -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "$SITE_URL/?deploy=$GITHUB_SHA")"
-  if ! printf '%s' "$live" | grep -qF "$marker"; then
+  live_file="$(mktemp)"
+  if ! curl -fsS -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' \
+      "$SITE_URL/?deploy=${GITHUB_SHA:-local}" -o "$live_file"; then
+    echo "ERROR: no se pudo descargar $SITE_URL" >&2
+    exit 1
+  fi
+  # grep sobre archivo y no por pipe: grep -q cierra el pipe antes de que el
+  # escritor termine y con pipefail el pipeline muere por SIGPIPE (141).
+  if ! grep -qF "$marker" "$live_file"; then
     echo "ERROR: $SITE_URL no está sirviendo el build nuevo (falta $marker)" >&2
     exit 1
   fi
