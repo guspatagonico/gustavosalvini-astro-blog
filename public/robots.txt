@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gustavosalvini.com.ar/sitemap-index.xml
