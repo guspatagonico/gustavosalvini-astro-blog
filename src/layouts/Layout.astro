@@ -10,6 +10,7 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 export interface Props {
   title?: string;
+  lang?: string;
   author?: string;
   profile?: string;
   description?: string;
@@ -22,6 +23,7 @@ export interface Props {
 
 const {
   title = SITE.title,
+  lang = SITE.lang ?? "en",
   author = SITE.author,
   profile = SITE.profile,
   description = SITE.desc,
@@ -52,7 +54,7 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html lang=`${SITE.lang ?? "en"}` class={`${scrollSmooth && "scroll-smooth"}`}>
+<html lang={`${lang}`} class={`${scrollSmooth && "scroll-smooth"}`}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />

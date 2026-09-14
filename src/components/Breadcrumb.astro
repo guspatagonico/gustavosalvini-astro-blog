@@ -25,6 +25,17 @@ if (SITE.base) {
 
 // console.log("breadcrumbList:", breadcrumbList);
 
+// if breadcrumb is /<lang>/now (eg: /es/now, /it/now) render it as Home > Now
+// (the language segment is not a real page, so it must not become a link)
+const I18N_SEGMENTS = ["es", "it"];
+if (
+  breadcrumbList.length === 2 &&
+  I18N_SEGMENTS.includes(breadcrumbList[0]) &&
+  breadcrumbList[1] === "now"
+) {
+  breadcrumbList.splice(0, 1);
+}
+
 // if breadcrumb is Home > Posts > 1 <etc>
 // replace Posts with Posts (page number)
 if (breadcrumbList[0] === "posts") {
