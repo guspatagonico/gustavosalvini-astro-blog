@@ -4,7 +4,7 @@ title: "Pívot: La máquina trabaja mientras Uruguay duerme"
 description: "Diez procesos, dos agentes y 75 fuentes en 18 países para una sola cartelera. Lo que no se puede fechar, no se publica: así se arma la de Pívot."
 slug: pivot-cartelera-agentica
 pubDatetime: 2026-09-15T13:05:08.000Z
-modDatetime: 2026-09-16T02:47:18.000Z
+modDatetime: 2026-09-16T03:15:31.000Z
 tags: [español, inteligencia artificial, bots, datos, producto]
 featured: true
 draft: false
@@ -29,65 +29,76 @@ import { SITE } from "@/config";
 
 Son las dos y cuarto y el teléfono no vibra. Eso, en esta casa, quiere decir que todo está saliendo bien.
 
-A esa hora, del otro lado, arranca la primera de diez tareas que alimentan la cartelera de Pívot. Convocatorias uruguayas primero, las fuentes de madrugada después, eventos y noticias antes del amanecer. Nadie las mira. Cuando me despierto ya hay una tanda de ítems esperando en el inbox.
+A esa hora arranca la primera de diez tareas que alimentan la cartelera de [Pívot](https://pivot.lat), el muro de eventos, convocatorias y noticias para emprendedores de América Latina. Nadie las mira. Cuando me despierto ya hay una tanda de ítems esperando en el inbox.
 
-La cartelera no se llena sola. Se llena mientras yo duermo. La diferencia entre esas dos frases es todo el trabajo: alguien tuvo que escribir las reglas, los filtros y los límites, y esa parte no la hace ningún modelo.
+La cartelera no se llena sola. Se llena mientras yo duermo. Y lo que tiene de interesante no es que haya procesos automáticos, sino que trabajan como una cuadrilla: cada uno con su tarea, su horario y su forma de entregar lo que hizo, y el resultado final lo firma una persona.
 
-## Lo que corre mientras Uruguay duerme
+## Una cuadrilla no es un robot
 
-Diez procesos entre las 02:15 y las 06:45, y cuatro momentos que ordenan la madrugada: 02:15, 05:40, 06:15 y 06:45. Alrededor de ellos corren los demás: los adaptadores que leen la convocatoria de una fuente puntual, el traductor, el que empuja todo al final, el que manda el correo del día.
+La idea que tuve primero fue la obvia: un agente inteligente que hiciera todo. Se desarma sola. Un proceso que hace de todo sale carísimo, es imposible de auditar y, cuando falla, falla entero: no sabés qué parte se rompió porque no hay partes.
 
-Dos de esos diez son agentes: uno sale a buscar eventos públicos y otro lee noticias. Los otros ocho son scripts. La diferencia importa. Un script hace siempre lo mismo y no se equivoca; un agente lee, duda y decide. Donde hay que ser exacto manda el script; donde hay que entender, el agente.
+Lo que terminó funcionando es al revés. Diez tareas chicas entre las 02:15 y las 06:45, cada una con un trabajo acotado y una hora fija, y ninguna sabe que las otras existen. Cuatro momentos ordenan la madrugada: 02:15, 05:40, 06:15 y 06:45.
+
+Lo que las une no es una conversación, es un contrato: qué deja cada una, dónde lo deja y con qué identidad. Se pasan cosas por una mesa común. Es una cocina: nadie discute el menú a las tres de la mañana, cada estación sabe qué tiene que salir y a qué hora.
 
 ```mermaid
 graph LR
-    A["02:15<br/>convocatorias UY"] --> C["capturas JSONL"]
-    B["03:00 a 03:30<br/>adaptadores por fuente"] --> C
-    T["04:00<br/>traductor pt a es"] --> C
-    D["05:40<br/>discovery de eventos"] --> C
-    E["06:15<br/>productor de noticias"] --> C
-    C --> F["06:45<br/>exporter: filtra, deduplica, cupos"]
-    F --> G["gateway HTTPS"]
-    G --> H["inbox pending"]
-    H --> I["curaduría humana"]
-    I --> J["cartelera pública"]
+    A["02:15<br/>convocatorias UY"] --> M["mesa común"]
+    B["03:00 a 03:30<br/>adaptador por fuente"] --> M
+    T["04:00<br/>traductor pt a es"] --> M
+    D["05:40<br/>explorador de eventos"] --> M
+    E["06:15<br/>lector de noticias"] --> M
+    M --> F["06:45<br/>el que junta y reparte"]
+    F --> G["inbox"]
+    G --> H["curaduría humana"]
+    H --> I["cartelera pública"]
 ```
 
-Los tres canales escriben en el mismo lugar: archivos JSONL que se acumulan. El exporter los lee, filtra, deduplica y manda el resultado por HTTPS con una clave a un gateway que hace de relay hacia el webhook. La máquina vive detrás de una VPN: no expone nada entrante y solo empuja hacia afuera. Es la forma más aburrida de conectar dos mundos, y justamente por eso funciona.
+Dos de esas diez son agentes: uno sale a buscar eventos y el otro lee noticias. Las otras ocho son scripts. El corte no es por moda, es por tipo de error. Un script hace siempre lo mismo y no se equivoca, pero no entiende nada. Un agente entiende, pero se equivoca. Así que el trabajo se corta donde equivocarse sale caro: una fecha, un cupo o una duplicación los resuelve un script; leer un titular y decidir si el evento es real, lo hace un agente.
 
-Dos reglas ordenan esto. El dedupe por `(source, external_id)`: si un proceso se reenvía, nada se duplica. Y nada se publica solo: todo cae al inbox como `pending` y una persona decide. El productor de noticias corta en 8 por corrida: prefiero ocho cosas buenas que ochenta regulares.
+Y al final de la fila hay una persona. No como red de seguridad: es el último puesto de la cuadrilla y el que pone el criterio.
 
-Si querés ver el resultado, está en [pivot.lat/cartelera-eventos](https://pivot.lat/cartelera-eventos/).
+Todo lo que esa cuadrilla junta se ve después acá: [la cartelera de Pívot](https://pivot.lat/cartelera-eventos/).
 
-## De dónde viene el material
+## Lo difícil no es conseguir datos, es repartirlos
 
-Para que una cartelera sirva hay que llenarla, y llenarla es más difícil de lo que parece.
+La cuadrilla trabaja sobre 75 fuentes de noticias que tienen 30 orígenes distintos, y el pipeline acepta material de 18 países: de Uruguay y Argentina a República Dominicana y Cuba. La lista la armó [Santiago Aramendía](https://www.linkedin.com/in/santiagoaramendia/) sobre un CSV de 112 fuentes, con una prioridad para cada una.
 
-Arranqué con 75 fuentes de noticias y solo 10 tenían alguna forma de saber la fecha. Las otras devolvían titulares sin cuándo. Sin fecha verificable, la noticia se descarta: nunca se estima. Después del barrido quedaron 44 de 75. Las trampas se repiten: el sitemap de un medio que quedó en 2013 mientras la portada muestra la fecha de hoy, la agenda de eventos disfrazada de noticias, el certificado roto que se parece a un bloqueo de bots.
+De ahí sale la primera regla dura: lo que no se puede fechar, no entra. Una noticia sin fecha verificable se descarta, no se estima. Suena obvio hasta que toca sostenerlo cien veces por día con fuentes que no quieren decir cuándo publicaron.
 
-Esas 75 fuentes tienen 30 orígenes distintos, y el pipeline acepta material de 18 países: de Uruguay y Argentina a República Dominicana y Cuba. La lista la armó [Santiago Aramendía](https://www.linkedin.com/in/santiagoaramendia/) sobre un CSV de 112 fuentes, con una prioridad para cada una: arriba las que tienen actividad clara y estructura estable, abajo las más locales o las que viven detrás de un paywall.
+El problema de fondo, igual, no es conseguir datos: es repartirlos. Si cada corrida leyera las mismas fuentes, la cartelera tendría siempre los mismos tres medios. Por eso las fuentes rotan en anillos, seis por corrida, y ninguna se repite hasta agotar su anillo. También hay un tope de ocho por corrida, porque prefiero ocho cosas buenas que ochenta regulares.
 
-Y no alcanza con tenerlas. Si cada corrida leyera las mismas, la cartelera tendría siempre los mismos tres medios. Así que las fuentes rotan en anillos: cada corrida toma seis, 2 de Uruguay, 3 de prioridad alta y 1 de apoyo, en círculos que no repiten una fuente hasta agotar su anillo. El anillo uruguayo se barre cada 4 corridas, el grande cada 15, el de apoyo cada 24.
+Y hubo un día en que el reparto se rompió de una forma que no se arregla con código. Las convocatorias chilenas empezaron a inundar una cartelera uruguaya: había fuentes, había volumen, y el resultado era otro país. La respuesta no fue técnica, fue editorial. Pusimos cupos: quince convocatorias por día como máximo, 4 de Uruguay, 6 de LATAM y 5 del sector privado, y dentro de cada carril entra primero lo que cierra antes.
 
-Después está el reparto, que es la decisión más editorial de todo el sistema. Un día me encontré con que las convocatorias chilenas inundaban una cartelera uruguaya: había fuentes, había volumen, y el resultado era otro país. El arreglo fueron los cupos. Quince convocatorias por día como máximo, 4 de Uruguay, 6 de LATAM y 5 del sector privado, y dentro de cada carril entra primero lo que cierra antes. El cupo se guarda por día, así que una segunda corrida no lo desborda.
+Lo mismo con el idioma. El material brasileño entra recién traducido: un traductor automático pasa a español solo lo que se ve en la tarjeta, el título y la descripción, sin tocar nombres, marcas ni cifras. Si no puede traducirlo, el ítem se descarta. En la cartelera no hay portugués crudo.
 
-Y hay algo que no se negocia: el material brasileño entra recién traducido. Si una captura llega en portugués, un traductor automático la pasa a español antes de que pueda existir en la cartelera. Traduce solo lo que se ve en la tarjeta, el título y la descripción, 600 caracteres como máximo, y no toca nombres, marcas ni cifras. Si la traducción no sale, el ítem se descarta. En la cartelera no hay portugués crudo.
+Sostener una decisión editorial todos los días es un problema de ingeniería. Tomarla es un problema de criterio, y el criterio no se programa.
 
-## El día que el radar devolvió el diario equivocado
+## La cuadrilla miente cuando dice que salió bien
 
-Una mañana le pedí la página de un medio uruguayo a un extractor y me devolvió el contenido de otro. Le pedí el de ese otro y me devolvió el del primero. El caché emparejaba cada página con su respuesta por posición, y el proveedor devuelve primero los aciertos y deja los errores al final. En un radar que atribuye cada noticia a su medio, atribuir mal es publicar contenido ajeno como propio. El arreglo fueron 206 entradas cruzadas purgadas y una regla nueva: verificar que el contenido corresponda al dominio antes de atribuir.
+Una mañana le pedí la página de un medio uruguayo a un extractor y me devolvió el contenido de otro. Le pedí el de ese otro y me devolvió el del primero: el sistema emparejaba cada página con su respuesta por posición, y el proveedor devuelve primero los aciertos. En un radar que atribuye cada noticia a su medio, atribuir mal es publicar lo ajeno como propio. Purgué 206 entradas cruzadas y agregué la regla de verificar el dominio antes de atribuir.
 
-El segundo caso enseñó más, porque no hubo error de nadie. El conversor de convocatorias corrió del 07/09 al 13/09 con estado `ok` sin escribir un solo archivo, porque le pedía leer archivos a un proceso que solo tenía herramientas web. Resultado: 1 oportunidad contra 21 noticias. Cuando un proceso termina bien y no produce nada, no suena ninguna alarma. La firma es la asimetría: un canal con un archivo mientras sus hermanos acumulan uno por día. La verificación se hace en el disco, no en el reporte. `last_status: ok` mide que el proceso terminó su turno, no que haya hecho algo. El reemplazo fue determinista: 13 de 13 ítems aceptados, y una segunda corrida que devuelve 0 novedades.
+El segundo caso enseñó más, porque no hubo error de nadie. El conversor de convocatorias corrió del 07/09 al 13/09 informando éxito y sin escribir un solo archivo. Nadie sospecha de un proceso en verde. La firma estaba en la asimetría: un canal con un archivo mientras sus hermanos acumulaban uno por día. La cartelera mostraba 1 oportunidad contra 21 noticias, y ese número fue la alarma.
 
-## Curar es el producto
+De los dos quedó la misma lección, y es la parte de orquestar que menos se cuenta: a la cuadrilla no se la audita por lo que declara, se la audita por lo que dejó hecho. El estado `ok` mide que el proceso terminó su turno, no que haya producido algo. El inspector tiene que estar en el diseño, no en la confianza.
 
-Lo que hace que la cartelera sirva es el filtro, no el volumen. El volumen se consigue; el criterio no.
+## El escritorio del que decide
 
-Las reglas de caducidad son decisiones editoriales escritas como código. Un evento se vence a la medianoche del día siguiente. Una convocatoria queda +7 días. Una noticia, +3 días. Un evento vencido no le sirve a nadie, y una noticia de hace dos semanas tampoco. Por eso esas reglas viven en el código y no en un documento aparte que nadie lee.
+Todo lo que produce la cuadrilla cae en un mismo lugar: el Inbox del admin de la cartelera. Nada llega publicado.
 
-La otra decisión la sostengo: la máquina propone, la persona decide. Todo pasa por el inbox como `pending`. Elegir qué ve alguien cuando abre la cartelera es una decisión de producto, no un detalle de implementación.
+Ahí hay cuatro solapas y una lógica simple: En cartelera, Vencidos, Inbox y Papelera. Cada ítem entra como pendiente y se puede editar, fijar, arrastrar para ordenar, destacar en portada, publicar, descartar, restaurar o eliminar. Es un escritorio de trabajo, no un tablero de métricas.
 
-Y por eso me interesa esta clase de arquitecturas más que cualquier modelo suelto. Lo que hace funcionar a la cartelera no es la IA: es cómo está repartido el trabajo entre lo que siempre hace lo mismo, lo que decide y alguien que mira al final. Dos agentes, ocho scripts y una persona. Con un solo modelo pretendiendo hacer de todo, esto no aguanta una semana.
+La parte que más pensamos es la caducidad, porque es una decisión de producto disfrazada de detalle. Un evento se vence a la medianoche del día siguiente, una convocatoria vencida aguanta +7 días y una noticia vive +3 días en el muro. Y nada se borra: lo vencido se muda a su solapa y sigue ahí. El vencimiento es de vidriera, no de archivo.
+
+El que cura no soy yo: es Santiago, que mira la cartelera todos los días. Ese detalle es de los más importantes del proyecto. De su curaduría salió el mejor diagnóstico que tuvo el sistema, el del canal que producía una convocatoria por cada veintiuna noticias, que se convirtió en cuatro fuentes nuevas, el carril LATAM y los cupos. La curaduría no es control de calidad: es el sensor de la máquina. El que cura es el único que sabe qué falta.
+
+Queda abierta, y es linda, una discusión que no es técnica: ¿"Todo" es un feed, con lo último arriba, o una agenda, con lo que viene ordenado por fecha? No es un detalle de diseño. Define qué cartelera estamos haciendo.
+
+## Lo que aprendí
+
+Orquestar no es conectar modelos: es hacer convivir procesos que no se conocen. Contratos de entrega, una mesa común, un inspector que mira la obra en lugar del reporte, y alguien que decide al final. Dos agentes, ocho scripts y una persona.
+
+Lo difícil nunca fue el modelo. Fue la convivencia.
 
 Esto es lo que Brainsource abastece para [Pívot](https://pivot.lat): los procesos, las fuentes, el inbox y la cartelera pública. La misma arquitectura se puede volver a armar para otra ciudad, otro rubro u otro país.
 
