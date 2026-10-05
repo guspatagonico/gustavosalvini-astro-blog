@@ -21,7 +21,7 @@ En el invierno de 1848, algo totalmente extraño ocurrió en California.
 
 Un carpintero llamado James Marshall estaba trabajando en un aserradero cuando vio unas pequeñas hojuelas brillantes en el arroyo.
 
-Las miró y dijo: “Eh, qué lindo”, y siguió con lo suyo.
+Las miró y dijo: "Eh, qué lindo", y siguió con lo suyo.
 
 Lo que desestimó como polvo brillante era oro.
 
@@ -174,7 +174,7 @@ Yo predije todo esto hace 3 años.
 
 Incluso te di todas las herramientas que necesitabas para actualizar tu flujo de trabajo.
 
-Pero estabas demasiado ocupado escuchando a Joe en Internet gritando: “¡Los programadores de verdad usan Vim!”
+Pero estabas demasiado ocupado escuchando a Joe en Internet gritando: "¡Los programadores de verdad usan Vim!"
 
 Ahora la prueba está delante de tus ojos.
 
