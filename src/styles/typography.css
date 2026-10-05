@@ -15,6 +15,14 @@
     @apply !text-accent;
   }
 
+  /* Los términos en negrita dentro de un encabezado toman el mismo color: si
+     no, el plugin los deja en color de texto y el título queda bicolor. La
+     negrita ya marca el énfasis; el color no hace falta que lo repita. */
+  .prose h2 strong,
+  .prose h3 strong {
+    @apply !text-accent;
+  }
+
   .prose a {
     @apply break-words hover:!text-accent;
   }
