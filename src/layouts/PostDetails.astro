@@ -14,6 +14,7 @@ import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import { SITE } from "@/config";
 import { getUI } from "@/i18n";
+import TranslationLinks from "@/components/TranslationLinks.astro";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -59,6 +60,45 @@ const ogImage = ogImageUrl
   ? new URL(ogImageUrl, Astro.url.origin).href
   : undefined;
 
+/* ========== Traducciones ========== */
+
+// El original es el que no declara `translationOf`; los hermanos son las versiones
+// que apuntan a él. El grupo se arma al revés, desde el original.
+const slugOriginal = post.data.translationOf ?? post.id;
+
+const grupo = posts.filter(
+  p => p.id === slugOriginal || p.data.translationOf === slugOriginal
+);
+
+// Un post sin hermanos no lleva hreflang ni selector: su grupo es él solo y el
+// hreflang de una sola version no le sirve a nadie.
+const hayTraducciones = grupo.length > 1;
+
+// `getPath` devuelve la ruta con el `base`, que es la que sirve para el enlace
+// interno (el espejo del tailnet vive bajo un subpath). Para el hreflang va la
+// pública, sin el base.
+const urlInterna = (p: CollectionEntry<"blog">) =>
+  `${getPath(p.id, p.filePath)}/`;
+const urlPublica = (p: CollectionEntry<"blog">) =>
+  new URL(`/posts${getPath(p.id, p.filePath, false)}/`, SITE.website).href;
+
+const translations = hayTraducciones
+  ? grupo.map(p => ({
+      lang: p.data.lang,
+      title: p.data.title,
+      href: urlInterna(p),
+    }))
+  : [];
+
+const hreflang = hayTraducciones
+  ? grupo.map(p => ({ lang: p.data.lang, href: urlPublica(p) }))
+  : [];
+
+// El x-default manda al original a quien no reconoce ninguno de los idiomas del grupo.
+const postOriginal = grupo.find(p => p.id === slugOriginal);
+const xDefault =
+  hayTraducciones && postOriginal ? urlPublica(postOriginal) : undefined;
+
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
   author,
@@ -68,6 +108,8 @@ const layoutProps = {
   canonicalURL,
   ogImage,
   lang,
+  translations: hreflang,
+  xDefault,
   scrollSmooth: true,
 };
 
@@ -129,6 +171,7 @@ const nextPost =
       />
       <EditPost class="max-sm:hidden" {hideEditPost} {post} {lang} />
     </div>
+    <TranslationLinks {lang} {translations} />
     <article id="article" class="mx-auto prose mt-8 max-w-5xl">
       <Content />
     </article>

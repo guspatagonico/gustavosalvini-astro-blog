@@ -1,0 +1,40 @@
+---
+import { LANG_NAMES, getUI, type Lang } from "@/i18n";
+
+export interface Props {
+  /** Idioma del post que se está leyendo. */
+  lang: string;
+  /** Todas las versiones del grupo, incluida la actual. */
+  translations: { lang: string; title: string; href: string }[];
+}
+
+const { lang, translations } = Astro.props;
+
+// El selector muestra las otras versiones, no la que se está leyendo. Los idiomas
+// que no existen no aparecen deshabilitados: directamente no aparecen.
+const otras = translations.filter(t => t.lang !== lang);
+
+const ui = getUI(lang);
+---
+
+{
+  otras.length > 0 && (
+    <p class="my-2 text-sm">
+      <span class="opacity-75">{ui.readIn}</span>{" "}
+      {otras.map((t, i) => (
+        <>
+          {i > 0 && <span class="opacity-50"> · </span>}
+          <a
+            href={t.href}
+            hreflang={t.lang}
+            lang={t.lang}
+            title={t.title}
+            class="text-accent underline decoration-dashed underline-offset-4 hover:opacity-75"
+          >
+            {LANG_NAMES[t.lang as Lang] ?? t.lang}
+          </a>
+        </>
+      ))}
+    </p>
+  )
+}

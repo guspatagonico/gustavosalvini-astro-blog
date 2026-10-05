@@ -16,6 +16,10 @@ export interface Props {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  /** Versiones del mismo texto en otros idiomas, para el hreflang. */
+  translations?: { lang: string; href: string }[];
+  /** URL del original, para el x-default. */
+  xDefault?: string;
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
@@ -32,6 +36,8 @@ const {
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  translations = [],
+  xDefault,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
@@ -64,6 +70,17 @@ const structuredData = {
       href={`${SITE.base ?? ""}/favicon.svg`}
     />
     <link rel="canonical" href={canonicalURL} />
+
+    {
+      /* Versiones del mismo texto en otros idiomas. Van con el dominio público,
+        nunca con el del espejo, o Google indexa una URL que no existe para nadie. */
+    }
+    {
+      translations.map(t => (
+        <link rel="alternate" hreflang={t.lang} href={t.href} />
+      ))
+    }
+    {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->

@@ -18,6 +18,11 @@ const blog = defineCollection({
       // botones) y el `lang` del <html>. Mismo campo que ya usan las páginas en
       // src/pages/*.md. Obligatorio a propósito: un post sin idioma no debe compilar.
       lang: z.enum(["es", "it", "en"]),
+      // Vínculo entre traducciones: el slug del post original del que este es una
+      // traducción. Opcional, porque la mayoría de los posts no tiene hermanos. El
+      // original no lo lleva: el vínculo va en un solo sentido y el sitio calcula
+      // el grupo al revés, sumando los posts que apuntan al mismo original.
+      translationOf: z.string().optional(),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),

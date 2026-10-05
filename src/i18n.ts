@@ -16,6 +16,14 @@ export type Lang = (typeof LANGS)[number];
 
 export const DEFAULT_LANG: Lang = "en";
 
+/** Nombre de cada idioma en su propia lengua: el selector de traducciones
+ *  no los traduce, los muestra como los escribe quien los habla. */
+export const LANG_NAMES: Record<Lang, string> = {
+  es: "Español",
+  it: "Italiano",
+  en: "English",
+};
+
 export interface UIStrings {
   /** Encabezado de la tabla de contenidos que genera remark-toc. */
   toc: string;
@@ -32,6 +40,8 @@ export interface UIStrings {
   copy: string;
   copied: string;
   editPost: string;
+  /** Etiqueta del selector de idioma: Leer en / Leggi in / Read in. */
+  readIn: string;
   /** Formato de fecha de dayjs, por idioma. */
   dateFormat: string;
   /** Formato de hora de dayjs: 24 h en español e italiano, 12 h en inglés. */
@@ -55,6 +65,7 @@ const UI: Record<Lang, UIStrings> = {
     copy: "Copiar",
     copied: "Copiado",
     editPost: "Editar esta página",
+    readIn: "Leer en",
     dateFormat: "D MMM, YYYY",
     timeFormat: "HH:mm",
     dayjsLocale: "es",
@@ -73,6 +84,7 @@ const UI: Record<Lang, UIStrings> = {
     copy: "Copia",
     copied: "Copiato",
     editPost: "Modifica questa pagina",
+    readIn: "Leggi in",
     dateFormat: "D MMM, YYYY",
     timeFormat: "HH:mm",
     dayjsLocale: "it",
@@ -91,6 +103,7 @@ const UI: Record<Lang, UIStrings> = {
     copy: "Copy",
     copied: "Copied",
     editPost: "Edit page",
+    readIn: "Read in",
     dateFormat: "MMM D, YYYY",
     timeFormat: "hh:mm A",
     dayjsLocale: "en",

@@ -31,7 +31,7 @@ No standalone `typecheck` script — `astro check` is embedded in `build`.
 - **Content loader**: glob pattern `**/[^_]*{.md,.mdx}` (supports both md and mdx)
 - **Site config**: `src/config.ts` → `SITE` (as const)
   - `SITE.base` reads `PUBLIC_BASE_PATH` — empty in production, set for the Thalamus preview mirror (`/gustavosalvini-blog`).
-- **Multilingual pages**: `src/pages/now.md` (en), `src/pages/es/now.md`, `src/pages/it/now.md`; posts are multilingual too. `SITE.lang` (currently `en`) drives `<html lang>`.
+- **Multilingual pages**: `src/pages/now.md` (en), `src/pages/es/now.md`, `src/pages/it/now.md`; posts are multilingual too. `SITE.lang` (currently `en`) drives `<html lang>`. Los posts declaran su idioma con `lang` y, cuando son traducciones de otro, con `translationOf` apuntando al original: el sitio arma el grupo, emite el `hreflang` en el `<head>` y muestra el selector arriba del post. Se verifica con `scripts/verificar-traducciones.py`, después del build.
 - **Cookie consent**: `vanilla-cookieconsent` via `src/components/CookieConsent.astro` + `CookieConsentConfig.ts`.
 - **Social/share links**: `src/constants.ts`
 - **Path alias**: `@/*` → `./src/*`
@@ -71,6 +71,7 @@ author: Gustavo Adrián Salvini   # default
 pubDatetime: 2025-01-01          # required (Date)
 title: "Post Title"              # required
 lang: es                         # required: es | it | en. Maneja el <html lang> y las cadenas del tema (tabla de contenidos, fechas, botones) desde src/i18n.ts
+translationOf: ia-y-orgullo-humano  # opcional: el slug del original del que este post es traducción. El original no lo lleva, y el vínculo va en un solo sentido.
 description: "..."               # required
 tags: [tag1, tag2]               # default: ["others"]
 draft: true/false                # optional
