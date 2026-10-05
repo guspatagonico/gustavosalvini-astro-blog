@@ -14,6 +14,7 @@
 | `pnpm dev`          | Dev server on :4321                                                                                                             |
 | `pnpm build`        | `playwright install chromium` → `astro check` → `astro build` → `pagefind --site dist` → `cp -r dist/pagefind public/`          |
 | `pnpm preview`      | Preview `dist/`                                                                                                                 |
+| `pnpm preview:thalamus` | Build with `PUBLIC_BASE_PATH` and rsync to the local mirror at `thalamus.tail789282.ts.net/gustavosalvini-blog/` (`scripts/preview-thalamus.sh`) |
 | `pnpm sync`         | Generate `.astro/types.d.ts`                                                                                                    |
 | `pnpm format:check` | Prettier check                                                                                                                  |
 | `pnpm format`       | Prettier write                                                                                                                  |
@@ -29,6 +30,9 @@ No standalone `typecheck` script — `astro check` is embedded in `build`.
   - Draft posts: `draft: true` in frontmatter
 - **Content loader**: glob pattern `**/[^_]*{.md,.mdx}` (supports both md and mdx)
 - **Site config**: `src/config.ts` → `SITE` (as const)
+  - `SITE.base` reads `PUBLIC_BASE_PATH` — empty in production, set for the Thalamus preview mirror (`/gustavosalvini-blog`).
+- **Multilingual pages**: `src/pages/now.md` (en), `src/pages/es/now.md`, `src/pages/it/now.md`; posts are multilingual too. `SITE.lang` (currently `en`) drives `<html lang>`.
+- **Cookie consent**: `vanilla-cookieconsent` via `src/components/CookieConsent.astro` + `CookieConsentConfig.ts`.
 - **Social/share links**: `src/constants.ts`
 - **Path alias**: `@/*` → `./src/*`
 - **Integrations**: MDX, Sitemap (filters `/archives` based on `SITE.showArchives`)
@@ -45,11 +49,20 @@ No standalone `typecheck` script — `astro check` is embedded in `build`.
 - **`@resvg/resvg-js` is excluded from Vite opt deps** (native addon workaround).
 - **No console.log allowed**: ESLint rule `no-console: error`.
 - **`.env` is gitignored**: Contains `PUBLIC_GOOGLE_SITE_VERIFICATION`. All public env vars must be prefixed with `PUBLIC_`.
-- **Deploy branch is `github-pages`**: Not `main`. GitHub Actions in `.github/workflows/deploy.yml`.
-- **Alternative SFTP deploy**: `.gsupload.json` config for deploying `dist/` to `ecim.tech`.
+- **Deploy is SFTP, not GitHub Pages**: `main` → production `/home/gsalvini/public_html` on `ecim.tech:2222` (https://gustavosalvini.com.ar); `staging` → `/home/gsalvini/staging_html`. CI in `.github/workflows/ci.yml`, deploy in `.github/workflows/deploy.yml` + `.github/scripts/deploy-sftp.sh`. Full runbook, secrets, rollback and pitfalls: `docs/cicd.md`.
+- **`.deployignore` guards the server**: lists paths rsync must neither sync nor `--delete` (e.g. hand-uploaded `embeds/images/iso-logotipo.png`). Anything living on the server but not in the build must be listed there.
+- **Obsolete**: the `github-pages` branch and its workflow are dead (domain hasn't pointed to Pages for years). `.gsupload.json` predates the CI SFTP deploy.
 - **Timezone default**: `America/Argentina/Buenos_Aires` in both `src/config.ts` and frontmatter defaults.
 - **Custom type declaration**: `remark-collapse.d.ts` for the untyped `remark-collapse` module.
 - **Tailwind v4 uses Vite plugin**, not PostCSS — tailwind config is CSS-based.
+
+## Repo extras
+
+- `docs/` — `cicd.md` (deploy runbook) and `nginx/staging.gustavosalvini.com.ar.conf`
+- `scripts/` — `preview-thalamus.sh` + `preview-thalamus-check.py` (systemd-timed local mirror)
+- `.brv/` — ByteRover context tree; `_seed/` — scratch source seeds
+- `.frontmatter/` — Front Matter CMS database (tracked; holds workspace metadata)
+- **Versioning**: `package.json` SemVer (currently `0.3.0`), bumped by `chore(release)` commits via `pnpm commit`.
 
 ## Blog post frontmatter
 
