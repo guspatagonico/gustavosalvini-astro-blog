@@ -5,6 +5,10 @@ dist-gustavosalvini-blog/
 # generated types
 .astro/
 
+# local renders and scratch from the diagram/cover generators
+# (the generators themselves live in scripts/)
+.hermes/
+
 # dependencies
 node_modules/
 

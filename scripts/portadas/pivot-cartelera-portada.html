@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 750px; overflow: hidden; }
+      body {
+        position: relative;
+        font-family: "Inter", system-ui, sans-serif;
+        background:
+          radial-gradient(760px 520px at 12% 18%, #16305e 0%, rgba(10,17,30,0) 62%),
+          radial-gradient(620px 460px at 92% 92%, #0d3a44 0%, rgba(10,17,30,0) 60%),
+          linear-gradient(135deg, #0a1120 0%, #0d1728 55%, #0a1120 100%);
+        color: #e8eef7;
+      }
+      .grid-dots {
+        position: absolute; inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+        background-size: 24px 24px;
+        mask-image: linear-gradient(120deg, #000 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0) 85%);
+      }
+      .left { position: absolute; left: 64px; top: 58px; width: 500px; }
+      .kicker {
+        font-size: 11.5px; font-weight: 600; letter-spacing: 1.25px;
+        color: #7f93ae; text-transform: uppercase; white-space: nowrap;
+      }
+      .time {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 150px; font-weight: 700; letter-spacing: -7px;
+        line-height: 1; margin: 20px 0 0 -6px;
+        color: #ffffff;
+        text-shadow: 0 0 60px rgba(77, 134, 255, 0.45), 0 0 18px rgba(77, 134, 255, 0.25);
+      }
+      .timesub {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 15px; color: #9fb2cc; margin-top: 10px;
+      }
+      .chain {
+        margin-top: 26px; display: grid;
+        grid-template-columns: repeat(2, max-content);
+        gap: 10px 12px;
+      }
+      .chip {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12.5px; color: #a8bacf;
+        border: 1px solid rgba(140, 170, 210, 0.22);
+        border-radius: 999px; padding: 7px 13px;
+        background: rgba(20, 32, 52, 0.72);
+      }
+      .chip b { color: #ffffff; font-weight: 700; }
+      .rule { margin-top: 30px; width: 78px; height: 3px; background: linear-gradient(90deg, #4d86ff, #2fd0c5); border-radius: 2px; }
+      .claim {
+        margin-top: 22px; font-size: 33px; font-weight: 700; line-height: 1.22;
+        letter-spacing: -0.4px; color: #eef3f9;
+      }
+      .claim em { font-style: normal; color: #62a0ff; }
+      .byline {
+        position: absolute; left: 64px; bottom: 54px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px; color: #7f93ae; letter-spacing: 0.4px;
+      }
+      .right { position: absolute; right: -160px; top: 108px; }
+      .frame {
+        width: 800px; height: 571px; border-radius: 16px; overflow: hidden;
+        border: 1px solid rgba(150, 180, 220, 0.28);
+        box-shadow:
+          0 40px 90px rgba(0, 0, 0, 0.62),
+          0 0 0 8px rgba(255, 255, 255, 0.025),
+          0 0 70px rgba(77, 134, 255, 0.22);
+        transform: rotate(-2.2deg);
+        background: #ffffff;
+      }
+      .frame img { width: 800px; height: 571px; object-fit: cover; object-position: top left; display: block; }
+    </style>
+  </head>
+  <body>
+    <div class="grid-dots"></div>
+    <div class="left">
+      <div class="kicker">Pívot · Cartelera de eventos, novedades y oportunidades</div>
+      <div class="time">02:15</div>
+      <div class="timesub">el primer proceso del día</div>
+      <div class="chain">
+        <span class="chip"><b>02:15</b> convocatorias</span>
+        <span class="chip"><b>05:40</b> eventos</span>
+        <span class="chip"><b>06:15</b> noticias</span>
+        <span class="chip"><b>06:45</b> push</span>
+      </div>
+      <div class="rule"></div>
+      <div class="claim">Lo que no se puede fechar,<br /><em>no se publica.</em></div>
+    </div>
+    <div class="byline">gustavosalvini.com.ar</div>
+    <div class="right">
+      <div class="frame"><img src="app.png" alt="" /></div>
+    </div>
+  </body>
+</html>
