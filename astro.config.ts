@@ -9,6 +9,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeMermaid from "rehype-mermaid";
 import rehypeModifyMermaidGraphs from "./src/utils/rehype/rehype-modifyMermaidGraphs";
+import remarkLocalizeToc from "./src/utils/remark/remark-localize-toc";
 
 import { SITE } from "./src/config";
 import { targetBlank } from "./src/utils/rehype/rehype-targetBlank";
@@ -29,7 +30,11 @@ export default defineConfig({
       remarkPlugins: [
         remarkMath,
         remarkToc,
-        [remarkCollapse, { test: "Table of contents" }],
+        // El encabezado de la tabla de contenidos es un marcador que nunca se
+        // renderiza: remarkLocalizeToc lo reescribe con el `lang` del frontmatter,
+        // igual que el resumen colapsado que arma collapse.
+        [remarkCollapse, { test: "toc|(table[ -]of[ -])?contents?" }],
+        remarkLocalizeToc,
       ],
       rehypePlugins: [
         [targetBlank, { domain: "gustavosalvini.com.ar" }],

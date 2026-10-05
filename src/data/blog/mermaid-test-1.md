@@ -1,5 +1,6 @@
 ---
 author: Gustavo Salvini
+lang: "en"
 pubDatetime: 2025-04-09T16:45:39.660Z
 modDatetime: 2025-04-09T16:45:39.660Z
 title: Testing Mermaid diagrams

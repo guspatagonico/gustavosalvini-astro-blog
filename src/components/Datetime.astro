@@ -2,8 +2,12 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import "dayjs/locale/es";
+import "dayjs/locale/it";
+import "dayjs/locale/en";
 import IconCalendar from "@/assets/icons/IconCalendar.svg";
 import { SITE } from "@/config";
+import { getUI } from "@/i18n";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -14,6 +18,7 @@ export interface Props {
   timezone: string | undefined;
   pubDatetime: string | Date;
   modDatetime: string | Date | undefined | null;
+  lang?: string;
 }
 
 const {
@@ -22,15 +27,22 @@ const {
   size = "sm",
   class: className = "",
   timezone: postTimezone,
+  lang,
 } = Astro.props;
+
+const ui = getUI(lang);
 
 /* ========== Formatted Datetime ========== */
 const latestDatetime =
   modDatetime && modDatetime > pubDatetime ? modDatetime : pubDatetime;
-const datetime = dayjs(latestDatetime).tz(postTimezone || SITE.timezone);
+// El locale va por instancia y no con dayjs.locale() global: las páginas se
+// renderizan en paralelo y un estado global se pisaría entre idiomas.
+const datetime = dayjs(latestDatetime)
+  .tz(postTimezone || SITE.timezone)
+  .locale(ui.dayjsLocale);
 
-const date = datetime.format("D MMM, YYYY"); // e.g., '22 Mar, 2025'
-const time = datetime.format("hh:mm A"); // e.g., '08:30 PM'
+const date = datetime.format(ui.dateFormat); // es/it: '5 oct, 2026' | en: 'Oct 5, 2026'
+const time = datetime.format(ui.timeFormat); // es/it: '23:40' | en: '11:40 PM'
 ---
 
 <div class:list={["flex items-end space-x-2 opacity-80", className]}>
@@ -43,16 +55,16 @@ const time = datetime.format("hh:mm A"); // e.g., '08:30 PM'
   {
     modDatetime && modDatetime > pubDatetime ? (
       <span class:list={["text-sm", { "sm:text-base": size === "lg" }]}>
-        Updated:
+        {ui.updated}
       </span>
     ) : (
-      <span class="sr-only">Published:</span>
+      <span class="sr-only">{ui.published}</span>
     )
   }
   <span class:list={["text-sm", { "sm:text-base": size === "lg" }]}>
     <time datetime={datetime.toISOString()}>{date}</time>
     <span aria-hidden="true">|</span>
-    <span class="sr-only">&nbsp;at&nbsp;</span>
+    <span class="sr-only">&nbsp;{ui.at}&nbsp;</span>
     <span class="text-nowrap">{time}</span>
   </span>
 </div>

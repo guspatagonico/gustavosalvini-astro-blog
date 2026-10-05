@@ -8,6 +8,7 @@ tags:
   - sharing
   - reflections
 author: Gustavo Adrián Salvini
+lang: "en"
 pubDatetime: 2025-04-13T02:45:23.022Z
 featured: false
 hideEditPost: true

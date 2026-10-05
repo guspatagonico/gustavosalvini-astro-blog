@@ -3,6 +3,7 @@ title: "My 2025 Web Dev & AI Tech Stack"
 description: "A snapshot of my current tech stack for web development and AI integration."
 featured: false
 slug: my-tech-stack-2025
+lang: "en"
 pubDatetime: 2025-04-13T02:58:03.223Z
 modDatetime: 2025-04-13T02:58:03.223Z
 draft: false

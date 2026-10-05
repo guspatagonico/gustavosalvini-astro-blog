@@ -62,7 +62,7 @@ No standalone `typecheck` script — `astro check` is embedded in `build`.
 - `scripts/` — `preview-thalamus.sh` + `preview-thalamus-check.py` (systemd-timed local mirror)
 - `.brv/` — ByteRover context tree; `_seed/` — scratch source seeds
 - `.frontmatter/` — Front Matter CMS database (tracked; holds workspace metadata)
-- **Versioning**: `package.json` SemVer (currently `0.3.0`), bumped by `chore(release)` commits via `pnpm commit`.
+- **Versioning**: `package.json` SemVer (currently `0.4.0`), bumped by `chore(release)` commits via `pnpm commit`.
 
 ## Blog post frontmatter
 
@@ -70,6 +70,7 @@ No standalone `typecheck` script — `astro check` is embedded in `build`.
 author: Gustavo Adrián Salvini   # default
 pubDatetime: 2025-01-01          # required (Date)
 title: "Post Title"              # required
+lang: es                         # required: es | it | en. Maneja el <html lang> y las cadenas del tema (tabla de contenidos, fechas, botones) desde src/i18n.ts
 description: "..."               # required
 tags: [tag1, tag2]               # default: ["others"]
 draft: true/false                # optional
@@ -85,6 +86,6 @@ timezone: America/Argentina/Buenos_Aires  # optional
 
 - Blog is multilingual (Spanish/English/Italian) — posts may have `.mdx` or `.md` extension
 - `src/data/blog/examples/` — example/template posts
-- `src/data/blog/_releases/` — release notes (excluded from content loader via `[^_]` prefix)
+- `src/data/blog/_releases/` — release notes. **Ojo: sí se cargan**, porque el `[^_]` del loader solo mira el nombre del archivo y no los directorios; son entradas como cualquier otra y necesitan `lang`. Lo único que el patrón deja afuera es un archivo que empiece con `_` (por ejemplo `examples/_portfolio-website-development.md`).
 - `src/components/AboutMe.md` and `AboutMeIntro.md` — markdown components imported into layouts
 - For textual quotes with source attribution (blockquotes), add the source URL directly in the attribution line using an HTML anchor with `target="_blank"` and `rel="noopener noreferrer"`.

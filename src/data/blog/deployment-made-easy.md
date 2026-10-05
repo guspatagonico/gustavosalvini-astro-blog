@@ -2,6 +2,7 @@
 title: "Safe, Deterministic SFTP / FTP Deploys: 'gsupload-python'"
 description: "A DevOps-friendly CLI to sync files to FTP/SFTP targets using hierarchical config discovery, additive ignores, and a pre-flight tree diff."
 slug: gsupload-presentation
+lang: "en"
 pubDatetime: 2025-12-13T06:27:05.476Z
 draft: false
 timezone: America/Argentina/Buenos_Aires

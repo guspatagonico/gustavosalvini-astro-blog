@@ -13,6 +13,7 @@ import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import { SITE } from "@/config";
+import { getUI } from "@/i18n";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -32,9 +33,12 @@ const {
   timezone,
   tags,
   hideEditPost,
+  lang,
 } = post.data;
 
 const { Content } = await render(post);
+
+const ui = getUI(lang);
 
 let ogImageUrl: string | undefined;
 
@@ -63,6 +67,7 @@ const layoutProps = {
   modDatetime,
   canonicalURL,
   ogImage,
+  lang,
   scrollSmooth: true,
 };
 
@@ -96,9 +101,11 @@ const nextPost =
 
 <Layout {...layoutProps}>
   <Header />
-  <BackButton />
+  <BackButton {lang} />
   <main
     id="main-content"
+    data-copy={ui.copy}
+    data-copied={ui.copied}
     class:list={[
       "mx-auto w-full max-w-5xl px-4 pb-12",
       { "mt-8": !SITE.showBackButton },
@@ -112,8 +119,15 @@ const nextPost =
       {title}
     </h1>
     <div class="flex items-center gap-4">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" class="my-2" />
-      <EditPost class="max-sm:hidden" {hideEditPost} {post} />
+      <Datetime
+        {pubDatetime}
+        {modDatetime}
+        {timezone}
+        {lang}
+        size="lg"
+        class="my-2"
+      />
+      <EditPost class="max-sm:hidden" {hideEditPost} {post} {lang} />
     </div>
     <article id="article" class="mx-auto prose mt-8 max-w-5xl">
       <Content />
@@ -121,7 +135,7 @@ const nextPost =
 
     <hr class="my-8 border-dashed" />
 
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
+    <EditPost class="sm:hidden" {hideEditPost} {post} {lang} />
 
     <ul class="mt-4 mb-8 sm:my-8">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
@@ -130,14 +144,14 @@ const nextPost =
     <div
       class="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end sm:gap-4"
     >
-      <ShareLinks />
+      <ShareLinks {lang} />
 
       <button
         id="back-to-top"
         class="focus-outline py-1 whitespace-nowrap hover:opacity-75"
       >
         <IconChevronLeft class="inline-block rotate-90" />
-        <span>Back to Top</span>
+        <span>{ui.backToTop}</span>
       </button>
     </div>
 
@@ -157,7 +171,7 @@ const nextPost =
           >
             <IconChevronLeft class="inline-block flex-none" />
             <div>
-              <span>Previous Post</span>
+              <span>{ui.prevPost}</span>
               <div class="text-sm text-accent/85">{prevPost.title}</div>
             </div>
           </a>
@@ -174,7 +188,7 @@ const nextPost =
             class="flex w-full justify-end gap-1 text-right hover:opacity-75 sm:col-start-2"
           >
             <div>
-              <span>Next Post</span>
+              <span>{ui.nextPost}</span>
               <div class="text-sm text-accent/85">{nextPost.title}</div>
             </div>
             <IconChevronRight class="inline-block flex-none" />
@@ -253,7 +267,10 @@ const nextPost =
   /** Attaches copy buttons to code blocks in the document,
    * allowing users to copy code easily. */
   function attachCopyButtons() {
-    const copyButtonLabel = "Copy";
+    // Las etiquetas las pone el frontmatter, via los data-* de <main>: este script
+    // es is:inline y no ve las variables del componente.
+    const postUI = document.querySelector("#main-content")?.dataset;
+    const copyButtonLabel = postUI?.copy ?? "Copy";
     const codeBlocks = Array.from(document.querySelectorAll("pre"));
 
     for (const codeBlock of codeBlocks) {
@@ -283,7 +300,7 @@ const nextPost =
       await navigator.clipboard.writeText(text ?? "");
 
       // visual feedback that task is completed
-      button.innerText = "Copied";
+      button.innerText = postUI?.copied ?? "Copied";
 
       setTimeout(() => {
         button.innerText = copyButtonLabel;

@@ -1,5 +1,6 @@
 ---
 author: Sat Naing
+lang: "en"
 pubDatetime: 2022-09-23T15:22:00Z
 modDatetime: 2025-03-22T06:25:46.734Z
 title: Adding new posts in AstroPaper theme

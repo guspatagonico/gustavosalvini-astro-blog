@@ -1,6 +1,14 @@
 ---
 import { SHARE_LINKS } from "@/constants";
+import { getUI } from "@/i18n";
 import LinkButton from "./LinkButton.astro";
+
+export interface Props {
+  lang?: string;
+}
+
+const { lang } = Astro.props;
+const ui = getUI(lang);
 
 const URL = Astro.url;
 ---
@@ -8,7 +16,7 @@ const URL = Astro.url;
 <div
   class="flex flex-col flex-wrap items-center justify-center gap-1 sm:items-start"
 >
-  <span>Share this post on:</span>
+  <span>{ui.shareOn}</span>
   <div class="text-center">
     {
       SHARE_LINKS.map(social => (

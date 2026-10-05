@@ -2,14 +2,18 @@
 import type { CollectionEntry } from "astro:content";
 import IconEdit from "@/assets/icons/IconEdit.svg";
 import { SITE } from "@/config";
+import { getUI } from "@/i18n";
 
 export interface Props {
   hideEditPost?: CollectionEntry<"blog">["data"]["hideEditPost"];
   class?: string;
   post: CollectionEntry<"blog">;
+  lang?: string;
 }
 
-const { hideEditPost, post, class: className = "" } = Astro.props;
+const { hideEditPost, post, class: className = "", lang } = Astro.props;
+
+const ui = getUI(lang);
 
 const href = `${SITE.editPost.url}${post.filePath}`;
 const showEditPost =
@@ -29,7 +33,7 @@ const showEditPost =
         target="_blank"
       >
         <IconEdit class="inline-block size-6" />
-        <span class="max-sm:text-sm sm:inline">{SITE.editPost.text}</span>
+        <span class="max-sm:text-sm sm:inline">{ui.editPost}</span>
       </a>
     </div>
   )

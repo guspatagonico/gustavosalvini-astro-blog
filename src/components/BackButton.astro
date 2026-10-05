@@ -2,6 +2,14 @@
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
+import { getUI } from "@/i18n";
+
+export interface Props {
+  lang?: string;
+}
+
+const { lang } = Astro.props;
+const ui = getUI(lang);
 ---
 
 {
@@ -13,7 +21,7 @@ import { SITE } from "@/config";
         class="focus-outline mt-8 mb-2 flex hover:text-foreground/75"
       >
         <IconChevronLeft class="inline-block size-6" />
-        <span>Go back</span>
+        <span>{ui.goBack}</span>
       </LinkButton>
     </div>
   )

@@ -14,6 +14,10 @@ const blog = defineCollection({
       pubDatetime: z.date(),
       modDatetime: z.date().optional().nullable(),
       title: z.string(),
+      // Idioma del post: maneja las cadenas del tema (tabla de contenidos, fechas,
+      // botones) y el `lang` del <html>. Mismo campo que ya usan las páginas en
+      // src/pages/*.md. Obligatorio a propósito: un post sin idioma no debe compilar.
+      lang: z.enum(["es", "it", "en"]),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),

@@ -6,6 +6,7 @@ tags:
   - architecture
   - web development
 author: Gustavo Adrián Salvini
+lang: "en"
 pubDatetime: 2025-04-16T15:15:26.903Z
 draft: false
 hideEditPost: true
