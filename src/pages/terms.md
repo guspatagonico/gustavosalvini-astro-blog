@@ -4,7 +4,7 @@ title: Terms and Conditions
 author: Gustavo Adrián Salvini
 ---
 
-*Last updated: [April 14, 2025]*
+_Last updated: [April 14, 2025]_
 
 Welcome to **Gustavo Adrian Salvini personal website**! By accessing and using this website, you agree to the following terms:
 
@@ -35,4 +35,4 @@ We may update these Terms and Conditions from time to time. Changes will be post
 
 If you have any questions about these Terms, please contact us at:
 
-Gustavo Adrián Salvini - [guspatagonico@gmail.com](mailto\:guspatagonico@gmail.com)
+Gustavo Adrián Salvini - [guspatagonico@gmail.com](mailto:guspatagonico@gmail.com)

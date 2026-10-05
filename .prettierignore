@@ -4,6 +4,14 @@
 # Except these files & folders
 !/src
 !/public
+
+# El contenido del blog y los embeds quedan afuera de prettier porque los rompe.
+# Formatear un post escapa los guiones bajos de las formulas de LaTeX (\sum_{n=1}
+# pasa a \sum\_{n=1} y la formula deja de renderizar) y refluye los bloques HTML de
+# MDX, que quedan partidos en parrafos sueltos. Los embeds de public/ son HTML
+# interactivo que se sirve tal cual, sin pasar por el build.
+/src/data/blog/
+/public/embeds/
 !/.github
 !tsconfig.json
 !astro.config.ts

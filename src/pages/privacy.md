@@ -4,7 +4,7 @@ title: Privacy Policy
 author: Gustavo Adrián Salvini
 ---
 
-*Last updated: [April 14, 2025]*
+_Last updated: [April 14, 2025]_
 
 Thank you for visiting **Gustavo Adrián Salvini's personal website** ("we," "us," or "our").
 
@@ -57,4 +57,4 @@ You can exercise your rights by contacting us at [your email address].
 
 If you have questions about this Privacy Policy, please contact us at:
 
-Gustavo Adrián Salvini - [guspatagonico@gmail.com](mailto\:guspatagonico@gmail.com)\
+Gustavo Adrián Salvini - [guspatagonico@gmail.com](mailto:guspatagonico@gmail.com)\
