@@ -1,6 +1,6 @@
 export const SITE = {
   website: "https://gustavosalvini.com.ar/", // replace this with your deployed domain
-  base: "",
+  base: process.env.PUBLIC_BASE_PATH ?? "",
   author: "Gustavo Adrián Salvini",
   profile: "https://gustavosalvini.com.ar/",
   desc: "A personal playground for digital exploration by Gustavo Adrián Salvini.",
