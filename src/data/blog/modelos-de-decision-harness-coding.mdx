@@ -29,6 +29,17 @@ Son las once y cuarenta y el **agente** me pide permiso para correr un `rm` sobr
 
 Eso tiene un nombre en cualquier **harness de coding**: el **approval**. Es uno de los puntos donde el **loop** se frena y hay que tomar una decisión. Y desde hace tres semanas existe una familia de **modelos** que promete hacerse cargo de esas decisiones mejor, más rápido y más barato que el **LLM** que tengo atrás.
 
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/modelos-de-decision-rm-unknown-dir.webp`}
+    alt="Un dedo sobre la tecla que dice [Y] APPROVE, con una terminal de fondo que pide borrar un directorio llamado unknown_dir"
+  />
+
+  <figcaption class="text-center">
+    El momento que abre el post: el prompt pide aprobar un borrado sobre una carpeta que no reconozco, y el reflejo contesta que sí
+  </figcaption>
+</figure>
+
 [**Jev**](https://typesafe.ai/blog/introducing-system-one-models-and-jev) salió el 15 de septiembre; [**Laya**](https://huggingface.co/convaiinnovations/laya), un clon abierto con licencia Apache 2.0, tres días después; y OpenAI se sumó en el DevDay del 29 con su [Decisions API](https://openai.com/index/devday-2026-recap/), todavía en preview limitado. Los tres responden igual: no generan texto, reciben un estado y preguntas tipadas, y devuelven una opción, un puntaje o una probabilidad. Lo interesante no es que existan, sino dónde entran de verdad en un **harness de coding**. Y por qué el lugar que más tienta es el que más cuidado pide.
 
 Si preferís escucharlo en vez de leerlo, está en video:
@@ -63,6 +74,17 @@ Si preferís escucharlo en vez de leerlo, está en video:
 
 [Birgitta Böckeler](https://martinfowler.com/articles/harness-engineering.html) define el **harness** como todo lo que hay en un **agente** menos el **modelo**: `Agent = Model + Harness`. Adentro separa los controles en _guides_, que actúan antes de que el **agente** haga algo, y _sensors_, que actúan después para que se corrija solo. Y cada uno puede ser _computacional_ (tests, linters, type checkers: determinista, milisegundos, confiable) o _inferencial_ (juicio semántico, un modelo como juez: más lento, más caro, no determinista).
 
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/modelos-de-decision-el-harness.webp`}
+    alt="Lámina con el titular EL HARNESS y la ecuación AGENTE = MODELO + HARNESS, con una esfera de partículas y una red de cubos isométricos alrededor"
+  />
+
+  <figcaption class="text-center">
+    La ecuación que ordena todo el resto: el modelo genera el texto, el harness es todo lo demás
+  </figcaption>
+</figure>
+
 Un **modelo de decisión** es un **control inferencial**. La pregunta útil no es si sirve, sino qué decisiones del **harness** requieren un juicio semántico barato, tipado y calibrado, y cuáles requieren código determinístico.
 
 Lo desplegado da una pista. El 17 de septiembre LangChain publicó [tres formas de incorporarlo](https://www.langchain.com/blog/building-a-harness-with-jev): un middleware que elige el **modelo** según el pedido, otro que revisa las llamadas a bash antes de ejecutarlas y las bloquea si huelen mal, y la clasificación suelta. De la comunidad salió `fast-jev-compaction`, que puntúa si la salida de un tool call sigue siendo relevante y poda el contexto con eso. Y TypeSafe tiene una [página dedicada a coding agents](https://docs.typesafe.ai/introduction/coding-agents) cuyo primer renglón dice que **Jev** no es un reemplazo del **LLM** que hay detrás de Claude Code o Cursor. Su propia tabla manda a usarlo para hacer routing, para puntuar, para chequear si algo es cierto de un documento, y para reemplazar un prompt que le pide a un **LLM** que devuelva JSON.
@@ -74,6 +96,17 @@ Que el fabricante dibuje el límite en el primer párrafo ya dice bastante.
 El 18 de septiembre, dos días después del lanzamiento, apareció una [evaluación pre-registrada e independiente](https://github.com/ickma2311/jev-baselines-eval). El autor no tiene relación con TypeSafe, pagó la API de su bolsillo y publicó el pre-registro antes de correr nada. Los dos experimentos volvieron **ambiguos** según sus propias reglas de corte: nada de eso determina que **Jev** sirva mejor como gate que un **LLM** chico.
 
 Los números crudos dicen más que el veredicto. El informe usa dos benchmarks públicos, que son pruebas con las respuestas ya cargadas y con las que se mide a cualquiera que se presente. El primero es Banking77, con 77 categorías de consultas bancarias repartidas entre un montón de casos, y lo que se mide es la precisión, o sea el porcentaje de casos que cada candidato clasifica bien. Se presentaron cuatro. **Jev** sacó el 83,2%, y un **LLM** chico de la línea nano el 79,3%, así que el **modelo de decisión** le ganó por poco. Un **modelo** frontera, de los grandes y caros, el 87,5%. Y un encoder supervisado, que es la vieja escuela, un **modelo** chico entrenado a mano con 10.003 ejemplos, sacó **el 93,3% en 9 milisegundos, gratis, en una laptop**. Donde hay datos etiquetados, gana lo aburrido. El segundo benchmark es CLINC150, con 150 intenciones de asistente, y ahí la comparación es sin un solo ejemplo de entrenamiento: **Jev** sacó el 87,0% contra el 79,5% del nano, y el frontera el 91,5%.
+
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/modelos-de-decision-gana-lo-aburrido.webp`}
+    alt="Lámina con el titular GANA LO ABURRIDO y dos recuadros: el LLM con 81,6% de confianza tachado y un determinista con 93,3%"
+  />
+
+  <figcaption class="text-center">
+    Donde hay etiquetas, el encoder supervisado acierta 93,3% y la confianza del LLM queda en 81,6%
+  </figcaption>
+</figure>
 
 De ese informe me quedo con dos cosas que importan más que la precisión. La primera es **el tiempo**: los titulares hablan de un **modelo** 200 veces más rápido, y medida, la llamada tardó 0,42 segundos contra 0,92 del **LLM**, o sea 2,2 veces. Sigue siendo una diferencia útil, pero no es la que se publicita. La segunda es **la calibración**, que es la promesa central de la categoría: que el **modelo** sabe cuándo no está seguro. Se mide así: cuando se equivoca, ¿su confianza ya había bajado? El número que lo resume es el AUROC, también escrito AUC-ROC: las siglas del área bajo la [curva ROC](https://es.wikipedia.org/wiki/Curva_ROC), la métrica estándar para esta pregunta en cualquier clasificación binaria.
 
@@ -102,7 +135,29 @@ Acá la conversación pública se equivoca, y hay un paper que lo dice con preci
 
 [Approval Laundering](https://arxiv.org/abs/2609.38983) (arXiv:2609.38983, 30 de septiembre) arranca de una observación incómoda: todo **harness de coding** en producción apoya su frontera de seguridad en un solo mecanismo, el **approval** humano, y no tiene segunda línea de defensa. La suposición sobre la que se apoya es que la acción que yo apruebo es la acción que se ejecuta. Los autores muestran que es falsa, de manera sistemática, con seis modos de falla: por alcance, por argumento, por tiempo, por herramienta, por delegación y por semántica.
 
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/modelos-de-decision-approve-action.webp`}
+    alt="Pantalla de terminal con el estado PENDING APPROVAL y el prompt approve action, con una mano sobre un teclado a las 23:40"
+  />
+
+  <figcaption class="text-center">
+    El punto de decisión donde un harness de coding apoya toda su frontera de seguridad
+  </figcaption>
+</figure>
+
 El ejemplo benigno es el que me sacó el sueño. Yo apruebo `git commit -m "wip"`. El repo tiene un hook de pre-commit que hace `git add -A`. El hook barre un archivo que yo no quería commitear. El string que aprobé es exactamente el string que corrí. Un clasificador de riesgo no lo ve, porque `git commit` no es un comando peligroso. Un chequeo de alcance tampoco, porque commitear durante un refactor es lo esperable. La brecha no está en el juicio: está en la atadura entre lo aprobado y lo que después se ejecuta. Y la defensa que proponen arregla por completo una de las seis clases, deja la de alcance intacta y no reduce de manera significativa la de argumento.
+
+<figure>
+  <img
+    src={`${SITE.base ?? ""}/assets/modelos-de-decision-approve-execute.webp`}
+    alt="Dos teclas iluminadas de un teclado, APPROVE en cian y EXECUTE en rojo, con una terminal que muestra un commit wip y un hook que agrega todo"
+  />
+
+  <figcaption class="text-center">
+    Aprobar y ejecutar no son lo mismo, y la distancia entre las dos teclas es la falla de binding
+  </figcaption>
+</figure>
 
 Traducido: meter un clasificador más fino en el **approval** responde una pregunta que no es la que rompe. A esa atadura el paper le dice binding, y su título la nombra: Approval-Execution Binding Failures. Si el **approval** es tu único control, lo que hay que asegurar no es que el juicio sea mejor, sino que el comando que corre sea, palabra por palabra, el que aprobaste.
 
