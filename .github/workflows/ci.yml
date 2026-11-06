@@ -18,7 +18,9 @@ concurrency:
 jobs:
   quality:
     name: Calidad y build
-    runs-on: ubuntu-latest
+    # Fijado a 24.04: playwright 1.51 no soporta chromium en ubuntu 26.04,
+    # que es a lo que apunta `ubuntu-latest` desde noviembre de 2026.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout

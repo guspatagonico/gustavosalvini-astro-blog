@@ -30,7 +30,9 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    # Fijado a 24.04: playwright 1.51 no soporta chromium en ubuntu 26.04,
+    # que es a lo que apunta `ubuntu-latest` desde noviembre de 2026.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -70,7 +72,9 @@ jobs:
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/staging') ||
       (github.event_name == 'workflow_dispatch' && inputs.target == 'staging')
-    runs-on: ubuntu-latest
+    # Fijado a 24.04: playwright 1.51 no soporta chromium en ubuntu 26.04,
+    # que es a lo que apunta `ubuntu-latest` desde noviembre de 2026.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment:
       name: staging
@@ -106,7 +110,9 @@ jobs:
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'workflow_dispatch' && inputs.target == 'production')
-    runs-on: ubuntu-latest
+    # Fijado a 24.04: playwright 1.51 no soporta chromium en ubuntu 26.04,
+    # que es a lo que apunta `ubuntu-latest` desde noviembre de 2026.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment:
       name: production
